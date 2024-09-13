@@ -598,7 +598,7 @@ INSERT [dbo].[Post] ([ID], [CategoryID], [Title], [Content], [IsDeleted], [Creat
 GO
 INSERT [dbo].[Post] ([ID], [CategoryID], [Title], [Content], [IsDeleted], [CreatedAt], [CreatedBy], [imgURL]) VALUES (32, 2, N'test2', N'test123123', 0, CAST(N'2024-05-20T19:44:46.490' AS DateTime), 1, N'https://th.bing.com/th/id/OIG4.LgUj9FIjzUbdTSMn0mRg')
 GO
-INSERT [dbo].[Post] ([ID], [CategoryID], [Title], [Content], [IsDeleted], [CreatedAt], [CreatedBy], [imgURL]) VALUES (33, 1, N'tesy', N'ádasd', 0, CAST(N'2024-05-22T01:05:52.463' AS DateTime), 1, N'https://th.bing.com/th/id/OIG4.LgUj9FIjzUbdTSMn0mRg')
+INSERT [dbo].[Post] ([ID], [CategoryID], [Title], [Content], [IsDeleted], [CreatedAt], [CreatedBy], [imgURL]) VALUES (33, 1, N'tesy', N'Ã¡dasd', 0, CAST(N'2024-05-22T01:05:52.463' AS DateTime), 1, N'https://th.bing.com/th/id/OIG4.LgUj9FIjzUbdTSMn0mRg')
 GO
 INSERT [dbo].[Post] ([ID], [CategoryID], [Title], [Content], [IsDeleted], [CreatedAt], [CreatedBy], [imgURL]) VALUES (34, 1, N'tesyasdasd', N'sdfsdfdsf', 0, CAST(N'2024-05-22T10:16:53.493' AS DateTime), 1, NULL)
 GO
@@ -737,8 +737,6 @@ GO
 INSERT [dbo].[ProductDetail] ([ID], [ProductID], [ImageURL], [Size],  [Stock], [IsDeleted], [CreatedAt], [CreatedBy], [price], [discount], [hold], [ImportPrice]) VALUES (43, 21, N'https://cdn.pixabay.com/photo/2024/05/13/04/47/ai-generated-8758045_640.jpg', N'M', 200, 0, CAST(N'2024-05-19T10:54:44.547' AS DateTime), 1, 200, 20, 0, 20)
 GO
 INSERT [dbo].[ProductDetail] ([ID], [ProductID], [ImageURL], [Size],  [Stock], [IsDeleted], [CreatedAt], [CreatedBy], [price], [discount], [hold], [ImportPrice]) VALUES (44, 2, N'https://cdn.pixabay.com/photo/2024/05/13/04/47/ai-generated-8758045_640.jpg', N'XXL', 20, 0, CAST(N'2024-07-16T23:31:34.020' AS DateTime), 1, 56, 10, 0, 0)
-GO
-INSERT [dbo].[ProductDetail] ([ID], [ProductID], [ImageURL], [Size],  [Stock], [IsDeleted], [CreatedAt], [CreatedBy], [price], [discount], [hold], [ImportPrice]) VALUES (45, NULL, NULL, N'', NULL, NULL, 0, CAST(N'2024-07-17T00:17:33.380' AS DateTime), NULL, NULL, NULL, 0, 0)
 GO
 SET IDENTITY_INSERT [dbo].[ProductDetail] OFF
 GO
