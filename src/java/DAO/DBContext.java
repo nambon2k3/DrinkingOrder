@@ -17,18 +17,18 @@ public class DBContext {
      public Connection getConnection()throws Exception {
         String url = "jdbc:sqlserver://"+serverName+":"+portNumber + "\\" + instance +";databaseName="+dbName+";encrypt=true;trustServerCertificate=true";
         if(instance == null || instance.trim().isEmpty())
-            url = "jdbc:mysql://"+serverName+":"+portNumber +";databaseName="+dbName+";encrypt=true;trustServerCertificate=true";
-        Class.forName("com.mysql.cj.jdbc.Driver");
+            url = "jdbc:sqlserver://"+serverName+":"+portNumber +";databaseName="+dbName+";encrypt=true;trustServerCertificate=true";
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         return DriverManager.getConnection(url, userID, password);
     }   
    
   
     private final String serverName = "localhost";
-    private final String dbName = "swp-online-shop";
-    private final String portNumber = "3306";
+    private final String dbName = "DrinkingOrder";
+    private final String portNumber = "1433";
     private final String instance="";
-    private final String userID = "root";
-    private final String password = "root";    
+    private final String userID = "sa";
+    private final String password = "123";    
     
 }
 
