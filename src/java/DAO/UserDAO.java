@@ -38,7 +38,7 @@ public class UserDAO {
             ps.setString(5, user.getAddress());
             ps.setString(6, user.getPhone());
             ps.setInt(7, user.getCreatedBy());
-            ps.setString(8, user.getAvatar());
+            ps.setString(8, "https://www.svgrepo.com/show/452030/avatar-default.svg");
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {

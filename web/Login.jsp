@@ -1,134 +1,201 @@
-<%-- 
-    Document   : Login
-    Created on : Jan 16, 2024, 8:56:18 PM
-    Author     : anhdu
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <title>Login Form</title>
-        <!-- Include Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
+            />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+            />
+
+        <!-- MDB -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css"
+            rel="stylesheet"
+            />
+        <!-- Custom styles -->
         <style>
-            body {
-                background-color: #e8e4d9;
+            .icon-hover:hover {
+                border-color: #3b71ca !important;
+                background-color: white !important;
             }
 
-            .login-container {
-                max-width: 400px;
-                margin: 100px auto;
-                background-color: #fff;
-                padding: 20px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                border-radius: 8px;
-            }
-
-            .login-container h2 {
-                text-align: center;
-                color: #007bff;
-            }
-
-            .login-form {
-                margin-top: 20px;
-            }
-
-            .login-form .form-group {
-                margin-bottom: 20px;
-            }
-
-            .login-form label {
-                font-weight: 600;
-            }
-
-            .login-form input[type="text"],
-            .login-form input[type="password"] {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ced4da;
-                border-radius: 4px;
-            }
-
-            .login-form button {
-                width: 100%;
-                padding: 10px;
-                background-color: #007bff;
-                color: #fff;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .login-form button:hover {
-                background-color: #0056b3;
-            }
-
-            .forgot-password,
-            .register {
-                text-align: center;
-                margin-top: 10px;
-            }
-
-            .forgot-password a,
-            .register a {
-                color: #007bff;
-                text-decoration: none;
-            }
-
-            .forgot-password a:hover,
-            .register a:hover {
-                text-decoration: underline;
-            }
-
-            .error-message {
-                color: red;
-                text-align: center;
-                margin-top: 10px;
+            .icon-hover:hover i {
+                color: #3b71ca !important;
             }
         </style>
     </head>
     <body>
+        <!--Main Navigation-->
+        <header>
+            <!-- Jumbotron -->
+            <jsp:include page="Header.jsp"></jsp:include>
+                <!-- Jumbotron -->
 
-        <div class="login-container">
-            <h2>Login</h2>
 
-            <!-- Display error message if any -->
-            <% if (request.getAttribute("errorMessage") != null) { %>
-            <div class="error-message">
-                <%= request.getAttribute("errorMessage") %>
-            </div>
-            <% } %>
+            </header>
+            <!-- Products -->
+            <section class="vh-100" style="background-color: #508bfc;">
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                            <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                                <div class="card-body p-5 text-center">
 
-            <form class="login-form" action="login" method="post">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" name="email" required oninput="validateEmail()">
-                    <div id="emailError" class="error-message"></div>
+                                    <h3 class="mb-5">Log in</h3>
+                                <% if (request.getAttribute("errorMessage") != null) { %>
+                                <div class="text-danger">
+                                    <%= request.getAttribute("errorMessage") %>
+                                </div>
+                                <% } %>
+
+                                <form action="login" method="post">
+                                    
+                                    <div data-mdb-input-init class="form-outline mb-1">
+                                        <input type="email" id="email" name="email" class="form-control form-control-lg" required oninput="validateEmail()" />
+                                        <label class="form-label" for="typeEmailX-2">Email</label>
+                                    </div>
+                                    <div id="emailError" class="text-danger"></div>
+
+                                    <div data-mdb-input-init class="form-outline mt-3 mb-1">
+                                        <input type="password" id="password" name="password" class="form-control form-control-lg" required oninput="validatePassword()"/>
+                                        <label class="form-label" for="typePasswordX-2">Password</label>
+                                    </div>
+                                    <div id="passwordError" class="text-danger"></div>
+
+                                    <button  class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+
+                                </form>
+                                <hr class="my-4">
+
+                                <a href="${pageContext.request.contextPath}/reset-password">Forgot password?</a><br>
+                                Don't have account? <a href="${pageContext.request.contextPath}/register"> Register</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required oninput="validatePassword()">
-                    <div id="passwordError" class="error-message"></div>
+            </div>
+        </section>
+        <!-- Products -->
+
+
+
+        <!-- Footer -->
+        <footer
+            class="text-center text-lg-start text-muted mt-3"
+            style="background-color: #f5f5f5"
+            >
+            <!-- Section: Links  -->
+            <section class="">
+                <div class="container text-center text-md-start pt-4 pb-4">
+                    <!-- Grid row -->
+                    <div class="row mt-3">
+                        <!-- Grid column -->
+                        <div class="col-12 col-lg-3 col-sm-12 mb-2">
+                            <!-- Content -->
+                            <a href="https://mdbootstrap.com/" target="_blank" class="">
+                                <img
+                                    src="${pageContext.request.contextPath}/Image/logo.png"
+                                    height="35"
+                                    />
+                            </a>
+                            <p class="mt-2 text-dark">© 2023 Copyright: SWP391 - FPT University</p>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-6 col-sm-4 col-lg-2">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Store</h6>
+                            <ul class="list-unstyled mb-4">
+                                <li><a class="text-muted" href="#">About us</a></li>
+                                <li><a class="text-muted" href="#">Find store</a></li>
+                                <li><a class="text-muted" href="#">Categories</a></li>
+                                <li><a class="text-muted" href="#">Blogs</a></li>
+                            </ul>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-6 col-sm-4 col-lg-2">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Information</h6>
+                            <ul class="list-unstyled mb-4">
+                                <li><a class="text-muted" href="#">Help center</a></li>
+                                <li><a class="text-muted" href="#">Money refund</a></li>
+                                <li><a class="text-muted" href="#">Shipping info</a></li>
+                                <li><a class="text-muted" href="#">Refunds</a></li>
+                            </ul>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-6 col-sm-4 col-lg-2">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Support</h6>
+                            <ul class="list-unstyled mb-4">
+                                <li><a class="text-muted" href="#">Help center</a></li>
+                                <li><a class="text-muted" href="#">Documents</a></li>
+                                <li><a class="text-muted" href="#">Account restore</a></li>
+                                <li><a class="text-muted" href="#">My orders</a></li>
+                            </ul>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-12 col-sm-12 col-lg-3">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Newsletter</h6>
+                            <p class="text-muted">
+                                Stay in touch with latest updates about our products and offers
+                            </p>
+                            <div class="input-group mb-3">
+                                <input
+                                    type="email"
+                                    class="form-control border"
+                                    placeholder="Email"
+                                    aria-label="Email"
+                                    aria-describedby="button-addon2"
+                                    />
+                                <button
+                                    class="btn btn-light border shadow-0"
+                                    type="button"
+                                    id="button-addon2"
+                                    data-mdb-ripple-color="dark"
+                                    >
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+                    <!-- Grid row -->
                 </div>
-                <button type="submit">Login</button>
-            </form>
-            <div class="forgot-password">
-                <a href="reset-password">Forgot Password?</a>
-            </div>
-            <div class="register">
-                <p>Don't have an account? <a href="register">Register</a></p>
-            </div>
-        </div>
+            </section>
+            <!-- Section: Links  -->
 
-        <!-- Include Bootstrap JS and Popper.js -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-        <script>
+        </footer>
+        <!-- Footer -->
+        <!-- MDB -->
+        <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"
+        ></script>
+        <!-- Custom scripts -->
+        <script type="text/javascript">
             function validateEmail() {
                 var emailInput = document.getElementById('email');
                 var emailError = document.getElementById('emailError');
@@ -154,6 +221,7 @@
                 }
             }
         </script>
-
     </body>
 </html>
+
+
