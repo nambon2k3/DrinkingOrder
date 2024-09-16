@@ -1010,5 +1010,56 @@ public class ProductDAO extends DBContext {
 
         return success;
     }
+    
+    public List<Product> homePage() {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT TOP 12 \n"
+                + "    p.*, \n"
+                + "    pd.*\n"
+                + "FROM \n"
+                + "    product p\n"
+                + "INNER JOIN (\n"
+                + "    SELECT \n"
+                + "        ProductID, \n"
+                + "        MIN(Price) AS MinPrice\n"
+                + "    FROM \n"
+                + "        productDetail\n"
+                + "    WHERE \n"
+                + "        isDeleted = 0\n"
+                + "    GROUP BY \n"
+                + "        ProductID\n"
+                + ") AS MinPrices ON p.ID = MinPrices.ProductID\n"
+                + "INNER JOIN productDetail pd ON p.ID = pd.ProductID AND pd.Price = MinPrices.MinPrice\n"
+                + "WHERE \n"
+                + "    p.isDeleted = 0\n"
+                + "ORDER BY \n"
+                + "    p.CreatedAt DESC\n";
+        try {
+             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                ProductDetail productDetail = new ProductDetail();
+                List<ProductDetail> productDetails = new ArrayList<>();
+                product.setProductId(rs.getInt("ID"));
+                product.setProductName(rs.getString("Name"));
+                product.setDescription(rs.getString("description"));
+                
+                productDetail.setPrice(rs.getDouble("price"));
+                productDetail.setImageURL(rs.getString("ImageURL"));
+                productDetail.setDiscount(rs.getInt("discount"));
+                
+                productDetails.add(productDetail);
+                product.setListProductDetail(productDetails);
+                
+                products.add(product);
+            }
+            return products;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return products;
+    }
 
 }
