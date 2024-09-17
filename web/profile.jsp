@@ -145,7 +145,7 @@
                             </div>
                             <div class="d-flex justify-content-center mb-2">
                                 <button  type="submit" class="btn btn-primary">Submit</button>
-                                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary ms-1">Change password</button>
+                                <a  href="change-pass"  class="btn btn-outline-primary ms-1">Change password</a>
                             </div>
                         </div>
                     </div>
