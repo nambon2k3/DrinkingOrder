@@ -347,7 +347,7 @@ public class UserDAO {
 
     // Login
     public User loginUser(String email, String password) {
-        String query = "SELECT * FROM [User] WHERE Email = ? AND Password = ?";
+        String query = "SELECT * FROM `swp-online-shop`.user WHERE Email = ? AND Password = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, email);

@@ -90,11 +90,12 @@ CREATE TABLE [dbo].[OrderDetail](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[OrderID] [int] NULL,
 	[ProductDetailID] [int] NULL,
-	ToppingID INT NULL,
+	ToppingID nvarchar(max) NULL,
 	[IsDeleted] [bit] NULL,
 	[CreatedAt] [datetime] NULL,
 	[CreatedBy] [int] NULL,
 	[quantity] [int] NULL,
+
 
 PRIMARY KEY CLUSTERED 
 (
@@ -152,7 +153,9 @@ CREATE TABLE [dbo].[Topping](
     Price [float]  NULL,               -- Price of the topping
     [IsDeleted] BIT DEFAULT 1,                 -- Availability status of the topping (1: available, 0: not available)
     CreatedDate DATETIME DEFAULT GETDATE(),    -- The date the topping was added to the system
-    LastUpdated DATETIME DEFAULT GETDATE()     -- Last updated timestamp
+    LastUpdated DATETIME DEFAULT GETDATE(),     -- Last updated timestamp
+	Img nvarchar(max),
+	ProductID int foreign key references Product(ID)
 PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -306,251 +309,6 @@ GO
 SET IDENTITY_INSERT [dbo].[Feedback] ON 
 GO
 SET IDENTITY_INSERT [dbo].[Feedback] OFF
-GO
-SET IDENTITY_INSERT [dbo].[Order] ON 
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (1, 1, N'John Doe', N'123 Main St', N'1234567890', N'Close', 0, CAST(N'2024-06-08T23:24:44.457' AS DateTime), 3, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (2, 1, N'Nam', NULL, NULL, N'Close', 0, CAST(N'2024-06-09T00:03:16.550' AS DateTime), 3, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (3, 1, N'Nam', NULL, NULL, N'Close', 0, CAST(N'2024-06-09T00:03:43.273' AS DateTime), 3, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (4, 1, N'Nam', NULL, NULL, N'Close', 0, CAST(N'2024-06-09T00:13:39.323' AS DateTime), 3, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (5, 1, N'John Doe', N'123 Main St', N'1234567890', N'Packaging', 0, CAST(N'2024-06-09T00:29:49.193' AS DateTime), 3, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (6, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-09T13:29:54.897' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (7, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-09T13:32:56.230' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (8, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-09T13:33:38.700' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (9, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-09T13:35:04.250' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (10, 1, N'John Doe', N'123 Main St', N'1234567890', N'Canceled', 0, CAST(N'2024-06-09T13:49:58.153' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (11, 1, N'John Doe', N'123 Main St', N'1234567890', N'Success', 0, CAST(N'2024-06-09T13:50:59.840' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (12, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-09T13:51:45.560' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (13, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-09T13:53:35.757' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (14, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-09T21:32:24.747' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (15, 1, N'John Doe', N'123 Main St', N'1234567890', N'Pay Failed', 0, CAST(N'2024-06-09T21:36:22.880' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (16, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-14T08:32:17.617' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (17, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-14T08:32:57.437' AS DateTime), 1, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (18, 1, NULL, NULL, NULL, N'Rejected', 0, CAST(N'2024-06-14T08:33:59.530' AS DateTime), 1, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (19, 1, N'John Doe', N'123 Main St', N'1234567890', N'Close', 0, CAST(N'2024-06-14T08:41:50.733' AS DateTime), NULL, N'                                                123                            
-                                    
-                                ', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (20, 1, NULL, NULL, NULL, N'Failed', 0, CAST(N'2024-06-14T08:44:26.607' AS DateTime), 1, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (21, 1, NULL, NULL, NULL, N'COD', 0, CAST(N'2024-06-14T08:44:29.627' AS DateTime), 1, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (22, 1, NULL, NULL, NULL, N'Submitted', 0, CAST(N'2024-06-18T23:02:38.920' AS DateTime), 4, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (23, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-21T01:08:18.403' AS DateTime), 4, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (24, 1, N'John Doe', N'123 Main St', N'1234567890', N'Success', 0, CAST(N'2024-06-21T01:10:50.973' AS DateTime), 15, N'                                                                        asdasdasd              
-                                
-                                
-                                ', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (25, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-21T10:22:48.640' AS DateTime), 4, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (26, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-21T10:24:14.157' AS DateTime), 4, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (27, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-06-21T10:56:31.733' AS DateTime), 15, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (28, 1, NULL, NULL, NULL, N'Failed', 0, CAST(N'2024-06-21T11:03:54.270' AS DateTime), 4, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (29, 1, N'John Doe', N'123 Main St', N'1234567890', N'Delivering', 0, CAST(N'2024-06-21T11:05:56.157' AS DateTime), 3, N'                                        
-                                    ', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (30, 1, N'John Doe', N'123 Main St', N'1234567890', N'Delivering', 0, CAST(N'2024-06-22T09:46:27.793' AS DateTime), 7, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (31, 1, N'John Doe', N'123 Main St', N'1234567890', N'Canceled', 0, CAST(N'2024-06-25T23:31:40.157' AS DateTime), 11, N'', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (32, 1, NULL, NULL, NULL, N'Rejected', 0, CAST(N'2024-06-27T20:44:31.330' AS DateTime), 7, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (33, 1, NULL, NULL, NULL, N'COD', 0, CAST(N'2024-06-27T20:54:16.433' AS DateTime), 11, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (34, 1, N'John Doe', N'123 Main St', N'1234567890', N'Canceled', 0, CAST(N'2024-06-27T20:54:22.060' AS DateTime), 7, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (35, 1, N'John Doe', N'123 Main St', N'1234567890', N'Close', 0, CAST(N'2024-06-27T22:36:32.597' AS DateTime), 7, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (36, 1, N'John Doe', N'123 Main St', N'1234567890', N'Rejected', 0, CAST(N'2024-06-27T22:42:51.733' AS DateTime), 11, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (37, 1, N'John Doe', N'123 Main St', N'1234567890', N'Rejected', 0, CAST(N'2024-06-27T22:42:55.233' AS DateTime), 15, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (38, 1, N'John Doe', N'123 Main St', N'1234567890', N'Rejected', 0, CAST(N'2024-06-27T22:43:07.677' AS DateTime), 7, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (39, 1, N'John Doe', N'123 Main St', N'1234567890', N'Rejected', 0, CAST(N'2024-06-27T22:43:46.057' AS DateTime), 11, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (40, 1, NULL, NULL, NULL, N'COD', 0, CAST(N'2024-06-27T22:51:18.670' AS DateTime), 15, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (41, 1, N'John Doe', N'123 Main St', N'1234567890', N'COD', 0, CAST(N'2024-06-27T22:51:58.323' AS DateTime), 7, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (42, 1, N'John Doe', N'123 Main St', N'1234567890', N'Canceled', 0, CAST(N'2024-06-28T00:25:04.357' AS DateTime), 11, NULL, NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (43, 1, N'John Doe', N'123 Main St', N'1234567890', N'Success', 0, CAST(N'2024-06-28T00:25:57.030' AS DateTime), 15, N'                                                                                
-                                    
-                                    ', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (44, 1, N'John Doe', N'123 Main St', N'1234567890', N'Close', 0, CAST(N'2024-06-28T00:26:00.653' AS DateTime), 15, N'                                        
-                                    ', NULL)
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (45, 1, N'John Doe', N'123 Main St', N'1234567890', N'Request Cancel', 0, CAST(N'2024-07-01T20:10:40.617' AS DateTime), 11, NULL, N'Tranfer')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (46, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-07-04T10:17:55.290' AS DateTime), 7, N'', N'COD')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (47, 1, N'John Doe', N'123 Main St', N'1234567890', N'Success', 0, CAST(N'2024-07-04T10:21:03.323' AS DateTime), 3, N'', N'COD')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (48, 1, N'John Doe', N'123 Main St', N'1234567890', N'Wait for pay', 0, CAST(N'2024-07-05T08:48:23.837' AS DateTime), 11, N'', N'VNPAY')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (49, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-07-05T22:56:56.190' AS DateTime), 15, N'', N'Tranfer')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (50, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-07-13T19:43:25.453' AS DateTime), 7, N'', N'COD')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (51, 1, N'John Doe', N'123 Main St', N'1234567890', N'Failed', 0, CAST(N'2024-07-13T19:45:20.943' AS DateTime), 3, N'                                            
-                                        ', N'COD')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (52, 1, N'John Doe', N'123 Main St', N'1234567890', N'Submitted', 0, CAST(N'2024-07-13T20:04:16.923' AS DateTime), 11, N'', N'COD')
-GO
-INSERT [dbo].[Order] ([ID], [UserID], [Fullname], [Address], [Phone], [Status], [IsDeleted], [CreatedAt], [CreatedBy], [Notes], [paymentMethod]) VALUES (53, 1, N'John Doe', N'123 Main St', N'1234567890', N'Canceled', 0, CAST(N'2024-07-15T13:22:30.143' AS DateTime), 3, N'                                            
-                                        ', N'COD')
-GO
-SET IDENTITY_INSERT [dbo].[Order] OFF
-GO
-SET IDENTITY_INSERT [dbo].[OrderDetail] ON 
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (1, 1, 4, 0, CAST(N'2024-06-08T23:24:44.490' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (2, 4, 5, 0, CAST(N'2024-06-09T00:13:39.350' AS DateTime), 1, 5)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (3, 5, 4, 0, CAST(N'2024-06-09T00:29:49.227' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (4, 6, 4, 0, CAST(N'2024-06-09T13:29:54.943' AS DateTime), 1, 3)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (5, 6, 5, 0, CAST(N'2024-06-09T13:29:54.953' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (6, 7, 4, 0, CAST(N'2024-06-09T13:32:56.263' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (7, 7, 5, 0, CAST(N'2024-06-09T13:32:56.270' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (8, 8, 4, 0, CAST(N'2024-06-09T13:33:38.733' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (9, 8, 5, 0, CAST(N'2024-06-09T13:33:38.743' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (10, 9, 4, 0, CAST(N'2024-06-09T13:35:04.290' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (11, 9, 5, 0, CAST(N'2024-06-09T13:35:04.300' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (12, 10, 4, 0, CAST(N'2024-06-09T13:49:58.200' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (13, 10, 5, 0, CAST(N'2024-06-09T13:49:58.210' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (14, 11, 4, 0, CAST(N'2024-06-09T13:50:59.887' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (15, 11, 5, 0, CAST(N'2024-06-09T13:50:59.907' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (16, 12, 4, 0, CAST(N'2024-06-09T13:51:45.610' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (17, 12, 5, 0, CAST(N'2024-06-09T13:51:45.620' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (18, 13, 4, 0, CAST(N'2024-06-09T13:53:35.793' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (19, 13, 5, 0, CAST(N'2024-06-09T13:53:35.800' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (20, 14, 4, 0, CAST(N'2024-06-09T21:32:24.790' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (21, 14, 5, 0, CAST(N'2024-06-09T21:32:24.803' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (22, 15, 4, 0, CAST(N'2024-06-09T21:36:22.913' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (23, 16, 4, 0, CAST(N'2024-06-14T08:32:17.667' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (24, 16, 5, 0, CAST(N'2024-06-14T08:32:17.680' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (25, 17, 4, 0, CAST(N'2024-06-14T08:32:57.477' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (26, 18, 4, 0, CAST(N'2024-06-14T08:33:59.560' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (27, 19, 4, 0, CAST(N'2024-06-14T08:41:50.770' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (28, 20, 4, 0, CAST(N'2024-06-14T08:44:26.633' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (29, 21, 4, 0, CAST(N'2024-06-14T08:44:29.660' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (30, 22, 4, 0, CAST(N'2024-06-18T23:02:38.960' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (31, 23, 4, 0, CAST(N'2024-06-21T01:08:18.447' AS DateTime), 1, 2)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (32, 24, 4, 0, CAST(N'2024-06-21T01:10:51.010' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (33, 25, 4, 0, CAST(N'2024-06-21T10:22:48.687' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (34, 26, 4, 0, CAST(N'2024-06-21T10:24:14.220' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (35, 27, 4, 0, CAST(N'2024-06-21T10:56:31.777' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (36, 27, 5, 0, CAST(N'2024-06-21T10:56:31.787' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (37, 28, 4, 0, CAST(N'2024-06-21T11:03:54.293' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (38, 29, 4, 0, CAST(N'2024-06-21T11:05:56.180' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (39, 30, 7, 0, CAST(N'2024-06-22T09:46:27.870' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (40, 30, 16, 0, CAST(N'2024-06-22T09:46:27.883' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (41, 31, 4, 0, CAST(N'2024-06-26T23:31:40.213' AS DateTime), 1, 3)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (42, 31, 5, 0, CAST(N'2024-06-26T23:31:40.227' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (43, 31, 12, 0, CAST(N'2024-06-26T23:31:40.237' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (45, 32, 4, 0, CAST(N'2024-06-27T20:44:31.363' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (46, 33, 4, 0, CAST(N'2024-06-27T20:54:16.460' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (47, 34, 4, 0, CAST(N'2024-06-27T20:54:22.080' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (48, 35, 4, 0, CAST(N'2024-06-27T22:36:32.620' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (49, 40, 4, 0, CAST(N'2024-06-27T22:51:18.690' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (50, 41, 4, 0, CAST(N'2024-06-27T22:51:58.340' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (51, 42, 4, 0, CAST(N'2024-06-28T00:25:04.377' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (52, 43, 4, 0, CAST(N'2024-06-28T00:25:57.050' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (53, 44, 5, 0, CAST(N'2024-06-28T00:26:00.670' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (54, 45, 4, 0, CAST(N'2024-07-01T20:10:40.663' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (55, 46, 4, 0, CAST(N'2024-07-04T10:17:55.327' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (56, 47, 4, 0, CAST(N'2024-07-04T10:21:03.363' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (57, 48, 4, 0, CAST(N'2024-07-05T08:48:23.863' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (58, 49, 4, 0, CAST(N'2024-07-05T22:56:56.220' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (59, 50, 4, 0, CAST(N'2024-07-13T19:43:25.490' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (60, 51, 4, 0, CAST(N'2024-07-13T19:45:20.970' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (61, 52, 4, 0, CAST(N'2024-07-13T20:04:16.950' AS DateTime), 1, 1)
-GO
-INSERT [dbo].[OrderDetail] ([ID], [OrderID], [ProductDetailID], [IsDeleted], [CreatedAt], [CreatedBy], [quantity]) VALUES (62, 53, 4, 0, CAST(N'2024-07-15T13:22:30.173' AS DateTime), 1, 1)
 GO
 SET IDENTITY_INSERT [dbo].[OrderDetail] OFF
 GO
