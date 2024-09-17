@@ -55,16 +55,12 @@
             </header>
             <!-- Products -->
             <section style="background-color: #eee;">
-            <c:if test="${param.success ne null}">
-                <div class="alert alert-success" role="alert">
-                    Success!
-                </div>
-            </c:if>
-            <c:if test="${param.fail ne null}">
-                <div class="alert alert-danger" role="alert">
-                    Failed!
-                </div>
-            </c:if>
+                <div class="alert alert-success" style="visibility: ${param.success ne null ? 'visible' : 'hidden'}" role="alert">
+                Success!
+            </div>
+            <div class="alert alert-danger" style="display: ${param.fail ne null ? 'block': 'none'}"  role="alert">
+                Failed!
+            </div>
             <form id="profileForm" onsubmit="return validateForm()" action="profile" method="post">
                 <div class="container py-5">
 
@@ -145,7 +141,7 @@
                             </div>
                             <div class="d-flex justify-content-center mb-2">
                                 <button  type="submit" class="btn btn-primary">Submit</button>
-                                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary ms-1">Change password</button>
+                                <a  href="change-pass" class="btn btn-outline-primary ms-1">Change password</a>
                             </div>
                         </div>
                     </div>
