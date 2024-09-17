@@ -12,6 +12,17 @@ public class OrderDetail {
     private Date createdAt;
     private int createdBy;
     private int quantity;
+    private String toppingId;
+
+    public String getToppingId() {
+        return toppingId;
+    }
+
+    public void setToppingId(String toppingId) {
+        this.toppingId = toppingId;
+    }
+    
+    
     
     private ProductDetail productDetail;
 

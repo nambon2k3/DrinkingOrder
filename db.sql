@@ -671,9 +671,6 @@ GO
 ALTER TABLE [dbo].[OrderDetail]  WITH CHECK ADD FOREIGN KEY([ProductDetailID])
 REFERENCES [dbo].[ProductDetail] ([ID])
 GO
-ALTER TABLE [dbo].[OrderDetail]  WITH CHECK ADD FOREIGN KEY([ToppingID ])
-REFERENCES [dbo].Topping ([ID])
-GO
 ALTER TABLE [dbo].[Post]  WITH CHECK ADD FOREIGN KEY([CategoryID])
 REFERENCES [dbo].[Category] ([ID])
 GO
