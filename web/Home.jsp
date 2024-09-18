@@ -46,13 +46,13 @@
     </head>
     <body>
         <!--Main Navigation-->
-        
-            <header>
+
+        <header>
             <jsp:include page="Header.jsp"></jsp:include>
-            <!-- Carousel wrapper -->
-            <div id="carouselMaterialStyle" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
-                <!-- Indicators -->
-                <div class="carousel-indicators">
+                <!-- Carousel wrapper -->
+                <div id="carouselMaterialStyle" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
+                    <!-- Indicators -->
+                    <div class="carousel-indicators">
                     <c:forEach var="slider" items="${sliders}" varStatus="status">
                         <button type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide-to="${status.index}" 
                                 class="${status.index == 0 ? 'active' : ''}" aria-label="Slide ${status.index}"></button>
@@ -98,30 +98,30 @@
                 <div class="row">
                     <c:forEach items="${products}" var="p">
 
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="card my-2 shadow-0">
-                                <a href="public/product-detail?id=${p.productId}" class="">
-                                    <c:if test="${p.listProductDetail[0].discount != null && p.listProductDetail[0].discount != 0}">
-                                        <div class="mask" style="height: 50px;">
-                                            <div class="d-flex justify-content-start align-items-start h-100 m-2">
-                                                <h6><span class="badge bg-danger pt-1">New</span></h6>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                                     data-mdb-ripple-color="light">
+                                    <img src="${p.productDetail.imageURL}"
+                                         class="w-100" />
+                                    <a href="public/product-detail?id=${p.productId}">
+                                        <c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
+                                            <div class="mask">
+                                                <div class="d-flex justify-content-start align-items-end h-100">
+                                                    <h5><span class="badge bg-dark ms-2">NEW</span></h5>
+                                                </div>
                                             </div>
+                                        </c:if>
+                                        <div class="hover-overlay">
+                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                                         </div>
-                                    </c:if>
-
-                                    <img src="${p.listProductDetail[0].imageURL}" class="card-img-top rounded-2" style="aspect-ratio: 1 / 1"/>
-                                </a>
-                                <div class="card-body p-0 pt-3">
-                                    <h5 class="card-title">${p.productName}</h5>
-                                    <p class="card-text mb-0">${p.listProductDetail[0].price}</p>
-                                    <!--                                <p class="text-muted">
-                                                                        Model: X-200
-                                                                    </p>-->
-                                    <div
-                                        class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto"
-                                        >
-                                        <a href="public/product-detail?id=${p.productId}" class="btn btn-primary shadow-0 me-1">View detail</a>
-                                    </div>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <a href="public/product-detail?id=${p.productId}" class="text-reset">
+                                        <h5 class="card-title mb-2">${p.productName}</h5>
+                                    </a>
+                                    <h6 class="mb-3 price">${p.productDetail.price}</h6>
                                 </div>
                             </div>
                         </div>
