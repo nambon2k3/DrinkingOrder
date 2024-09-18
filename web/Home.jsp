@@ -122,7 +122,7 @@
                                         >
                                         <a href="public/product-detail?id=${p.productId}" class="btn btn-primary shadow-0 me-1">View detail</a>
                                     </div>
-                                </div>
+                                </div
                             </div>
                         </div>
 

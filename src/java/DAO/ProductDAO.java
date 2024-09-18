@@ -6,6 +6,7 @@ package DAO;
 
 import Model.Product;
 import Model.ProductDetail;
+import Model.Topping;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
@@ -60,7 +61,7 @@ public class ProductDAO extends DBContext {
         return sizes;
     }
 
-    public List<Product> getProductsByPage(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String color, String size) {
+    public List<Product> getProductsByPage(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT Distinct  p.*, c.Name as CategoryName FROM Product p "
                 + "                 JOIN ProductDetail pd ON p.ID = pd.ProductID "
@@ -84,10 +85,6 @@ public class ProductDAO extends DBContext {
         if (maxPrice != null) {
             sql += " AND pd.Price <= ?";
             params.add(maxPrice);
-        }
-        if (color != null && !color.isEmpty()) {
-            sql += " AND pd.Color = ?";
-            params.add(color);
         }
         if (size != null && !size.isEmpty()) {
             sql += " AND pd.Size = ?";
@@ -131,7 +128,7 @@ public class ProductDAO extends DBContext {
     
     public List<Product> getProductsByPage2(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String color, String size) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price, pd.Color, pd.Size, pd.ID as PDID FROM Product p " +
+        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price,  pd.Size, pd.ID as PDID FROM Product p " +
 "                                  JOIN ProductDetail pd ON p.ID = pd.ProductID " +
 "                 				 Join Category c on p.CategoryID = c.ID" +
 "                                  WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0  ";
@@ -197,7 +194,7 @@ public class ProductDAO extends DBContext {
         return products;
     }
     
-    public int countTotalProducts(String searchQuery, String categoryId, Double minPrice, Double maxPrice, String color, String size) {
+    public int countTotalProducts(String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
         String sql = "SELECT COUNT(*) FROM Product p "
                 + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
                 + "WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0";
@@ -219,10 +216,6 @@ public class ProductDAO extends DBContext {
         if (maxPrice != null) {
             sql += " AND pd.Price <= ?";
             params.add(maxPrice);
-        }
-        if (color != null && !color.isEmpty()) {
-            sql += " AND pd.Color = ?";
-            params.add(color);
         }
         if (size != null && !size.isEmpty()) {
             sql += " AND pd.Size = ?";
@@ -257,7 +250,7 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + "pd.Color, "
+                + " "
                 + "pd.Stock, "
                 + "pd.price AS price, "
                 + "pd.discount AS discount, "
@@ -281,7 +274,7 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                productDetail.setColor(resultSet.getString("Color"));
+                
                 productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("ProductDetailCreatedAt"));
                 productDetail.setCreatedBy(resultSet.getInt("ProductDetailCreatedBy"));
@@ -341,7 +334,6 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + "pd.Color, "
                 + "pd.Stock, "
                 + "pd.price, "
                 + "pd.discount, "
@@ -361,7 +353,6 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                productDetail.setColor(resultSet.getString("Color"));
                 productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setPrice(resultSet.getDouble("price"));
                 productDetail.setDiscount(resultSet.getInt("discount"));
@@ -394,6 +385,33 @@ public class ProductDAO extends DBContext {
 
         return totalProducts;
     }
+    
+    public List<Topping> getAllToppings() {
+        List<Topping> toppings = new ArrayList<>();
+        String query = "SELECT [ID], [ToppingName], [Price], [IsDeleted], [CreatedDate], [LastUpdated], [Img], [ProductID] FROM [Topping] WHERE [IsDeleted] = 0";
+
+        try (
+             PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Topping topping = new Topping();
+                topping.setId(rs.getInt("ID"));
+                topping.setToppingName(rs.getString("ToppingName"));
+                topping.setPrice(rs.getDouble("Price"));
+                topping.setDeleted(rs.getBoolean("IsDeleted"));
+                topping.setCreatedDate(rs.getDate("CreatedDate").toLocalDate());
+                topping.setLastUpdated(rs.getDate("LastUpdated").toLocalDate());
+                topping.setImg(rs.getString("Img"));
+                topping.setProductId(rs.getInt("ProductID"));
+                toppings.add(topping);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllToppings: " + e.getMessage());
+        }
+        return toppings;
+    }
+    
 
     public List<ProductDetail> getProductDetailsByProductId(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
@@ -402,7 +420,6 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + "pd.Color, "
                 + "pd.Stock, "
                 + "pd.price, "
                 + "pd.discount, "
@@ -420,7 +437,6 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                productDetail.setColor(resultSet.getString("Color"));
                 productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setPrice(resultSet.getDouble("price"));
                 productDetail.setDiscount(resultSet.getInt("discount"));
@@ -520,7 +536,6 @@ public class ProductDAO extends DBContext {
                 + "ProductID, "
                 + "ImageURL, "
                 + "Size, "
-                + "Color, "
                 + "price, "
                 + "discount, "
                 + "Stock, "
@@ -541,7 +556,6 @@ public class ProductDAO extends DBContext {
                     productDetail.setProductId(resultSet.getInt("ProductID"));
                     productDetail.setImageURL(resultSet.getString("ImageURL"));
                     productDetail.setSize(resultSet.getString("Size"));
-                    productDetail.setColor(resultSet.getString("Color"));
                     productDetail.setStock(resultSet.getInt("Stock"));
                     productDetail.setPrice(resultSet.getDouble("price"));
                     productDetail.setDiscount(resultSet.getInt("discount"));
@@ -667,7 +681,7 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + "pd.Color, "
+                + " "
                 + "pd.Stock, "
                 + "pd.price AS price, "
                 + "pd.discount AS discount, "
@@ -691,7 +705,7 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                productDetail.setColor(resultSet.getString("Color"));
+                
                 productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("ProductDetailCreatedAt"));
                 productDetail.setCreatedBy(resultSet.getInt("ProductDetailCreatedBy"));

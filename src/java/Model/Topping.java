@@ -20,6 +20,11 @@ public class Topping {
     private String img;
     private int productId;
 
+    public Topping() {
+    }
+    
+    
+
     // Constructor
     public Topping(int id, String toppingName, double price, boolean isDeleted, LocalDate createdDate, LocalDate lastUpdated, String img, int productId) {
         this.id = id;
