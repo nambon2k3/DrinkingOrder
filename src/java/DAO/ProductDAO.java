@@ -1076,4 +1076,106 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
+        public List<Product> listProductsPage(String name, String category, double minPrice, double maxPrice, int pageSize, int pageNumber, String arrange) {
+        String sql = "SELECT \n"
+                + "    p.ID,\n"
+                + "    p.Name,\n"
+                + "    p.CreatedAt,  \n"
+                + "    pd.ID,\n"
+                + "    pd.ImageURL,\n"
+                + "    pd.Price, \n"
+                + "	pd.discount,\n"
+                + "    c.Name  \n"
+                + "FROM \n"
+                + "    product p\n"
+                + "INNER JOIN \n"
+                + "    productdetail pd\n"
+                + "ON \n"
+                + "    p.ID = pd.ProductID\n"
+                + "INNER JOIN \n"
+                + "    Category pc\n"
+                + "ON \n"
+                + "    p.ID = pc.ID\n"
+                + "INNER JOIN \n"
+                + "    category c\n"
+                + "ON \n"
+                + "    pc.ID = c.ID\n"
+                + "WHERE \n"
+                + "     pd.Price BETWEEN "+minPrice+" AND "+maxPrice+"  \n"
+                + "    AND p.Name LIKE '%"+name+"%'  \n";
+
+        if (category != null && category.length() != 0) {
+            sql += "  AND c.ID in (" + category + ")";
+        }
+
+        sql += "  ORDER BY \n"
+                + "    p.CreatedAt ASC,\n"
+                + "    pd.Price "+arrange+" \n"
+                + " OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
+                + " FETCH NEXT " + pageSize + " ROWS ONLY;";
+        List<Product> products = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                ProductDetail productDetail = new ProductDetail();
+
+                product.setProductId(rs.getInt("ID"));
+                product.setProductName(rs.getString("Name"));
+
+                productDetail.setPrice(rs.getDouble("price"));
+                productDetail.setImageURL(rs.getString("ImageURL"));
+                productDetail.setDiscount(rs.getInt("discount"));
+
+                product.setProductDetail(productDetail);
+
+                products.add(product);
+            }
+            return products;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return products;
+    }
+
+    public int countFilter(String name, String category, double minPrice, double maxPrice) {
+        String sql = "SELECT \n"
+                + "    COUNT(p.ID) AS TotalProducts\n"
+                + "FROM \n"
+                + "    product p\n"
+                + "INNER JOIN \n"
+                + "    productdetail pd\n"
+                + "ON \n"
+                + "    p.ID = pd.ProductID\n"
+                + "INNER JOIN \n"
+                + "    Category pc\n"
+                + "ON \n"
+                + "    p.ID = pc.ID\n"
+                + "INNER JOIN \n"
+                + "    category c\n"
+                + "ON \n"
+                + "    pc.ID = c.ID\n"
+                + "WHERE \n"
+                + "    pd.Price BETWEEN " + minPrice + " AND " + maxPrice + " \n"
+                + "    AND p.Name LIKE '%" + name + "%'";
+                if(category != null && category.length != 0){
+                    sql += "  AND c.ID in ("+category+")";
+                }
+        int products = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                products = rs.getInt(1);
+            }
+            return products;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return products;
+    }
+
 }

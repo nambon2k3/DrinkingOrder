@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,37 +65,47 @@ public class ListProductController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
-        String searchQuery = request.getParameter("searchQuery");
+        String searchQuery = request.getParameter("searchQuery") == null ? "" : request.getParameter("searchQuery");
         String categoryId = request.getParameter("categoryId");
         String minPriceParam = request.getParameter("minPrice");
         String maxPriceParam = request.getParameter("maxPrice");
-        String size = request.getParameter("size");
+        String[] categoriesCheckBox = request.getParameterValues("category");
+        String arrange = request.getParameter("arrange") == null ? "ASC" : request.getParameter("arrange");
+        String _categoriesCheckBox = "";
+        if(categoriesCheckBox != null && categoriesCheckBox.length != 0){
+            if(categoriesCheckBox.length == 1) _categoriesCheckBox = categoriesCheckBox[0];
+            else{
+                _categoriesCheckBox += categoriesCheckBox[0];
+                for (String c : categoriesCheckBox) {
+                    _categoriesCheckBox += (", "+c);
+                }
+            }
+            request.setAttribute("categoriesCheckBox", Arrays.asList(categoriesCheckBox));
+        }
 
         int pageNumber = pageParam == null ? 1 : Integer.parseInt(pageParam);
         int pageSize = 12;
 
-        Double minPrice = minPriceParam == null || minPriceParam.isEmpty() ? null : Double.parseDouble(minPriceParam);
-        Double maxPrice = maxPriceParam == null || maxPriceParam.isEmpty() ? null : Double.parseDouble(maxPriceParam);
+        Double minPrice = minPriceParam == null || minPriceParam.isEmpty() ? 0 : Double.parseDouble(minPriceParam);
+        Double maxPrice = maxPriceParam == null || maxPriceParam.isEmpty() ? 10000 : Double.parseDouble(maxPriceParam);
 
-        List<Product> products = new ProductDAO().getProductsByPage(pageNumber, pageSize, searchQuery, categoryId, minPrice, maxPrice, size);
-        int total = new ProductDAO().countTotalProducts(searchQuery, categoryId, minPrice, maxPrice, size);
+        List<Product> products = new ProductDAO().listProductsPage(searchQuery, _categoriesCheckBox, minPrice, maxPrice, pageSize, pageNumber, arrange);
+        int total = new ProductDAO().countFilter(searchQuery, _categoriesCheckBox, minPrice, maxPrice);
 
-        int endPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+        int endPage = (int)Math.ceil(1.0 *total / pageSize);
         List<Category> categories = new CategoryDAO().getCategories();
-        List<String> colors = new ProductDAO().getAvailableColors();
-        List<String> sizes = new ProductDAO().getAvailableSizes();
+
 
         request.setAttribute("products", products);
         request.setAttribute("endPage", endPage);
         request.setAttribute("page", pageNumber);
         request.setAttribute("categories", categories);
-        request.setAttribute("colors", colors);
-        request.setAttribute("sizes", sizes);
+
         request.setAttribute("searchQuery", searchQuery);
-        request.setAttribute("categoryId", categoryId);
+        request.setAttribute("arrange", arrange);
         request.setAttribute("minPrice", minPrice);
         request.setAttribute("maxPrice", maxPrice);
-        request.setAttribute("selectedSize", size);
+
 
         request.getRequestDispatcher("/list-product.jsp").forward(request, response);
     }
