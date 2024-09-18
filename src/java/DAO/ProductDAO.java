@@ -1054,7 +1054,7 @@ public class ProductDAO extends DBContext {
             while (rs.next()) {
                 Product product = new Product();
                 ProductDetail productDetail = new ProductDetail();
-                List<ProductDetail> productDetails = new ArrayList<>();
+
                 product.setProductId(rs.getInt("ID"));
                 product.setProductName(rs.getString("Name"));
                 product.setDescription(rs.getString("description"));
@@ -1063,8 +1063,7 @@ public class ProductDAO extends DBContext {
                 productDetail.setImageURL(rs.getString("ImageURL"));
                 productDetail.setDiscount(rs.getInt("discount"));
                 
-                productDetails.add(productDetail);
-                product.setListProductDetail(productDetails);
+                product.setProductDetail(productDetail);
                 
                 products.add(product);
             }
