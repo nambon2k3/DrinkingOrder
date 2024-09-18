@@ -1160,7 +1160,7 @@ public class ProductDAO extends DBContext {
                 + "WHERE \n"
                 + "    pd.Price BETWEEN " + minPrice + " AND " + maxPrice + " \n"
                 + "    AND p.Name LIKE '%" + name + "%'";
-                if(category != null && category.length != 0){
+                if(category != null && category.length() != 0){
                     sql += "  AND c.ID in ("+category+")";
                 }
         int products = 0;
