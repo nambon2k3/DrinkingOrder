@@ -144,10 +144,9 @@
                     <div class="col-lg-9">
                         <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
                             <div class="ms-auto">
-                                <select class="form-select d-inline-block w-auto border pt-1">
-                                    <option value="1">Decreasing price</option>
-                                    <option value="2">Decreasing price</option>
-                                    <option value="3">Increasing price</option>
+                                <select class="form-select d-inline-block w-auto border pt-1" name="arrange">
+                                    <option value="ASC" ${arrange eq 'ASC' ? 'selected' : ''}>Increasing price</option>
+                                    <option value="DESC" ${arrange eq 'DESC' ? 'selected' : ''}>Decreasing price</option>
                                 </select>
                             </div>
                         </header>
@@ -160,7 +159,7 @@
                                         <img src="${p.productDetail.imageURL}" class="card-img-top" />
                                         <div class="card-body d-flex flex-column">
                                             <div class="d-flex flex-row">
-                                                <h5 class="mb-1 me-1">${p.productDetail.price * ( 100 - p.productDetail.discount eq null ? 100 : p.productDetail.discount)/100}</h5>
+                                                <h5 class="mb-1 me-1">${p.productDetail.price*(100 - (p.productDetail.discount eq null ? 100 : p.productDetail.discount)) / 100}</h5>
                                                 <span class="text-danger"><s>${p.productDetail.price}</s></span>
                                             </div>
                                             <p class="card-text">${p.productName}</p>
