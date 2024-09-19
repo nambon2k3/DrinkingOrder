@@ -1,236 +1,301 @@
-<%-- 
-    Document   : Home
-    Created on : Jan 7, 2024, 9:04:10 PM
-    Author     : Admin
---%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>List Product Page</title>
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Login Form</title>
+        <!-- Font Awesome -->
+        <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
+            />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+            />
+
+        <!-- MDB -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css"
+            rel="stylesheet"
+            />
+        <!-- Custom styles -->
         <style>
-            .product-title, .price, .sizes {
-                text-transform: UPPERCASE;
-                font-weight: bold;
+            .icon-hover:hover {
+                border-color: #3b71ca !important;
+                background-color: white !important;
             }
 
-            .checked, .price span {
-                color: #ff9f1a;
-            }
-
-            .product-title, .rating, .product-description, .price, .vote, .sizes {
-                margin-bottom: 15px;
-            }
-            .size {
-                margin-right: 10px;
-            }
-            .size:first-of-type {
-                margin-left: 40px;
-            }
-
-            .size.active{
-                background-color: black;
-                color: white
-            }
-            .size:hover {
-                cursor: pointer;
-                background-color: #555252
+            .icon-hover:hover i {
+                color: #3b71ca !important;
             }
         </style>
     </head>
     <body>
-        <jsp:include page="Header.jsp"></jsp:include>
-            <!-- Header-->
-            <header class="py-5" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://w0.peakpx.com/wallpaper/752/914/HD-wallpaper-sabito-s-haori-kimetsu-no-yaiba-pattern.jpg);">
-                <div class="container px-4 px-lg-5 my-5">
-                    <div class="text-center text-white">
-                        <h1 class="display-4 fw-bolder">Shop in style</h1>
-                        <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
-                    </div>
-                </div>
+        <!--Main Navigation-->
+        <header>
+            <!-- Jumbotron -->
+            <jsp:include page="Header.jsp"></jsp:include>
+                <!-- Jumbotron -->
+
+
             </header>
-            <!-- Section-->
-            <section class="py-5 ">
-                <div class="container px-4 px-lg-5 mt-5 d-flex justify-content-between">
-                    <!-- Search and Filter Form -->
-                    <div class="col-3 mr-2">
-                        <form action="list-product" method="get" class="d-flex mb-4 flex-column justify-content-between">
-                            <input class="form-control me-2 mb-4" type="search" name="searchQuery" placeholder="Search" aria-label="Search" value="${searchQuery}">
+            <!-- Products -->
+            <section class="mt-5">
+                <div class="container">
+                    <div class="row">
+                        <!-- sidebar -->
+                        <div class="col-lg-3">
+                            <!-- Toggle button -->
+                            <button
+                                class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
+                                type="button"
+                                data-mdb-toggle="collapse"
+                                data-mdb-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation"
+                                >
+                                <span>Show filter</span>
+                            </button>
+                            <!-- Collapsible wrapper -->
+                            <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+                                <form action="list-product">
+                                    <input type="hidden" name="searchQuery" value="${searchQuery}" />
+                                <div class="accordion" id="accordionPanelsStayOpenExample">
 
-                        <select class="form-select me-2 mb-4" name="categoryId">
-                            <option value="">All Categories</option>
-                            <c:forEach items="${categories}" var="category">
-                                <option value="${category.ID}" <c:if test="${categoryId == category.ID}">selected</c:if>>${category.categoryName}</option>
-                            </c:forEach>
-                        </select>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingTwo">
+                                            <button
+                                                class="accordion-button text-dark bg-light"
+                                                type="button"
+                                                >
+                                                Category
+                                            </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo">
+                                            <div class="accordion-body">
+                                                <div>
+                                                    <!-- Checked checkbox -->
+                                                    <c:forEach items="${categories}" var="c">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" name="category" type="checkbox" value="${c.ID}" ${categoriesCheckBox.contains(c.ID.toString()) == true ? 'checked' : ''}/>
+                                                            <label class="form-check-label">${c.categoryName}</label>
 
-                        <input class="form-control me-2 mb-4" type="number" name="minPrice" placeholder="Min Price" value="${minPrice}">
-                        <input class="form-control me-2 mb-4" type="number" name="maxPrice" placeholder="Max Price" value="${maxPrice}">
+                                                        </div>
+                                                    </c:forEach>
 
-                        <select class="form-select me-2 mb-4" name="color">
-                            <option value="">All Colors</option>
-                            <c:forEach items="${colors}" var="color">
-                                <option value="${color}" <c:if test="${selectedColor == color}">selected</c:if>>${color}</option>
-                            </c:forEach>
-                        </select>
-
-                        <select class="form-select me-2 mb-4" name="size">
-                            <option value="">All Sizes</option>
-                            <c:forEach items="${sizes}" var="size">
-                                <option value="${size}" <c:if test="${selectedSize == size}">selected</c:if>>${size}</option>
-                            </c:forEach>
-                        </select>
-
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center col-9">
-                    <c:forEach items="${products}" var="p">
-                        <div class="col mb-5">
-                            <div class="card h-100">
-                                <!-- Sale badge-->
-                                <c:if test="${p.productDetail.discount != null || p.productDetail.discount != 0}">
-                                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                                </c:if>
-
-                                <!-- Product image-->
-                                <img class="card-img-top" src="${p.productDetail.imageURL}" alt="..." />
-                                <!-- Product details-->
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <!-- Product name-->
-                                        <h5 class="fw-bolder">${p.productName}</h5>
-                                        <!-- Product reviews-->
-                                        <div class="d-flex justify-content-center small text-warning mb-2">
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <!-- Product price-->
-                                        <span class="text-muted text-decoration-line-through">$20.00</span>
-                                        $${p.productDetail.price}
                                     </div>
+                                    <div class="accordion-item">
+                                        <h2 >
+                                            <button
+                                                class="accordion-button text-dark bg-light"
+                                                type="button"
+                                                >
+                                                Price
+                                            </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+                                            <div class="accordion-body">
+
+                                                <div class="row mb-3">
+                                                    <div class="col-6">
+                                                        <p class="mb-0">
+                                                            Min
+                                                        </p>
+                                                        <div class="form-outline">
+                                                            <input type="number" value="${minPrice}" name="minPrice" id="typeNumber" class="form-control border" />
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p class="mb-0">
+                                                            Max
+                                                        </p>
+                                                        <div class="form-outline">
+                                                            <input type="number" value="${maxPrice}" name="maxPrice" id="typeNumber" class="form-control border" />
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-white w-100 border border-secondary">apply</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
-                                <!-- Product actions-->
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="product-detail?id=${p.productId}">View details</a></div>
-<!--                                    <div class="text-center mt-3">
-                                        <button  type="button" class="btn btn-outline-dark mt-auto text-center" data-bs-toggle="modal" data-bs-target="#exampleModal-${p.productId}">
-                                            Add To Cart
-                                        </button>
-                                    </div>-->
-                                </div>
-                            </div>
+
                         </div>
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal-${p.productId}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Choose type</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h3 class="product-title">${p.productName}</h3>
-                                        <p class="product-description">${product.description}</p>
-                                        <h4 class="price">current price: <span><span style="color: grey; text-decoration: line-through; margin: 0 10px">${p.productDetail.price}$</span> ${p.productDetail.price * (1 - p.productDetail.discount/100)}$ </span></h4>
-                                        <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
-                                        <h5 class="sizes">sizes:
-                                            <span style="margin-right: 20px"></span>
-                                            <c:forEach items="${p.listProductDetail}" var="pd">
-                                                <span class="color size ${pd.size == p.productDetail.size ? 'active' : ''}" onclick="toggleActive(this, ${pd.productDetailId}, '${pd.color}', ${pd.stock})" data-toggle="tooltip" style="border: 1px solid black; text-align: center; align-content: center;" title="small">
-                                                    ${pd.size}
-                                                </span>
-                                            </c:forEach>
-                                        </h5>
-                                        <h5 class="colors">Quantity: 
-                                            <input oninput="valid2(this)" id="quantity" type="text" style="padding: 5px; width: 200px"  value="1" name="quantity"> 
-                                            <span style="font-weight: normal; font-style: italic; font-size: 16px"> (Available: <span id="stock">${p.productDetail.stock}</span>) </span>
-                                        </h5>
-                                        <input type="hidden" id="selectedProductDetailId" name="selectedProductDetailId" value="${p.productDetail.productDetailId}" />
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="addToCart(${p.productDetail.productDetailId})">Submit</button>
+                    </div>
+                    <!-- sidebar -->
+                    <!-- content -->
+                    <div class="col-lg-9">
+                        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+                            <div class="ms-auto">
+                                <select class="form-select d-inline-block w-auto border pt-1">
+                                    <option value="1">Decreasing price</option>
+                                    <option value="2">Decreasing price</option>
+                                    <option value="3">Increasing price</option>
+                                </select>
+                            </div>
+                        </header>
+
+                        <div class="row">
+
+                            <c:forEach items="${products}" var="p">
+                                <div class="col-lg-4 col-md-6 col-sm-6 d-flex">
+                                    <div class="card w-100 my-2 shadow-2-strong">
+                                        <img src="${p.productDetail.imageURL}" class="card-img-top" />
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="d-flex flex-row">
+                                                <h5 class="mb-1 me-1">${p.productDetail.price * ( 100 - p.productDetail.discount eq null ? 100 : p.productDetail.discount)/100}</h5>
+                                                <span class="text-danger"><s>${p.productDetail.price}</s></span>
+                                            </div>
+                                            <p class="card-text">${p.productName}</p>
+                                            <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                                                <a href="#!" class="btn btn-primary shadow-0 me-1">View detail</a>
+                                                <a href="#!" class="btn btn-light border icon-hover px-2 pt-2"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </c:forEach>
                         </div>
-                    </c:forEach> 
-                    <!-- Pagination -->
-                    <div class="row mb-5">
-                        <form action="list-product" method="get" class="d-flex text-center justify-content-center align-items-lg-center">
-                            <input type="hidden" name="searchQuery" value="${searchQuery}">
-                            <input type="hidden" name="categoryId" value="${categoryId}">
+
+                        <hr />
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
                             <button style="margin-right: 10px; width: fit-content" class="btn btn-primary">Go to Page:</button>
                             <input class="form-control" oninput="valid(this)" style="width: 30px; font-size: 15px; padding: 5px; height: 25px; margin-right: 5px" pattern="\d{1,}" title="Enter number" type="text" name="page" value="${page}" min="1" max="${endPage}">
                             / ${endPage}
-                        </form>
+                            </form>
+                        </nav>
+                        <!-- Pagination -->
                     </div>
                 </div>
-
-
-            </div>
+            </div>            
         </section>
-
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
-
-        <script>
-                                            function valid(input) {
-                                                input.value = input.value.replace(/[^0-9]/g, '');
-                                                if (input.value > ${endPage})
-                                                    input.value = ${endPage};
-                                                if (input.value < 1)
-                                                    input.value = 1;
-                                            }
+        <!-- Products -->
 
 
-                                            function toggleActive(element, productDetailId, color, stock) {
-                                                // Remove 'active' class from all spans
-                                                document.querySelectorAll('.color.size').forEach(span => {
-                                                    span.classList.remove('active');
-                                                });
 
-                                                // Add 'active' class to the clicked span
-                                                element.classList.add('active');
-                                                document.getElementById('stock').innerHTML = stock;
-                                                // Update the hidden input with the selected ProductDetail ID
-                                                document.getElementById('selectedProductDetailId').value = productDetailId;
+        <!-- Footer -->
+        <footer
+            class="text-center text-lg-start text-muted mt-3"
+            style="background-color: #f5f5f5"
+            >
+            <!-- Section: Links  -->
+            <section class="">
+                <div class="container text-center text-md-start pt-4 pb-4">
+                    <!-- Grid row -->
+                    <div class="row mt-3">
+                        <!-- Grid column -->
+                        <div class="col-12 col-lg-3 col-sm-12 mb-2">
+                            <!-- Content -->
+                            <a href="https://mdbootstrap.com/" target="_blank" class="">
+                                <img
+                                    src="${pageContext.request.contextPath}/Image/logo.png"
+                                    height="35"
+                                    />
+                            </a>
+                            <p class="mt-2 text-dark">© 2023 Copyright: SWP391 - FPT University</p>
+                        </div>
+                        <!-- Grid column -->
 
-                                                // Update the color display
-                                                document.getElementById('selectedColor').style.backgroundColor = color.toLowerCase();
-                                            }
-                                            function addToCart(id) {
-                                                let quantity = document.getElementById('quantity').value;
-                                                console.log(quantity);
-                                                fetch('add-cart?id=' + id + '&quantity=' + quantity);
-                                                window.alert('ADDED Successfully');
-                                            }
+                        <!-- Grid column -->
+                        <div class="col-6 col-sm-4 col-lg-2">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Store</h6>
+                            <ul class="list-unstyled mb-4">
+                                <li><a class="text-muted" href="#">About us</a></li>
+                                <li><a class="text-muted" href="#">Find store</a></li>
+                                <li><a class="text-muted" href="#">Categories</a></li>
+                                <li><a class="text-muted" href="#">Blogs</a></li>
+                            </ul>
+                        </div>
+                        <!-- Grid column -->
 
+                        <!-- Grid column -->
+                        <div class="col-6 col-sm-4 col-lg-2">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Information</h6>
+                            <ul class="list-unstyled mb-4">
+                                <li><a class="text-muted" href="#">Help center</a></li>
+                                <li><a class="text-muted" href="#">Money refund</a></li>
+                                <li><a class="text-muted" href="#">Shipping info</a></li>
+                                <li><a class="text-muted" href="#">Refunds</a></li>
+                            </ul>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-6 col-sm-4 col-lg-2">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Support</h6>
+                            <ul class="list-unstyled mb-4">
+                                <li><a class="text-muted" href="#">Help center</a></li>
+                                <li><a class="text-muted" href="#">Documents</a></li>
+                                <li><a class="text-muted" href="#">Account restore</a></li>
+                                <li><a class="text-muted" href="#">My orders</a></li>
+                            </ul>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-12 col-sm-12 col-lg-3">
+                            <!-- Links -->
+                            <h6 class="text-uppercase text-dark fw-bold mb-2">Newsletter</h6>
+                            <p class="text-muted">
+                                Stay in touch with latest updates about our products and offers
+                            </p>
+                            <div class="input-group mb-3">
+                                <input
+                                    type="email"
+                                    class="form-control border"
+                                    placeholder="Email"
+                                    aria-label="Email"
+                                    aria-describedby="button-addon2"
+                                    />
+                                <button
+                                    class="btn btn-light border shadow-0"
+                                    type="button"
+                                    id="button-addon2"
+                                    data-mdb-ripple-color="dark"
+                                    >
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+                    <!-- Grid row -->
+                </div>
+            </section>
+            <!-- Section: Links  -->
+
+        </footer>
+        <!-- Footer -->
+        <!-- MDB -->
+        <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"
+        ></script>
+        <!-- Custom scripts -->
+        <script type="text/javascript">
 
         </script>
-
-        <script>
-            function valid2(input) {
-                input.value = input.value.replace(/[^0-9]/g, '');
-                if (input.value - document.getElementById('stock').innerHTML > 0)
-                    input.value = document.getElementById('stock').innerHTML;
-                if (input.value < 1)
-                    input.value = 1;
-            }
-        </script>
-        <!-- đáy -->
-        <jsp:include page="footer.html"></jsp:include>
     </body>
 </html>
