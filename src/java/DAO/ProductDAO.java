@@ -1076,42 +1076,24 @@ public class ProductDAO extends DBContext {
     }
 
         public List<Product> listProductsPage(String name, String category, double minPrice, double maxPrice, int pageSize, int pageNumber, String arrange) {
-        String sql = "SELECT \n"
-                + "    p.ID,\n"
-                + "    p.Name,\n"
-                + "    p.CreatedAt,  \n"
-                + "    pd.ID,\n"
-                + "    pd.ImageURL,\n"
-                + "    pd.Price, \n"
-                + "	pd.discount,\n"
-                + "    c.Name  \n"
-                + "FROM \n"
-                + "    product p\n"
-                + "INNER JOIN \n"
-                + "    productdetail pd\n"
-                + "ON \n"
-                + "    p.ID = pd.ProductID\n"
-                + "INNER JOIN \n"
-                + "    Category pc\n"
-                + "ON \n"
-                + "    p.ID = pc.ID\n"
-                + "INNER JOIN \n"
-                + "    category c\n"
-                + "ON \n"
-                + "    pc.ID = c.ID\n"
-                + "WHERE \n"
-                + "     pd.Price BETWEEN "+minPrice+" AND "+maxPrice+"  \n"
-                + "    AND p.Name LIKE '%"+name+"%'  \n";
+        String sql = "SELECT p.*, pd.*, c.*\n"
+                + "FROM Product p\n"
+                + "JOIN ProductDetail pd ON p.ID = pd.ProductID\n"
+                + "JOIN Category c ON p.CategoryID = c.ID\n"
+                + "JOIN (\n"
+                + "    SELECT ProductID, MIN(Price) AS CheapestPrice\n"
+                + "    FROM ProductDetail\n"
+                + "    GROUP BY ProductID\n"
+                + ") min_pd ON pd.ProductID = min_pd.ProductID AND pd.Price = min_pd.CheapestPrice\n"
+                ;
 
         if (category != null && category.length() != 0) {
-            sql += "  AND c.ID in (" + category + ")";
+            sql += "  WHERE c.ID in (" + category + ")";
         }
 
-        sql += "  ORDER BY \n"
-                + "    p.CreatedAt ASC,\n"
-                + "    pd.Price "+arrange+" \n"
-                + " OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
+        sql += "ORDER BY p.CreatedAt DESC\n  OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
                 + " FETCH NEXT " + pageSize + " ROWS ONLY;";
+
         List<Product> products = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -1140,28 +1122,20 @@ public class ProductDAO extends DBContext {
     }
 
     public int countFilter(String name, String category, double minPrice, double maxPrice) {
-        String sql = "SELECT \n"
-                + "    COUNT(p.ID) AS TotalProducts\n"
-                + "FROM \n"
-                + "    product p\n"
-                + "INNER JOIN \n"
-                + "    productdetail pd\n"
-                + "ON \n"
-                + "    p.ID = pd.ProductID\n"
-                + "INNER JOIN \n"
-                + "    Category pc\n"
-                + "ON \n"
-                + "    p.ID = pc.ID\n"
-                + "INNER JOIN \n"
-                + "    category c\n"
-                + "ON \n"
-                + "    pc.ID = c.ID\n"
-                + "WHERE \n"
-                + "    pd.Price BETWEEN " + minPrice + " AND " + maxPrice + " \n"
-                + "    AND p.Name LIKE '%" + name + "%'";
-                if(category != null && category.length() != 0){
-                    sql += "  AND c.ID in ("+category+")";
-                }
+                String sql = "SELECT count(p.id)\n"
+                + "FROM Product p\n"
+                + "JOIN ProductDetail pd ON p.ID = pd.ProductID\n"
+                + "JOIN Category c ON p.CategoryID = c.ID\n"
+                + "JOIN (\n"
+                + "    SELECT ProductID, MIN(Price) AS CheapestPrice\n"
+                + "    FROM ProductDetail\n"
+                + "    GROUP BY ProductID\n"
+                + ") min_pd ON pd.ProductID = min_pd.ProductID AND pd.Price = min_pd.CheapestPrice\n"
+                ;
+
+        if (category != null && category.length() != 0) {
+            sql += "  WHERE c.ID in (" + category + ")";
+        }
         int products = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
