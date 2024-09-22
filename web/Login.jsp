@@ -3,225 +3,229 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
-        <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-            />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>Login Form</title>
-        <!-- Font Awesome -->
-        <link
-            rel="stylesheet"
-            href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
-            />
-        <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-            />
-
-        <!-- MDB -->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css"
-            rel="stylesheet"
-            />
-        <!-- Custom styles -->
-        <style>
-            .icon-hover:hover {
-                border-color: #3b71ca !important;
-                background-color: white !important;
-            }
-
-            .icon-hover:hover i {
-                color: #3b71ca !important;
-            }
-        </style>
+        <title>Login</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="author" content="">
+        <meta name="keywords" content="">
+        <meta name="description" content="">
     </head>
-    <body>
-        <!--Main Navigation-->
-        <header>
-            <!-- Jumbotron -->
-            <jsp:include page="Header.jsp"></jsp:include>
-                <!-- Jumbotron -->
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 
-            </header>
-            <!-- Products -->
-            <section class="vh-100" style="background-color: #508bfc;">
-                <div class="container py-5 h-100">
-                    <div class="row d-flex justify-content-center align-items-center h-100">
-                        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                            <div class="card shadow-2-strong" style="border-radius: 1rem;">
-                                <div class="card-body p-5 text-center">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
-                                    <h3 class="mb-5">Log in</h3>
-                                <% if (request.getAttribute("errorMessage") != null) { %>
-                                <div class="text-danger">
-                                    <%= request.getAttribute("errorMessage") %>
-                                </div>
-                                <% } %>
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 
-                                <form action="login" method="post">
-                                    
-                                    <div data-mdb-input-init class="form-outline mb-1">
-                                        <input type="email" id="email" name="email" class="form-control form-control-lg" required oninput="validateEmail()" />
-                                        <label class="form-label" for="typeEmailX-2">Email</label>
-                                    </div>
-                                    <div id="emailError" class="text-danger"></div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chilanka&family=Montserrat:wght@300;400;500&display=swap"
+          rel="stylesheet">
+    <style>
+            .custom-user-profile {
+                position: relative;
+                display: inline-block;
+            }
 
-                                    <div data-mdb-input-init class="form-outline mt-3 mb-1">
-                                        <input type="password" id="password" name="password" class="form-control form-control-lg" required oninput="validatePassword()"/>
-                                        <label class="form-label" for="typePasswordX-2">Password</label>
-                                    </div>
-                                    <div id="passwordError" class="text-danger"></div>
+            .custom-user-image {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+            }
 
-                                    <button  class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+            .custom-dropdown {
+                display: inline-block;
+            }
 
-                                </form>
-                                <hr class="my-4">
+            .custom-dropbtn {
+                background-color: #F9F3EC;
+                ;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-                                <a href="${pageContext.request.contextPath}/reset-password">Forgot password?</a><br>
-                                Don't have account? <a href="${pageContext.request.contextPath}/register"> Register</a>
-                            </div>
+            .custom-dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1000;
+            }
+
+            .custom-dropdown-item {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            .custom-dropdown-item:hover {
+                background-color: #f1f1f1;
+            }
+
+            .custom-dropdown:hover .custom-dropdown-content {
+                display: block;
+            }
+
+        </style>
+
+</head>
+
+<body>
+
+    <div class="preloader-wrapper">
+        <div class="preloader">
+        </div>
+    </div>
+
+    <jsp:include page="Header.jsp"></jsp:include>
+        <section id="register" style="background: url('images/background-img.png') no-repeat;">
+            <div class="container ">
+                <div class="row py-5">
+                    <div class="offset-md-3 col-md-6 my-5 ">
+                        <h2 class="display-3 fw-normal text-center">
+                            Login
+                        </h2>
+                    <c:if test="${errorMessage != null}">
+                        <p class="text-center" style="color: red">${errorMessage}</p>
+                    </c:if>
+                    <form action="login" method="post">
+                        <div class="mb-3">
+                            <input type="email" class="form-control form-control-lg" name="email" id="email"
+                                   placeholder="Enter Your Email Address">
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control form-control-lg" name="password" id="password"
+                                   placeholder="Password">
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-dark btn-lg rounded-1">Login</button>
+                        </div>
+                    </form>
+                    <p style="margin-top: 5px; margin-bottom: 0"><a style="color: blue" href="${pageContext.request.contextPath}/reset-password">Forgot password?</a></p>
+                    <p style="margin-top: 2px">Don't have account? <a href="${pageContext.request.contextPath}/register" style="color: blue">Register</a></p>
                 </div>
             </div>
-        </section>
-        <!-- Products -->
+        </div>
+    </section>
 
 
+    <footer id="footer" class="my-5">
+        <div class="container py-5 my-5">
+            <div class="row">
 
-        <!-- Footer -->
-        <footer
-            class="text-center text-lg-start text-muted mt-3"
-            style="background-color: #f5f5f5"
-            >
-            <!-- Section: Links  -->
-            <section class="">
-                <div class="container text-center text-md-start pt-4 pb-4">
-                    <!-- Grid row -->
-                    <div class="row mt-3">
-                        <!-- Grid column -->
-                        <div class="col-12 col-lg-3 col-sm-12 mb-2">
-                            <!-- Content -->
-                            <a href="https://mdbootstrap.com/" target="_blank" class="">
-                                <img
-                                    src="${pageContext.request.contextPath}/Image/logo.png"
-                                    height="35"
-                                    />
-                            </a>
-                            <p class="mt-2 text-dark">© 2023 Copyright: SWP391 - FPT University</p>
-                        </div>
-                        <!-- Grid column -->
+                <div class="col-md-3">
+                    <div class="footer-menu">
+                        <img src="${pageContext.request.contextPath}/Image/logo.png" alt="logo">
+                        <p class="blog-paragraph fs-6 mt-3">Subscribe to our newsletter to get updates about our grand offers.</p>
+                        <div class="social-links">
+                            <ul class="d-flex list-unstyled gap-2">
+                                <li class="social">
+                                    <a href="#">
+                                        <iconify-icon class="social-icon" icon="ri:facebook-fill"></iconify-icon>
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a href="#">
+                                        <iconify-icon class="social-icon" icon="ri:twitter-fill"></iconify-icon>
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a href="#">
+                                        <iconify-icon class="social-icon" icon="ri:pinterest-fill"></iconify-icon>
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a href="#">
+                                        <iconify-icon class="social-icon" icon="ri:instagram-fill"></iconify-icon>
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a href="#">
+                                        <iconify-icon class="social-icon" icon="ri:youtube-fill"></iconify-icon>
+                                    </a>
+                                </li>
 
-                        <!-- Grid column -->
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Store</h6>
-                            <ul class="list-unstyled mb-4">
-                                <li><a class="text-muted" href="#">About us</a></li>
-                                <li><a class="text-muted" href="#">Find store</a></li>
-                                <li><a class="text-muted" href="#">Categories</a></li>
-                                <li><a class="text-muted" href="#">Blogs</a></li>
                             </ul>
                         </div>
-                        <!-- Grid column -->
-
-                        <!-- Grid column -->
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Information</h6>
-                            <ul class="list-unstyled mb-4">
-                                <li><a class="text-muted" href="#">Help center</a></li>
-                                <li><a class="text-muted" href="#">Money refund</a></li>
-                                <li><a class="text-muted" href="#">Shipping info</a></li>
-                                <li><a class="text-muted" href="#">Refunds</a></li>
-                            </ul>
-                        </div>
-                        <!-- Grid column -->
-
-                        <!-- Grid column -->
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Support</h6>
-                            <ul class="list-unstyled mb-4">
-                                <li><a class="text-muted" href="#">Help center</a></li>
-                                <li><a class="text-muted" href="#">Documents</a></li>
-                                <li><a class="text-muted" href="#">Account restore</a></li>
-                                <li><a class="text-muted" href="#">My orders</a></li>
-                            </ul>
-                        </div>
-                        <!-- Grid column -->
-
-                        <!-- Grid column -->
-                        <div class="col-12 col-sm-12 col-lg-3">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Newsletter</h6>
-                            <p class="text-muted">
-                                Stay in touch with latest updates about our products and offers
-                            </p>
-                            <div class="input-group mb-3">
-                                <input
-                                    type="email"
-                                    class="form-control border"
-                                    placeholder="Email"
-                                    aria-label="Email"
-                                    aria-describedby="button-addon2"
-                                    />
-                                <button
-                                    class="btn btn-light border shadow-0"
-                                    type="button"
-                                    id="button-addon2"
-                                    data-mdb-ripple-color="dark"
-                                    >
-                                    Join
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Grid column -->
                     </div>
-                    <!-- Grid row -->
                 </div>
-            </section>
-            <!-- Section: Links  -->
+                <div class="col-md-3">
+                    <div class="footer-menu">
+                        <h3>Quick Links</h3>
+                        <ul class="menu-list list-unstyled">
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Home</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">About us</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Offer </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Services</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Conatct Us</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-menu">
+                        <h3>Help Center</h5>
+                            <ul class="menu-list list-unstyled">
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">FAQs</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Payment</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Returns & Refunds</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Checkout</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Delivery Information</a>
+                                </li>
+                            </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div>
+                        <h3>Our Newsletter</h3>
+                        <p class="blog-paragraph fs-6">Subscribe to our newsletter to get updates about our grand offers.</p>
+                        <div class="search-bar border rounded-pill border-dark-subtle px-2">
+                            <form class="text-center d-flex align-items-center" action="" method="">
+                                <input type="text" class="form-control border-0 bg-transparent" placeholder="Enter your email here" />
+                                <iconify-icon class="send-icon" icon="tabler:location-filled"></iconify-icon>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
-        </footer>
-        <!-- Footer -->
-        <!-- MDB -->
-        <script
-            type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"
-        ></script>
-        <!-- Custom scripts -->
-        <script type="text/javascript">
-            function validateEmail() {
-                var emailInput = document.getElementById('email');
-                var emailError = document.getElementById('emailError');
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            </div>
+        </div>
+    </footer>
 
-                if (!emailRegex.test(emailInput.value)) {
-                    emailError.textContent = 'Invalid email address';
-                } else {
-                    emailError.textContent = '';
-                }
-            }
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+</body>
 
-            function validatePassword() {
-                var passwordInput = document.getElementById('password');
-                var passwordError = document.getElementById('passwordError');
-
-                if (passwordInput.value.trim() === '') {
-                    passwordError.textContent = 'Password cannot be empty';
-                } else if (passwordInput.value.length < 8) {
-                    passwordError.textContent = 'Password need more than 8 character';
-                } else {
-                    passwordError.textContent = '';
-                }
-            }
-        </script>
-    </body>
 </html>
-
-
