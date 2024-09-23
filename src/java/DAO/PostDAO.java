@@ -317,7 +317,7 @@ public class PostDAO extends DBContext {
     }
     
     public List<Post> homePage(){
-        String sql = "SELECT TOP 4 * FROM post where isDeleted = 0 ORDER BY CreatedAt DESC";
+        String sql = "SELECT TOP 3 * FROM post where isDeleted = 0 ORDER BY CreatedAt DESC";
         List<Post> posts = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
