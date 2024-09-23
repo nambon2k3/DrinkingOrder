@@ -125,13 +125,12 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-    
     public List<Product> getProductsByPage2(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String color, String size) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price,  pd.Size, pd.ID as PDID FROM Product p " +
-"                                  JOIN ProductDetail pd ON p.ID = pd.ProductID " +
-"                 				 Join Category c on p.CategoryID = c.ID" +
-"                                  WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0  ";
+        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price,  pd.Size, pd.ID as PDID FROM Product p "
+                + "                                  JOIN ProductDetail pd ON p.ID = pd.ProductID "
+                + "                 				 Join Category c on p.CategoryID = c.ID"
+                + "                                  WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0  ";
 
         List<Object> params = new ArrayList<>();
 
@@ -193,7 +192,7 @@ public class ProductDAO extends DBContext {
 
         return products;
     }
-    
+
     public int countTotalProducts(String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
         String sql = "SELECT COUNT(*) FROM Product p "
                 + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
@@ -274,7 +273,7 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                
+
                 productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("ProductDetailCreatedAt"));
                 productDetail.setCreatedBy(resultSet.getInt("ProductDetailCreatedBy"));
@@ -385,14 +384,13 @@ public class ProductDAO extends DBContext {
 
         return totalProducts;
     }
-    
+
     public List<Topping> getAllToppings() {
         List<Topping> toppings = new ArrayList<>();
         String query = "SELECT [ID], [ToppingName], [Price], [IsDeleted], [CreatedDate], [LastUpdated], [Img], [ProductID] FROM [Topping] WHERE [IsDeleted] = 0";
 
         try (
-             PreparedStatement ps = connection.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Topping topping = new Topping();
@@ -411,7 +409,6 @@ public class ProductDAO extends DBContext {
         }
         return toppings;
     }
-    
 
     public List<ProductDetail> getProductDetailsByProductId(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
@@ -705,7 +702,7 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                
+
                 productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("ProductDetailCreatedAt"));
                 productDetail.setCreatedBy(resultSet.getInt("ProductDetailCreatedBy"));
@@ -735,7 +732,7 @@ public class ProductDAO extends DBContext {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     updateProductDetailQuantity(resultSet.getInt(1), resultSet.getInt(2) * mode);
-                    
+
                 }
             }
         } catch (SQLException e) {
@@ -743,7 +740,7 @@ public class ProductDAO extends DBContext {
         }
 
     }
-    
+
     public void updateHoldQuantity(int orderId, int mode) {
         String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
                 = "SELECT ProductDetailID, [quantity] "
@@ -763,7 +760,7 @@ public class ProductDAO extends DBContext {
         }
 
     }
-    
+
     public void updateProductDetailQuantity(int productDetailId, int quantity) {
         String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL
                 = "UPDATE ProductDetail "
@@ -795,7 +792,7 @@ public class ProductDAO extends DBContext {
             System.out.println("updateProductDetailQuantity: " + e.getMessage());
         }
     }
-    
+
     public int addProduct(Product product) {
         int generatedId = -1; // Initialize to a default value if insertion fails
         String query = "INSERT INTO Product (Name, CategoryID, CreatedBy, Description, IsDeleted) "
@@ -897,7 +894,7 @@ public class ProductDAO extends DBContext {
                     product.setCreatedBy(rs.getInt("CreatedBy"));
                     product.setDescription(rs.getString("Description"));
                     product.setIsDeleted(rs.getBoolean("IsDeleted"));
-                    
+
                     productList.add(product);
                 }
             }
@@ -1002,7 +999,7 @@ public class ProductDAO extends DBContext {
 
         return success;
     }
-    
+
     public boolean updateProductDetailInventory(ProductDetail productDetail) {
         boolean success = false;
         String query = "UPDATE ProductDetail SET Stock = ?, hold = ?, importPrice = ? "
@@ -1011,7 +1008,7 @@ public class ProductDAO extends DBContext {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, productDetail.getStock());
             statement.setInt(2, productDetail.getHold());
-             statement.setDouble(3, productDetail.getImportPrice());
+            statement.setDouble(3, productDetail.getImportPrice());
             statement.setInt(4, productDetail.getProductDetailId());
 
             int rowsUpdated = statement.executeUpdate();
@@ -1024,7 +1021,7 @@ public class ProductDAO extends DBContext {
 
         return success;
     }
-    
+
     public List<Product> homePage() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT TOP 12 \n"
@@ -1049,7 +1046,7 @@ public class ProductDAO extends DBContext {
                 + "ORDER BY \n"
                 + "    p.CreatedAt DESC\n";
         try {
-             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Product product = new Product();
@@ -1058,13 +1055,13 @@ public class ProductDAO extends DBContext {
                 product.setProductId(rs.getInt("ID"));
                 product.setProductName(rs.getString("Name"));
                 product.setDescription(rs.getString("description"));
-                
+
                 productDetail.setPrice(rs.getDouble("price"));
                 productDetail.setImageURL(rs.getString("ImageURL"));
                 productDetail.setDiscount(rs.getInt("discount"));
-                
+
                 product.setProductDetail(productDetail);
-                
+
                 products.add(product);
             }
             return products;
@@ -1075,23 +1072,28 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-        public List<Product> listProductsPage(String name, String category, double minPrice, double maxPrice, int pageSize, int pageNumber, String arrange) {
+    public List<Product> listProductsPage(String name, String category, double minPrice, double maxPrice, int pageSize, int pageNumber, String arrange) {
         String sql = "SELECT p.*, pd.*, c.*\n"
                 + "FROM Product p\n"
-                + "JOIN ProductDetail pd ON p.ID = pd.ProductID\n"
-                + "JOIN Category c ON p.CategoryID = c.ID\n"
                 + "JOIN (\n"
-                + "    SELECT ProductID, MIN(Price) AS CheapestPrice\n"
-                + "    FROM ProductDetail\n"
-                + "    GROUP BY ProductID\n"
-                + ") min_pd ON pd.ProductID = min_pd.ProductID AND pd.Price = min_pd.CheapestPrice\n"
-                ;
+                + "    SELECT pd1.*\n"
+                + "    FROM ProductDetail pd1\n"
+                + "    JOIN (\n"
+                + "        -- Lấy giá nhỏ nhất của từng ProductID\n"
+                + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
+                + "        FROM ProductDetail\n"
+                + "        GROUP BY ProductID\n"
+                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
+                + ") pd ON p.ID = pd.ProductID\n"
+                + "JOIN Category c ON p.CategoryID = c.ID\n"
+                + "WHERE pd.Price BETWEEN "+minPrice+" AND "+maxPrice+"\n  "
+                + "  AND p.name like '%"+name+"%'  ";
 
         if (category != null && category.length() != 0) {
-            sql += "  WHERE c.ID in (" + category + ")";
+            sql += "  AND c.ID in (" + category + ")";
         }
 
-        sql += "ORDER BY p.CreatedAt DESC\n  OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
+        sql += "ORDER BY pd.price " + arrange + "\n  OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
                 + " FETCH NEXT " + pageSize + " ROWS ONLY;";
 
         List<Product> products = new ArrayList<>();
@@ -1122,19 +1124,24 @@ public class ProductDAO extends DBContext {
     }
 
     public int countFilter(String name, String category, double minPrice, double maxPrice) {
-                String sql = "SELECT count(p.id)\n"
+        String sql = "SELECT COUNT(*)\n"
                 + "FROM Product p\n"
-                + "JOIN ProductDetail pd ON p.ID = pd.ProductID\n"
-                + "JOIN Category c ON p.CategoryID = c.ID\n"
                 + "JOIN (\n"
-                + "    SELECT ProductID, MIN(Price) AS CheapestPrice\n"
-                + "    FROM ProductDetail\n"
-                + "    GROUP BY ProductID\n"
-                + ") min_pd ON pd.ProductID = min_pd.ProductID AND pd.Price = min_pd.CheapestPrice\n"
-                ;
+                + "    SELECT pd1.*\n"
+                + "    FROM ProductDetail pd1\n"
+                + "    JOIN (\n"
+                + "        -- Lấy giá nhỏ nhất của từng ProductID\n"
+                + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
+                + "        FROM ProductDetail\n"
+                + "        GROUP BY ProductID\n"
+                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
+                + ") pd ON p.ID = pd.ProductID\n"
+                + "JOIN Category c ON p.CategoryID = c.ID\n"
+                + "WHERE pd.Price BETWEEN "+minPrice+" AND "+maxPrice+"\n  "
+                + "  AND p.name like '%"+name+"%'  ";
 
         if (category != null && category.length() != 0) {
-            sql += "  WHERE c.ID in (" + category + ")";
+            sql += "  AND c.ID in (" + category + ")";
         }
         int products = 0;
         try {

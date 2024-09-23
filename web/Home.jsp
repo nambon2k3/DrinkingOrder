@@ -1,284 +1,351 @@
-<%-- 
-    Document   : newjsp
-    Created on : Sep 14, 2024, 4:59:23 PM
-    Author     : MSI
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
-        <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-            />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>Material Design for Bootstrap</title>
-        <!-- Font Awesome -->
-        <link
-            rel="stylesheet"
-            href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
-            />
-        <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-            />
+        <title>Home</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="author" content="">
+        <meta name="keywords" content="">
+        <meta name="description" content="">
 
-        <!-- MDB -->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css"
-            rel="stylesheet"
-            />
-        <!-- Custom styles -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+        <link rel="stylesheet" type="text/css" href="css2/vendor.css">
+        <link rel="stylesheet" type="text/css" href="style2.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chilanka&family=Montserrat:wght@300;400;500&display=swap"
+              rel="stylesheet">
         <style>
-            .icon-hover:hover {
-                border-color: #3b71ca !important;
-                background-color: white !important;
+            .custom-user-profile {
+                position: relative;
+                display: inline-block;
             }
 
-            .icon-hover:hover i {
-                color: #3b71ca !important;
+            .custom-user-image {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
             }
+
+            .custom-dropdown {
+                display: inline-block;
+            }
+
+            .custom-dropbtn {
+                background-color: #F9F3EC;
+                ;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .custom-dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1000;
+            }
+
+            .custom-dropdown-item {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            .custom-dropdown-item:hover {
+                background-color: #f1f1f1;
+            }
+
+            .custom-dropdown:hover .custom-dropdown-content {
+                display: block;
+            }
+
         </style>
+
     </head>
+
     <body>
-        <!--Main Navigation-->
-
-        <header>
-            <jsp:include page="Header.jsp"></jsp:include>
-                <!-- Carousel wrapper -->
-                <div id="carouselMaterialStyle" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
-                    <!-- Indicators -->
-                    <div class="carousel-indicators">
-                    <c:forEach var="slider" items="${sliders}" varStatus="status">
-                        <button type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide-to="${status.index}" 
-                                class="${status.index == 0 ? 'active' : ''}" aria-label="Slide ${status.index}"></button>
-                    </c:forEach>
-                </div>
-
-                <!-- Inner -->
-                <div class="carousel-inner rounded-5 shadow-4-strong">
-                    <c:forEach var="slider" items="${sliders}" varStatus="status">
-                        <!-- Single item -->
-                        <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                            <img src="${slider.imageUrl}" class="d-block w-100" alt="..." />
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5>${slider.title}</h5>
-                                <p>${slider.notes}</p>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
-                <!-- Inner -->
-
-                <!-- Controls -->
-                <button class="carousel-control-prev" type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+        <div class="preloader-wrapper">
+            <div class="preloader">
             </div>
+        </div>
+        
+        <jsp:include page="Header.jsp"></jsp:include>
 
-            <!-- Carousel wrapper -->
-        </header>
-        <!-- Products -->
-        <section>
-            <div class="container my-5">
-                <header class="mb-4 d-flex justify-content-between align-items-center">
-                    <h3>New products</h3>
-                    <a href="public/list-product" class="btn btn-link text-primary">See more</a>
-                </header>
+            <section id="banner" style="background: #F9F3EC;">
+                <div class="container">
+                    <div class="swiper main-swiper">
+                        <div class="swiper-wrapper">
 
-                <div class="row">
-                    <c:forEach items="${products}" var="p">
 
-                        <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="card">
-                                <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
-                                     data-mdb-ripple-color="light">
-                                    <img src="${p.productDetail.imageURL}"
-                                         class="w-100" />
-                                    <a href="public/product-detail?id=${p.productId}">
-                                        <c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
-                                            <div class="mask">
-                                                <div class="d-flex justify-content-start align-items-end h-100">
-                                                    <h5><span class="badge bg-dark ms-2">NEW</span></h5>
-                                                </div>
-                                            </div>
-                                        </c:if>
-                                        <div class="hover-overlay">
-                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <a href="public/product-detail?id=${p.productId}" class="text-reset">
-                                        <h5 class="card-title mb-2">${p.productName}</h5>
-                                    </a>
-                                    <h6 class="mb-3 price">${p.productDetail.price}</h6>
+                        <c:forEach var="slider" items="${sliders}">
+                            <div class="swiper-slide py-5">
+                                <div class="row banner-content align-items-center">
+                                    <div class="img-wrapper col-md-5">
+                                        <img src="${slider.imageUrl}" class="img-fluid">
+                                    </div>
+                                    <div class="content-wrapper col-md-7 p-5 mb-5">
+                                        <div class="banner-title display-1 fw-normal"><h2>${slider.title}</h2></div>
+                                        <p class="secondary-font text-primary text-uppercase mb-4 ">${slider.notes}</p>
+                                    </div>
+
                                 </div>
                             </div>
-                        </div>
+                        </c:forEach>
+                    </div>
 
-                    </c:forEach>
+                    <div class="swiper-pagination mb-5"></div>
 
                 </div>
             </div>
         </section>
-        <!-- Products -->
 
 
-        <!-- Blog -->
-        <section class="mt-5 mb-4">
-            <div class="container text-dark">
-                <header class="mb-4 d-flex justify-content-between align-items-center">
-                    <h3>Blog posts</h3>
-                    <a href="marketing/list-post" class="btn btn-link text-primary">See more</a>
-                </header>
+        <section id="clothing" class="my-5 overflow-hidden">
+            <div class="container pb-5">
 
+                <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
+                    <h2 class="display-3 fw-normal">New product</h2>
+                    <div>
+                        <a href="public/list-product" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+                            See more
+                            <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+                            <use xlink:href="#arrow-right"></use>
+                            </svg></a>
+                    </div>
+                </div>
+
+                <div class="products-carousel swiper">
+                    <div class="swiper-wrapper">
+
+                        <c:forEach items="${products}" var="p">
+
+                            <div class="swiper-slide">
+                                <c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
+                                    <div class="z-1 position-absolute rounded-3 m-3 px-3 border border-dark-subtle bg-light ">
+                                        -${p.productDetail.discount}%
+                                    </div>
+                                </c:if>
+
+                                <div class="card position-relative">
+                                    <a href="single-product.html"><img src="${p.productDetail.imageURL}" class="img-fluid rounded-4" alt="image"></a>
+                                    <div class="card-body p-0">
+                                        <a href="single-product.html">
+                                            <h3 class="card-title pt-4 m-0">${p.productName}</h3>
+                                        </a>
+
+                                        <div class="card-text">
+                                            <span class="rating secondary-font">
+                                                <iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+                                                <iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+                                                <iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+                                                <iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+                                                <iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+                                                5.0</span>
+
+                                            <h3 class="secondary-font text-primary">${p.productDetail.price}</h3>
+
+                                            <div class="d-flex flex-wrap mt-3">
+                                                <a href="#" class="btn-cart me-3 px-4 pt-3 pb-3">
+                                                    <h5 class="text-uppercase m-0">Add to Cart</h5>
+                                                </a>
+                                                <a href="#" class="btn-wishlist px-4 pt-3 ">
+                                                    <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
+                                                </a>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </c:forEach>
+
+
+
+                    </div>
+                </div>
+                <!-- / products-carousel -->
+
+
+            </div>
+        </section>
+
+
+        <section id="latest-blog" class="my-5">
+            <div class="container py-5 my-5">
+                <div class="row mt-5">
+                    <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
+                        <h2 class="display-3 fw-normal">Latest Blog Post</h2>
+                        <div>
+                            <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+                                Read all
+                                <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+                                <use xlink:href="#arrow-right"></use>
+                                </svg></a>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
 
                     <c:forEach var="post" items="${posts}" begin="0" end="3" step="1">
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                            <article>
-                                <a href="public/post-detail?id=${post.id}" class="img-fluid">
-                                    <img
-                                        class="rounded w-100"
-                                        src="${post.imgURL}"
-                                        style="object-fit: cover"
-                                        height="160"
-                                        alt="${post.title}"
-                                        />
-                                </a>
-                                <div class="mt-2 text-muted small d-block mb-1">
-                                    <span>
-                                        <i class="fa fa-calendar-alt fa-sm"></i>
-                                        23.12.2022
-                                    </span>
-                                    <a href="#"><h6 class="text-dark">${post.title}</h6></a>
-                                    <p>
-                                        ${fn:substring(post.content, 0, 50)}...
-                                    </p>
+                        <div class="col-md-4 my-4 my-md-0">
+                            <div class="z-1 position-absolute rounded-3 m-2 px-3 pt-1 bg-light">
+                                <h3 class="secondary-font text-primary m-0">20</h3>
+                                <p class="secondary-font fs-6 m-0">Feb</p>
+
+                            </div>
+                            <div class="card position-relative">
+                                <a href="single-post.html"><img src="${post.imgURL}" class="img-fluid rounded-4" alt="image"></a>
+                                <div class="card-body p-0">
+                                    <a href="single-post.html">
+                                        <h3 class="card-title pt-4 pb-3 m-0">${post.title}</h3>
+                                    </a>
+
+                                    <div class="card-text">
+                                        <p class="blog-paragraph fs-6">${fn:substring(post.content, 0, 50)}...</p>
+                                        <a href="single-post.html" class="blog-read">read more</a>
+                                    </div>
+
                                 </div>
-                            </article>
+                            </div>
                         </div>
                     </c:forEach>
-
                 </div>
             </div>
         </section>
-        <!-- Blog -->
 
-        <!-- Footer -->
-        <footer
-            class="text-center text-lg-start text-muted mt-3"
-            style="background-color: #f5f5f5"
-            >
-            <!-- Section: Links  -->
-            <section class="">
-                <div class="container text-center text-md-start pt-4 pb-4">
-                    <!-- Grid row -->
-                    <div class="row mt-3">
-                        <!-- Grid column -->
-                        <div class="col-12 col-lg-3 col-sm-12 mb-2">
-                            <!-- Content -->
-                            <a href="https://mdbootstrap.com/" target="_blank" class="">
-                                <img
-                                    src="Image/logo.png"
-                                    height="35"
-                                    />
-                            </a>
-                            <p class="mt-2 text-dark">© 2024 Copyright: SWP391 - FPT University</p>
-                        </div>
-                        <!-- Grid column -->
 
-                        <!-- Grid column -->
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Store</h6>
-                            <ul class="list-unstyled mb-4">
-                                <li><a class="text-muted" href="#">About us</a></li>
-                                <li><a class="text-muted" href="#">Find store</a></li>
-                                <li><a class="text-muted" href="#">Categories</a></li>
-                                <li><a class="text-muted" href="#">Blogs</a></li>
-                            </ul>
-                        </div>
-                        <!-- Grid column -->
+        <footer id="footer" class="my-5">
+            <div class="container py-5 my-5">
+                <div class="row">
 
-                        <!-- Grid column -->
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Information</h6>
-                            <ul class="list-unstyled mb-4">
-                                <li><a class="text-muted" href="#">Help center</a></li>
-                                <li><a class="text-muted" href="#">Money refund</a></li>
-                                <li><a class="text-muted" href="#">Shipping info</a></li>
-                                <li><a class="text-muted" href="#">Refunds</a></li>
-                            </ul>
-                        </div>
-                        <!-- Grid column -->
+                    <div class="col-md-3">
+                        <div class="footer-menu">
+                            <img src="${pageContext.request.contextPath}/Image/logo.png" alt="logo">
+                            <p class="blog-paragraph fs-6 mt-3">Subscribe to our newsletter to get updates about our grand offers.</p>
+                            <div class="social-links">
+                                <ul class="d-flex list-unstyled gap-2">
+                                    <li class="social">
+                                        <a href="#">
+                                            <iconify-icon class="social-icon" icon="ri:facebook-fill"></iconify-icon>
+                                        </a>
+                                    </li>
+                                    <li class="social">
+                                        <a href="#">
+                                            <iconify-icon class="social-icon" icon="ri:twitter-fill"></iconify-icon>
+                                        </a>
+                                    </li>
+                                    <li class="social">
+                                        <a href="#">
+                                            <iconify-icon class="social-icon" icon="ri:pinterest-fill"></iconify-icon>
+                                        </a>
+                                    </li>
+                                    <li class="social">
+                                        <a href="#">
+                                            <iconify-icon class="social-icon" icon="ri:instagram-fill"></iconify-icon>
+                                        </a>
+                                    </li>
+                                    <li class="social">
+                                        <a href="#">
+                                            <iconify-icon class="social-icon" icon="ri:youtube-fill"></iconify-icon>
+                                        </a>
+                                    </li>
 
-                        <!-- Grid column -->
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Support</h6>
-                            <ul class="list-unstyled mb-4">
-                                <li><a class="text-muted" href="#">Help center</a></li>
-                                <li><a class="text-muted" href="#">Documents</a></li>
-                                <li><a class="text-muted" href="#">Account restore</a></li>
-                                <li><a class="text-muted" href="#">My orders</a></li>
-                            </ul>
-                        </div>
-                        <!-- Grid column -->
-
-                        <!-- Grid column -->
-                        <div class="col-12 col-sm-12 col-lg-3">
-                            <!-- Links -->
-                            <h6 class="text-uppercase text-dark fw-bold mb-2">Newsletter</h6>
-                            <p class="text-muted">
-                                Stay in touch with latest updates about our products and offers
-                            </p>
-                            <div class="input-group mb-3">
-                                <input
-                                    type="email"
-                                    class="form-control border"
-                                    placeholder="Email"
-                                    aria-label="Email"
-                                    aria-describedby="button-addon2"
-                                    />
-                                <button
-                                    class="btn btn-light border shadow-0"
-                                    type="button"
-                                    id="button-addon2"
-                                    data-mdb-ripple-color="dark"
-                                    >
-                                    Join
-                                </button>
+                                </ul>
                             </div>
                         </div>
-                        <!-- Grid column -->
                     </div>
-                    <!-- Grid row -->
+                    <div class="col-md-3">
+                        <div class="footer-menu">
+                            <h3>Quick Links</h3>
+                            <ul class="menu-list list-unstyled">
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Home</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">About us</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Offer </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Services</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#" class="nav-link">Conatct Us</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="footer-menu">
+                            <h3>Help Center</h5>
+                                <ul class="menu-list list-unstyled">
+                                    <li class="menu-item">
+                                        <a href="#" class="nav-link">FAQs</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="nav-link">Payment</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="nav-link">Returns & Refunds</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="nav-link">Checkout</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="nav-link">Delivery Information</a>
+                                    </li>
+                                </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div>
+                            <h3>Our Newsletter</h3>
+                            <p class="blog-paragraph fs-6">Subscribe to our newsletter to get updates about our grand offers.</p>
+                            <div class="search-bar border rounded-pill border-dark-subtle px-2">
+                                <form class="text-center d-flex align-items-center" action="" method="">
+                                    <input type="text" class="form-control border-0 bg-transparent" placeholder="Enter your email here" />
+                                    <iconify-icon class="send-icon" icon="tabler:location-filled"></iconify-icon>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </section>
-            <!-- Section: Links  -->
-
+            </div>
         </footer>
-        <!-- Footer -->
-        <!-- MDB -->
-        <script
-            type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"
-        ></script>
-        <!-- Custom scripts -->
-        <script type="text/javascript">
 
-        </script>
+
+        <script src="${pageContext.request.contextPath}/js/jquery-1.11.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+        <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+        <script src="${pageContext.request.contextPath}/js/script.js"></script>
+        <script src="${pageContext.request.contextPath}/js/customjs.js"></script>
+        <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     </body>
+
 </html>
