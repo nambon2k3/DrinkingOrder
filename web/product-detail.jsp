@@ -195,15 +195,6 @@
             margin: 20px 0;
         }
 
-        input[type="text"] {
-            width: 60px;
-            padding: 5px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-        }
-
         .topping-card {
             display: inline-block;
             width: 120px;
@@ -319,7 +310,12 @@
                                 </c:forEach>
                             </h5>
                             <h5 class="colors">Quantity: 
-                                <input oninput="valid(this)" id="quantity" type="text" style="padding: 5px" value="1" name="quantity"> 
+                                <input oninput="valid(this)" id="quantity" type="text" style="padding: 5px; width: 60px;
+                                       padding: 5px;
+                                       font-size: 1rem;
+                                       border: 1px solid #ccc;
+                                       border-radius: 5px;
+                                       text-align: center;" value="1" name="quantity"> 
                                 <input  type="hidden" id="productdetailId" value="${product.productDetail.productDetailId}" name="productdetailId"> 
                                 <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock - product.productDetail.hold}) </span>
                             </h5>
