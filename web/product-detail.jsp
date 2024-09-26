@@ -293,11 +293,11 @@
                                     <span class="fa fa-star"></span>
                                     <span class="fa fa-star"></span>
                                 </div>
-                                <span class="review-no">41 reviews</span>
+                                <span class="review-no">41 đánh giá</span>
                             </div>
                             <p class="product-description">${product.description}</p>
-                            <h4 class="price">current price: <span><span style="color: grey; text-decoration: line-through; margin: 0 10px">${product.productDetail.price}$</span> ${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}$ </span></h4>
-                            <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
+                            <h4 class="price">Giá: <span><span style="color: grey; text-decoration: line-through; margin: 0 10px">${product.productDetail.price}$</span> ${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND </span></h4>
+                            <p class="vote"><strong>91%</strong> người hài lòng với sản phẩm! <strong>(87 đánh giá)</strong></p>
                             <h5 class="sizes">sizes:
                                 <span style="margin-right: 20px"></span>
                                 <c:set var="check" value=""/>
@@ -309,19 +309,19 @@
                                     </c:if>
                                 </c:forEach>
                             </h5>
-                            <h5 class="colors">Quantity: 
-                                <input oninput="valid(this)" id="quantity" type="text" style="padding: 5px; width: 60px;
+                            <h5 class="colors">Số lượng: 
+                                <input oninput="valid(this)" id="quantity" type="number" style="padding: 5px; width: 60px;
                                        padding: 5px;
                                        font-size: 1rem;
                                        border: 1px solid #ccc;
                                        border-radius: 5px;
                                        text-align: center;" value="1" name="quantity"> 
                                 <input  type="hidden" id="productdetailId" value="${product.productDetail.productDetailId}" name="productdetailId"> 
-                                <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock - product.productDetail.hold}) </span>
+                                <span style="font-weight: normal; font-style: italic"> (Còn lại: ${product.productDetail.stock - product.productDetail.hold}) </span>
                             </h5>
 
 
-                            <h1 class="my-4">Choose Your Toppings</h1>
+                            <h1 class="my-4">Chọn topping:</h1>
                             <div id="toppingContainer">
                                 <c:forEach var="topping" items="${toppings}">
                                     <div class="topping-card" data-id="${topping.id}">
@@ -334,7 +334,7 @@
 
 
                             <div class="action">
-                                <button class="add-to-cart btn btn-default" type="button" onclick="addToCart(${product.productDetail.productDetailId})">add to cart</button>
+                                <button class="add-to-cart btn btn-default" type="button" onclick="addToCart(${product.productDetail.productDetailId})">Thêm vào giỏ hàng</button>
                             </div>
                         </div>
                     </form>
@@ -457,18 +457,8 @@
                                         if (input.value < 1)
                                             input.value = 1;
                                     }
-                                    function addToCart(id) {
-                                        let quantity = document.getElementById('quantity').value;
-                                        console.log(quantity);
-                                        fetch('add-cart?id=' + id + '&quantity=' + quantity);
-                                        window.alert('ADDED Successfully');
-                                    }
 
-                                    document.getElementById('form').addEventListener('submit', function (event) {
-                                        event.preventDefault(); // Prevent form submission until image is processed
-                                        document.getElementById('amount').value = (document.getElementById('quantity').value * 100 * ${product.productDetail.price * (1 - product.productDetail.discount/100)});
-                                        document.getElementById('form').submit();
-                                    });
+
     </script>
     <script>
         // JavaScript to handle click events and toggle the background color
