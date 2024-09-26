@@ -39,7 +39,7 @@ public class ListProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pageParam = request.getParameter("page");
+        String pageParam = request.getParameter("page") == null || request.getParameter("page").length() == 0 ? "1" : request.getParameter("page");
         String searchQuery = request.getParameter("searchQuery") == null ? "" : request.getParameter("searchQuery");
 
         String minPriceParam = request.getParameter("minPrice");
