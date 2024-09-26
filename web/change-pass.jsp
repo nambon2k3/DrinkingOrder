@@ -92,37 +92,37 @@
     <jsp:include page="Header.jsp"></jsp:include>
         <div class="w-100 d-flex justify-content-center my-5 ">
             <div class="card text-center" style="width: 500px;">
-                <div class="card-header h5 text-white bg-primary">Change password</div>
+                <div class="card-header h5 text-white bg-primary">Đổi mật khẩu</div>
                 <div class="card-body px-5">
                     <!-- Display error message if any -->
                 <c:if test="${param.success ne null}">
                     <div class="alert alert-success" role="alert">
-                        Success!
+                        Thành công!
                     </div>
                 </c:if>
                 <c:if test="${param.fail ne null}">
                     <div class="alert alert-danger" role="alert">
-                        Failed!
+                        Thất bại!
                     </div>
                 </c:if>
                 <form class="login-form" action="change-pass" method="post" id="_form">
                     <div data-mdb-input-init class="form-outline">
-                        <input type="password"  required name="oldpassword"  class="form-control my-3" placeholder="Old Password"/>
+                        <input type="password"  required name="oldpassword"  class="form-control my-3" placeholder="Mật khẩu cũ"/>
                     </div>
                     <div data-mdb-input-init class="form-outline">
-                        <input type="password" id="password" name="password" required oninput="validatePassword()" class="form-control my-3" placeholder="Password"/>
+                        <input type="password" id="password" name="password" required oninput="validatePassword()" class="form-control my-3" placeholder="Mật khẩu mới"/>
                         <div id="passwordError" style="color: red"></div>
                     </div>
                     <div data-mdb-input-init class="form-outline">
-                        <input type="password" id="retypePassword" name="repassword" required oninput="validateRetypePassword()" class="form-control my-3" placeholder="Re-Password"/>
+                        <input type="password" id="retypePassword" name="repassword" required oninput="validateRetypePassword()" class="form-control my-3" placeholder="Nhập lại mật khẩu mới"/>
                         <div id="retypePasswordError" style="color: red"></div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Reset password</button>
+                    <button type="submit" class="btn btn-primary w-100">Đổi mật khẩu</button>
                 </form>
 
                 <div class="d-flex justify-content-between mt-4">
-                    <a class="" href="login">Login</a>
-                    <a class="" href="register">Register</a>
+                    <a class="" href="login">Đăng nhập</a>
+                    <a class="" href="register">Đăng ký</a>
                 </div>
             </div>
         </div>
@@ -243,7 +243,7 @@
             var passwordError = document.getElementById('passwordError');
 
             if (passwordInput.value.trim().length < 8) {
-                passwordError.textContent = 'Password must be more than 8 characters';
+                passwordError.textContent = 'Mật khẩu ít nhất 8 chữ số';
                 validatepassword = false;
             } else {
                 passwordError.textContent = '';
@@ -258,7 +258,7 @@
 
             if (retypePasswordInput.value !== passwordInput.value) {
                 validateRePassword = false;
-                retypePasswordError.textContent = 'Passwords do not match';
+                retypePasswordError.textContent = 'Mật khẩu không khớp';
             } else {
                 retypePasswordError.textContent = '';
                 validateRePassword = true;

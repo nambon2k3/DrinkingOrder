@@ -95,7 +95,7 @@
                 <div class="row py-5">
                     <div class="offset-md-3 col-md-6 my-5 ">
                         <h2 class="display-3 fw-normal text-center">
-                            Login
+                            Đăng nhập
                         </h2>
                     <c:if test="${errorMessage != null}">
                         <p class="text-center" style="color: red">${errorMessage}</p>
@@ -107,15 +107,15 @@
                         </div>
                         <div class="mb-3">
                             <input type="password" class="form-control form-control-lg" name="password" id="password"
-                                   placeholder="Password">
+                                   placeholder="Mật khẩu">
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-dark btn-lg rounded-1">Login</button>
+                            <button type="submit" class="btn btn-dark btn-lg rounded-1">Đăng nhập</button>
                         </div>
                     </form>
-                    <p style="margin-top: 5px; margin-bottom: 0"><a style="color: blue" href="${pageContext.request.contextPath}/reset-password">Forgot password?</a></p>
-                    <p style="margin-top: 2px">Don't have account? <a href="${pageContext.request.contextPath}/register" style="color: blue">Register</a></p>
+                    <p style="margin-top: 5px; margin-bottom: 0"><a style="color: blue" href="${pageContext.request.contextPath}/reset-password">Quên mật khẩu?</a></p>
+                    <p style="margin-top: 2px">Chưa có tài khoản? <a href="${pageContext.request.contextPath}/register" style="color: blue">Đăng ký</a></p>
                 </div>
             </div>
         </div>

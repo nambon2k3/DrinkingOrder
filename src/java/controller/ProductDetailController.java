@@ -79,7 +79,7 @@ public class ProductDetailController extends HttpServlet {
         //List<Feedback> feedbackList = new FeedbackDAO().getFeedbackByProductDetailID(product.getProductDetail().getProductDetailId(), offset, PAGE_SIZE);
         
        
-        List<Topping> toppings = new ProductDAO().getAllToppings(id);
+        List<Topping> toppings = new ProductDAO().getAllToppings();
         request.setAttribute("toppings", toppings);
         //request.setAttribute("feedbackList", feedbackList);
         //request.setAttribute("currentPage", page);

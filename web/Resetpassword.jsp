@@ -92,10 +92,10 @@
     <jsp:include page="Header.jsp"></jsp:include>
         <div class="w-100 d-flex justify-content-center my-5 ">
             <div class="card text-center" style="width: 500px;">
-                <div class="card-header h5 text-white bg-primary">Password Reset</div>
+                <div class="card-header h5 text-white bg-primary">Đặt lại mật khẩu</div>
                 <div class="card-body px-5">
                     <p class="card-text py-2">
-                        Enter your email address and we'll send you an email with instructions to reset your password.
+                        Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn email có hướng dẫn đặt lại mật khẩu.
                     </p>
                     <!-- Display error message if any -->
                 <c:if test="${errorMessage != null}">
@@ -107,12 +107,12 @@
                     <div data-mdb-input-init class="form-outline">
                         <input type="email" id="typeEmail" name="email" class="form-control my-3" placeholder="Email"/>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Reset password</button>
+                    <button type="submit" class="btn btn-primary w-100">Đặt lại mật khẩu</button>
                 </form>
 
                 <div class="d-flex justify-content-between mt-4">
-                    <a class="" href="login">Login</a>
-                    <a class="" href="register">Register</a>
+                    <a class="" href="login">Đăng nhập</a>
+                    <a class="" href="register">Đăng ký</a>
                 </div>
             </div>
         </div>

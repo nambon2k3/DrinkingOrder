@@ -39,27 +39,27 @@
         <div class="mt-5 main-content">
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save success!</strong> 
+                    <strong>Thành công!</strong> 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
             <c:if test="${isSuccess ne null && !isSuccess}">
                 <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save failed!</strong> You should check your network.
+                    <strong>Thất bại!</strong> 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
             <div class="card-header">
-                List post
+                Danh sách post
             </div>
             <form method="get" action="list-post" class="form-inline mb-3">
                 <table>
                     <tr>
                         <td>
                             <div class="form-group">
-                                <label for="category">Category:</label>
+                                <label for="category">Thể loại:</label>
                                 <select id="category" name="category" class="form-control">
-                                    <option value="">All</option>
+                                    <option value="">Tất cả</option>
                                     <c:forEach var="cat" items="${categories}">
                                         <option value="${cat.categoryName}" ${param.category == cat.categoryName ? 'selected' : ''}>${cat.categoryName}</option>
                                     </c:forEach>
@@ -68,9 +68,9 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                <label for="author">Author:</label>
+                                <label for="author">Người viết:</label>
                                 <select id="author" name="author" class="form-control">
-                                    <option value="">All</option>
+                                    <option value="">Tất cả</option>
                                     <c:forEach var="auth" items="${authors}">
                                         <option value="${auth}" ${param.author == auth ? 'selected' : ''}>${auth}</option>
                                     </c:forEach>
@@ -79,28 +79,28 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                <label for="status">Status:</label>
+                                <label for="status">Trạng thái: </label>
                                 <select id="status" name="status" class="form-control">
-                                    <option value="">All</option>
-                                    <option value="show" ${param.status == 'show' ? 'selected' : ''}>Hide</option>
-                                    <option value="hide" ${param.status == 'hide' ? 'selected' : ''}>Show</option>
+                                    <option value="">Tất cả</option>
+                                    <option value="show" ${param.status == 'show' ? 'selected' : ''}>Ẩn</option>
+                                    <option value="hide" ${param.status == 'hide' ? 'selected' : ''}>Hiện</option>
                                 </select>
                             </div>
                         </td>
                         <td>
                             <div class="form-group">
-                                <label for="search">Title:</label>
+                                <label for="search">Tiêu đề</label>
                                 <input type="text" id="search" name="search" class="form-control" value="${param.search}">
                             </div>
                         </td>
                         <td>
                             <div class="form-group">
-                                <label for="sortBy">Sort By:</label>
+                                <label for="sortBy">Sắp xếp:</label>
                                 <select id="sortBy" name="sortBy" class="form-control">
-                                    <option value="title" ${param.sortBy == 'title' ? 'selected' : ''}>Title</option>
-                                    <option value="CategoryId" ${param.sortBy == 'CategoryId' ? 'selected' : ''}>Category</option>
-                                    <option value="AuthorName" ${param.sortBy == 'AuthorName' ? 'selected' : ''}>Author</option>
-                                    <option value="IsDeleted" ${param.sortBy == 'IsDeleted' ? 'selected' : ''}>Status</option>
+                                    <option value="title" ${param.sortBy == 'title' ? 'selected' : ''}>Tiêu đề</option>
+                                    <option value="CategoryId" ${param.sortBy == 'CategoryId' ? 'selected' : ''}>Thể loại</option>
+                                    <option value="AuthorName" ${param.sortBy == 'AuthorName' ? 'selected' : ''}>Người viết</option>
+                                    <option value="IsDeleted" ${param.sortBy == 'IsDeleted' ? 'selected' : ''}>Trạng thái</option>
                                 </select>
                             </div>
                         </td>
@@ -108,16 +108,16 @@
                             <div class="form-group">
                                 <label for="sortOrder">Order:</label>
                                 <select id="sortOrder" name="sortOrder" class="form-control">
-                                    <option value="ASC" ${param.sortOrder == 'ASC' ? 'selected' : ''}>Ascending</option>
-                                    <option value="DESC" ${param.sortOrder == 'DESC' ? 'selected' : ''}>Descending</option>
+                                    <option value="ASC" ${param.sortOrder == 'ASC' ? 'selected' : ''}>Tăng dần</option>
+                                    <option value="DESC" ${param.sortOrder == 'DESC' ? 'selected' : ''}>Giảm dần</option>
                                 </select>
                             </div>
                         </td>
                         <td>
                             <div class="form-group" style="margin-left: 10px">
                                 <label for="sortOrder"></label><br>
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPostModal">Add New Post</button>
+                                <button type="submit" class="btn btn-primary">Lọc</button>
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPostModal">Thêm mới</button>
                             </div>
                         </td>
                     </tr>
@@ -129,12 +129,12 @@
                     <tr>
                         <td>#</td>
                         <td>Thumbnail</td>
-                        <td>Title</td>
+                        <td>Tiêu đề</td>
                         <!--<td>Brief</td>-->
-                        <td>Category</td>
-                        <td>Created Date</td>
-                        <td>Created By</td>
-                        <td>Action</td>
+                        <td>Thể loại</td>
+                        <td>Ngày tạo</td>
+                        <td>Người tạo</td>
+                        <td>Hành động</td>
                     </tr>
                 </thead>
                 <tbody id="table-content-body">
@@ -150,13 +150,13 @@
                             <td>${post.createdAt}</td>
                             <td>${post.authorName}</td>
                             <td>
-                                <a class="btn btn-info" href="./post-edit?id=${post.id}">Edit</a>
+                                <a class="btn btn-info" href="./post-edit?id=${post.id}">Chỉnh sửa</a>
                                 <!--<button type="btn" class="btn btn-info" onclick="view(`${post.id}`)" data-bs-toggle="modal" data-bs-target="#viewPostModal">View</button>-->
                                 <c:if test="${!post.isDeleted}">
-                                    <a href="update-post?postId=${post.id}&isDeleted=1" class="btn btn-danger">Hide</a>
+                                    <a href="update-post?postId=${post.id}&isDeleted=1" class="btn btn-danger">Ẩn</a>
                                 </c:if>
                                 <c:if test="${post.isDeleted}">
-                                    <a href="update-post?postId=${post.id}&isDeleted=0" class="btn btn-success">Show</a>
+                                    <a href="update-post?postId=${post.id}&isDeleted=0" class="btn btn-success">Hiện</a>
                                 </c:if>
                             </td>
                         </tr>
@@ -167,7 +167,7 @@
             <nav>
                 <ul class="pagination">
                     <c:if test="${currentPage > 1}">
-                        <li class="page-item"><a class="page-link" href="list-post?page=${currentPage - 1}&category=${param.category}&author=${param.author}&status=${param.status}&search=${param.search}&sortBy=${param.sortBy}&sortOrder=${param.sortOrder}">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="list-post?page=${currentPage - 1}&category=${param.category}&author=${param.author}&status=${param.status}&search=${param.search}&sortBy=${param.sortBy}&sortOrder=${param.sortOrder}">Sau</a></li>
                         </c:if>
                         <c:forEach var="i" begin="1" end="${totalPages}">
                         <li class="page-item ${currentPage == i ? 'active' : ''}">
@@ -175,7 +175,7 @@
                         </li>
                     </c:forEach>
                     <c:if test="${currentPage < totalPages}">
-                        <li class="page-item"><a class="page-link" href="list-post?page=${currentPage + 1}&category=${param.category}&author=${param.author}&status=${param.status}&search=${param.search}&sortBy=${param.sortBy}&sortOrder=${param.sortOrder}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="list-post?page=${currentPage + 1}&category=${param.category}&author=${param.author}&status=${param.status}&search=${param.search}&sortBy=${param.sortBy}&sortOrder=${param.sortOrder}">Tiếp</a></li>
                         </c:if>
                 </ul>
             </nav>
@@ -190,7 +190,7 @@
                 <div class="modal-content">
                     <form method="post" action="add-post">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addPostModalLabel">Add New Post</h5>
+                            <h5 class="modal-title" id="addPostModalLabel">Thêm mới</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -202,18 +202,18 @@
                                 <input type="hidden" class="form-control" id="imageUrl0" name="imgURL" value="">
                             </div>
                             <div class="form-group">
-                                <label for="postTitle">Title</label>
+                                <label for="postTitle">Tiêu đề</label>
                                 <input type="text" class="form-control" id="postTitle" name="title" required>
                             </div>
                             <div class="form-group">
-                                <label for="postContent">Content</label>
+                                <label for="postContent">Nội dung</label>
                                 <!--<textarea class="form-control" id="postContent" name="content" rows="5" required></textarea>-->
-                                <label for="editContent" class="form-label">Content:</label>
+                                <label for="editContent" class="form-label">Nội dung</label>
                                 <div id="postContentEdit" style="height: 900px;"></div>
                                 <input type="hidden" id="editContent" name="content">
                             </div>
                             <div class="form-group">
-                                <label for="postCategory">Category</label>
+                                <label for="postCategory">Thể loại</label>
                                 <select class="form-control" id="postCategory" name="category" required>
                                     <c:forEach var="cat" items="${categories}">
                                         <option value="${cat.ID}">${cat.categoryName}</option>
@@ -222,8 +222,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save Post</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu lại</button>
                         </div>
                     </form>
                 </div>
@@ -236,7 +236,7 @@
                 <div class="modal-content">
                     <form method="post" action="update-post">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addPostModalLabel">View Post</h5>
+                            <h5 class="modal-title" id="addPostModalLabel">Xem bài viết</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -245,19 +245,19 @@
                                 <input type="text" class="form-control" id="postId" name="postId" readonly style="background-color: #e6e6e6">
                             </div>
                             <div class="form-group">
-                                <label for="postTitleEdit">Title</label>
+                                <label for="postTitleEdit">Tiêu đề</label>
                                 <input type="text" class="form-control" id="postTitleEdit" name="title" required>
                             </div>
                             <div class="form-group">
-                                <label for="postContentEdit">Content</label>
+                                <label for="postContentEdit">Nội dung</label>
                                 <textarea class="form-control" id="postContentEdit" name="content" rows="5" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="createdAt">Created At: </label>
+                                <label for="createdAt">Ngày tạo: </label>
                                 <input type="text" class="form-control" id="createdAt" name="createdAt" readonly style="background-color: #e6e6e6">
                             </div>
                             <div class="form-group">
-                                <label for="createdBy">Created By: </label>
+                                <label for="createdBy">Người tạo: </label>
                                 <input type="text" class="form-control" id="createdBy" name="createdBy" readonly style="background-color: #e6e6e6">
                             </div>
                             <div class="form-group">
@@ -268,7 +268,7 @@
                                 <input type="hidden" class="form-control" id="imageUrl1" name="imgURL" value="">
                             </div>
                             <div class="form-group">
-                                <label for="postCategoryEdit">Category</label>
+                                <label for="postCategoryEdit">Thể loại</label>
                                 <select class="form-control" id="postCategoryEdit" name="category" required>
                                     <c:forEach var="cat" items="${categories}">
                                         <option class="cateOption" value="${cat.ID}">${cat.categoryName}</option>
@@ -277,8 +277,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save Post</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu lại</button>
                         </div>
                     </form>
                 </div>
@@ -333,7 +333,7 @@
                     const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
 
                     if (file.size > maxSize) {
-                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        alert("Ảnh chỉ có thể bé hơn 2MB.");
                         fileInput.value = ''; // Clear the file input
                         return;
                     }

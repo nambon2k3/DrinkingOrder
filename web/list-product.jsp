@@ -105,7 +105,7 @@
                             aria-expanded="false"
                             aria-label="Toggle navigation"
                             >
-                            <span>Show filter</span>
+                            <span>Lọc</span>
                         </button>
                         <!-- Collapsible wrapper -->
                         <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
@@ -119,7 +119,7 @@
                                             class="accordion-button text-dark bg-light"
                                             type="button"
                                             >
-                                            Category
+                                            Danh mục
                                         </button>
                                     </h2>
                                     <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo">
@@ -143,7 +143,7 @@
                                             class="accordion-button text-dark bg-light"
                                             type="button"
                                             >
-                                            Price
+                                            Giá
                                         </button>
                                     </h2>
                                     <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
@@ -152,7 +152,7 @@
                                             <div class="row mb-3">
                                                 <div class="col-6">
                                                     <p class="mb-0">
-                                                        Min
+                                                        Từ
                                                     </p>
                                                     <div class="form-outline rounded-2" style="border: 1px solid black">
                                                         <input  type="number" value="${minPrice}" name="minPrice" id="typeNumber" class="form-control border" />
@@ -161,7 +161,7 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <p class="mb-0">
-                                                        Max
+                                                        Đến
                                                     </p>
                                                     <div class="form-outline rounded-2" style="border: 1px solid black">
                                                         <input type="number" value="${maxPrice}" name="maxPrice" id="typeNumber" class="form-control border" />
@@ -169,7 +169,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn-cart w-100 border border-secondary" >Apply</button>
+                                            <button type="submit" class="btn-cart w-100 border border-secondary" >Tìm kiếm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -185,8 +185,8 @@
                     <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
                         <div class="ms-auto">
                             <select class="form-select d-inline-block w-auto pt-1" name="arrange" style="border: 1px solid black">
-                                <option value="ASC" ${arrange eq 'ASC' ? 'selected' : ''}>Increasing price</option>
-                                <option value="DESC" ${arrange eq 'DESC' ? 'selected' : ''}>Decreasing price</option>
+                                <option value="ASC" ${arrange eq 'ASC' ? 'selected' : ''}>Giá tăng dần</option>
+                                <option value="DESC" ${arrange eq 'DESC' ? 'selected' : ''}>Giá giảm dần</option>
                             </select>
                         </div>
                     </header>
@@ -232,13 +232,6 @@
                                                 </c:if>
 
 
-                                                <div class="d-flex flex-wrap mt-3">
-                                                    <a href="product-detail?id=${p.productId}" class="btn-cart me-3">
-                                                        <h5 class="text-uppercase m-0">View Detail</h5>
-                                                    </a>
-                                                </div>
-
-
                                             </div>
 
                                         </div>
@@ -253,7 +246,7 @@
 
                     <!-- Pagination -->
                     <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
-                        <button style="margin-right: 10px; width: fit-content; padding: 0" class="btn btn-primary">Go to Page:</button>
+                        <button style="margin-right: 10px; width: fit-content; padding: 0" class="btn btn-primary">Tới trang:</button>
                         <input class="form-control" oninput="valid(this)" style="width: 30px; font-size: 15px; padding: 5px; height: 25px; margin-right: 5px" pattern="\d{1,}" title="Enter number" type="text" name="page" value="${page}" min="1" max="${endPage}">
                         / ${endPage}
                         </form>

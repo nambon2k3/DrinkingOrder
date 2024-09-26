@@ -21,20 +21,20 @@
         <%@ include file="marketing-sidebar.jsp" %>
 
         <div class="mt-5 main-content">
-            <h2>Slider List</h2>
+            <h2>Danh sách slider</h2>
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Success!
+                    Thành công!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Failed!
+                    Thất bại!
                 </div>
             </c:if>
 
-            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSliderModal">Add Slider</button>
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSliderModal">Thêm slider</button>
 
             <!--filter form-->
             <form id="searchForm" action="slider" method="get" class="form-inline mb-3">
@@ -43,24 +43,24 @@
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
-                        <option value="">Select Status</option>
-                        <option value="true" ${status eq 'true' ? 'selected' : ''}>Inactive</option>
-                        <option value="false" ${status eq 'false' ? 'selected' : ''}>Active</option>
+                        <option value="">Trạn thái</option>
+                        <option value="true" ${status eq 'true' ? 'selected' : ''}>Không kích hoạt</option>
+                        <option value="false" ${status eq 'false' ? 'selected' : ''}>Kích hoạt</option>
                     </select>
                 </div>
                 <input type="hidden" name="page" id="pageInput" value="1">
-                <button type="submit" class="btn btn-primary mt-3">Search</button>
+                <button type="submit" class="btn btn-primary mt-3">Tìm kiếm</button>
             </form>
 
             <table id="sliderTable" class="table table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Title</th>
-                        <th>Image</th>
+                        <th>Tiêu đề</th>
+                        <th>Ảnh</th>
                         <th>Backlink</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,8 +72,8 @@
                             <td>${slider.backlink}</td>
                             <td>${slider.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sliderInfoModal_${slider.id}">Info</button>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSliderModal_${slider.id}">Edit</button>
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sliderInfoModal_${slider.id}">Thông tin</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSliderModal_${slider.id}">Chỉnh sửa</button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -108,7 +108,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editSliderModalLabel_${slider.id}">Edit Slider</h5>
+                            <h5 class="modal-title" id="editSliderModalLabel_${slider.id}">Chỉnh sửa Slider</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -119,7 +119,7 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="sliderId" value="${slider.id}">
                                 <div class="form-group">
-                                    <label for="imageUrl">Title</label>
+                                    <label for="imageUrl">Tiêu đề</label>
                                     <input type="text" class="form-control" id="title" name="title" value="${slider.title}" required>
                                 </div>
                                 <div class="form-group">
@@ -133,18 +133,18 @@
                                     <input type="text" class="form-control" id="backlink" name="backlink" value="${slider.backlink}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="imageUrl">Note</label>
+                                    <label for="imageUrl">Nội dung</label>
                                     <input type="text" class="form-control" id="notes" name="notes" value="${slider.notes}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="status">Status</label>
+                                    <label for="status">Trạng thái</label>
                                     <select class="form-control" id="status" name="isDeleted">
-                                        <option value="false" ${!slider.isDeleted ? "selected" : ""}>Active</option>
-                                        <option value="true" ${slider.isDeleted ? "selected" : ""}>Inactive</option>
+                                        <option value="false" ${!slider.isDeleted ? "selected" : ""}>Hoạt động</option>
+                                        <option value="true" ${slider.isDeleted ? "selected" : ""}>Không hoạt động</option>
                                     </select>
                                 </div>
                                 <!-- Add other fields as needed -->
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">Lưu lại</button>
                             </form>
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="sliderInfoModalLabel_${slider.id}">Slider Details</h5>
+                            <h5 class="modal-title" id="sliderInfoModalLabel_${slider.id}">Chi tiết</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -164,11 +164,11 @@
                         <div class="modal-body">
                             <img class="w-100 mb-3" src="${slider.imageUrl}">
                             <p><strong>ID:</strong> ${slider.id}</p>
-                            <p><strong>Title:</strong> ${slider.title}</p>
-                            <p><strong>Notes:</strong> ${slider.notes}</p>
+                            <p><strong>Tiêu đề:</strong> ${slider.title}</p>
+                            <p><strong>Nội dung:</strong> ${slider.notes}</p>
                             <p><strong>Backlink:</strong> ${slider.backlink}</p>
-                            <p><strong>Status:</strong> ${slider.isDeleted ? 'Inactive' : 'Active'}</p>
-                            <p><strong>Created At:</strong> <fmt:formatDate value="${slider.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                            <p><strong>Trạng thái</strong> ${slider.isDeleted ? 'Inactive' : 'Active'}</p>
+                            <p><strong>Ngày tạo:</strong> <fmt:formatDate value="${slider.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
                             <!--<p><strong>Created By:</strong> ${slider.createdBy}</p>-->
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addSliderModalLabel">Add Slider</h5>
+                        <h5 class="modal-title" id="addSliderModalLabel">Thêm Slider</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -197,13 +197,13 @@
                             <input type="hidden" name="action" value="add">
                             <!-- Form Inputs -->
                             <div class="form-group">
-                                <label for="imageUrl">Image</label>
+                                <label for="imageUrl">Ảnh</label>
                                 <img id="image0" class="w-100" src="">
                                 <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)" required>
                                 <input type="hidden" class="form-control" id="imageUrl0" name="imageUrl" value="">
                             </div>
                             <div class="form-group">
-                                <label for="imageUrl">Title</label>
+                                <label for="imageUrl">Tiêu đề</label>
                                 <input type="text" class="form-control" id="title" name="title" required>
                             </div>
                             <div class="form-group">
@@ -211,21 +211,21 @@
                                 <input type="text" class="form-control" id="backlink" name="backlink" required>
                             </div>
                             <div class="form-group">
-                                <label for="imageUrl">Note</label>
+                                <label for="imageUrl">Nội dung</label>
                                 <input type="text" class="form-control" id="notes" name="notes">
                             </div>
                             <div class="form-group">
-                                <label for="isDeleted">Status</label>
+                                <label for="isDeleted">Trạng thái</label>
                                 <select class="form-control" id="isDeleted" name="isDeleted">
-                                    <option value="false">Active</option>
-                                    <option value="true">Inactive</option>
+                                    <option value="false">Hoạt động</option>
+                                    <option value="true">Không hoạt động</option>
                                 </select>
                             </div>
                             <!--                            <div class="form-group">
                                                             <label for="createdBy">Created By</label>
                                                             <input type="text" class="form-control" id="createdBy" name="createdBy" required>
                                                         </div>-->
-                            <button type="submit" class="btn btn-primary">Add Slider</button>
+                            <button type="submit" class="btn btn-primary">Thêm Slider</button>
                         </form>
                     </div>
                 </div>
@@ -245,7 +245,7 @@
                     const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
 
                     if (file.size > maxSize) {
-                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        alert("File phải bé hơn 2MB.");
                         fileInput.value = ''; // Clear the file input
                         return;
                     }   

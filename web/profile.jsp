@@ -92,10 +92,10 @@
     <jsp:include page="Header.jsp"></jsp:include>
         <section style="background-color: #eee;">
             <div class="alert alert-success" style="visibility: ${param.success ne null ? 'visible' : 'hidden'}" role="alert">
-            Success!
+            Thành công!
         </div>
         <div class="alert alert-danger" style="display: ${param.fail ne null ? 'block': 'none'}"  role="alert">
-            Failed!
+            Thất bại!
         </div>
         <form id="profileForm" onsubmit="return validateForm()" action="profile" method="post">
             <div class="container py-5">
@@ -120,7 +120,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Full Name</p>
+                                        <p class="mb-0">Họ và tên</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="form-outline" data-mdb-input-init>
@@ -142,7 +142,7 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Phone</p>
+                                        <p class="mb-0">Số điện thoại</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="form-outline" data-mdb-input-init>
@@ -153,22 +153,22 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Gender</p>
+                                        <p class="mb-0">Giới tính</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <select style="padding: 1.25rem 0rem 1.25rem 1.25rem; 
                                                 border: 1px solid rgba(65, 64, 62, 0.20);
                                                 border-radius: 0.25rem;
                                                 color: #908F8D" name="gender">
-                                            <option value="Male" ${sessionScope.user.gender eq 'Male' ? 'selected' : ''}>Male</option>
-                                            <option value="Female" ${sessionScope.user.gender eq 'Female' ? 'selected' : ''}>Female</option>
+                                            <option value="Male" ${sessionScope.user.gender eq 'Male' ? 'selected' : ''}>Nam</option>
+                                            <option value="Female" ${sessionScope.user.gender eq 'Female' ? 'selected' : ''}>Nữ</option>
                                         </select>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Address</p>
+                                        <p class="mb-0">Địa chỉ</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="form-outline" data-mdb-input-init>
@@ -179,8 +179,8 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mb-2">
-                            <button  type="submit" class="btn btn-primary">Submit</button>
-                            <a  href="change-pass" class="btn btn-outline-primary ms-1">Change password</a>
+                            <button  type="submit" class="btn btn-primary">Xác nhận</button>
+                            <a  href="change-pass" class="btn btn-outline-primary ms-1">Đổi mật khẩu</a>
                         </div>
                     </div>
                 </div>

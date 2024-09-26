@@ -385,14 +385,13 @@ public class ProductDAO extends DBContext {
         return totalProducts;
     }
 
-    public List<Topping> getAllToppings(int productId) {
+    public List<Topping> getAllToppings() {
         List<Topping> toppings = new ArrayList<>();
-        String query = "SELECT [ID], [ToppingName], [Price], [IsDeleted], [CreatedDate], [LastUpdated], [Img], [ProductID] FROM [Topping] WHERE [IsDeleted] = 0 and ProductID = ?";
+        String query = "SELECT [ID], [ToppingName], [Price], [IsDeleted], [CreatedDate], [LastUpdated], [Img], [ProductID] FROM [Topping] WHERE [IsDeleted] = 0";
 
         try (
-                PreparedStatement ps = connection.prepareStatement(query); ) {
-            ps.setInt(1, productId);
-ResultSet rs = ps.executeQuery();
+                PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Topping topping = new Topping();
                 topping.setId(rs.getInt("ID"));
@@ -1091,7 +1090,7 @@ ResultSet rs = ps.executeQuery();
                 + "  AND p.name like '%"+name+"%'  ";
 
         if (category != null && category.length() != 0) {
-            sql += "  AND c.ID in (" + category + ")";
+            sql += "  AND c.ID in (1,2,3)";
         }
 
         sql += "ORDER BY pd.price " + arrange + "\n  OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"

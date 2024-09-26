@@ -31,13 +31,13 @@
         <div class="mt-5 main-content">
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save success!</strong> 
+                    <strong>Thành công!</strong> 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
             <c:if test="${isSuccess ne null && !isSuccess}">
                 <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save failed!</strong> You should check your network.
+                    <strong>Thất bại!</strong> 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
@@ -47,7 +47,7 @@
 
             <form method="post" action="update-post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addPostModalLabel">View Post</h5>
+                    <h5 class="modal-title" id="addPostModalLabel">Xem bài viết</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -56,22 +56,22 @@
                         <input type="text" class="form-control" id="postId" name="postId" readonly style="background-color: #e6e6e6">
                     </div>
                     <div class="form-group">
-                        <label for="postTitleEdit">Title</label>
+                        <label for="postTitleEdit">Tiêu đề</label>
                         <input type="text" class="form-control" id="postTitleEdit" name="title" required>
                     </div>
                     <div class="form-group">
-                        <label for="postContentEdit">Content</label>
+                        <label for="postContentEdit">Nội dung</label>
                         <!--<textarea class="form-control" id="postContentEdit" name="content" rows="5" required></textarea>-->
-                        <label for="editContent" class="form-label">Content:</label>
+                        <label for="editContent" class="form-label">Nội dung:</label>
                         <div id="postContentEdit" style="height: 900px;"></div>
                         <input type="hidden" id="editContent" name="content">
                     </div>
                     <div class="form-group">
-                        <label for="createdAt">Created At: </label>
+                        <label for="createdAt">Ngày tạo: </label>
                         <input type="text" class="form-control" id="createdAt" name="createdAt" readonly style="background-color: #e6e6e6">
                     </div>
                     <div class="form-group">
-                        <label for="createdBy">Created By: </label>
+                        <label for="createdBy">Người tạo: </label>
                         <input type="text" class="form-control" id="createdBy" name="createdBy" readonly style="background-color: #e6e6e6">
                     </div>
                     <div class="form-group">
@@ -81,7 +81,7 @@
                         <input type="hidden" class="form-control" id="imageUrl1" name="imgURL" value="">
                     </div>
                     <div class="form-group">
-                        <label for="postCategoryEdit">Category</label>
+                        <label for="postCategoryEdit">Thể loại</label>
                         <select class="form-control" id="postCategoryEdit" name="category" required>
                             <c:forEach var="cat" items="${categories}">
                                 <option class="cateOption" value="${cat.ID}">${cat.categoryName}</option>
@@ -90,8 +90,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Post</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
                 </div>
             </form>
 
@@ -176,7 +176,7 @@
                     const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
 
                     if (file.size > maxSize) {
-                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        alert("File chỉ tối đa 2 MB");
                         fileInput.value = ''; // Clear the file input
                         return;
                     }

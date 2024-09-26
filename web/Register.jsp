@@ -95,7 +95,7 @@
                 <div class="row py-5">
                     <div class="offset-md-3 col-md-6 my-5 ">
                         <h2 class="display-3 fw-normal text-center">
-                            Register
+                            Đăng ký
                         </h2>
                     <c:if test="${errorMessage != null}">
                         <p class="text-center" style="color: red">${errorMessage}</p>
@@ -103,7 +103,7 @@
                     <form action="register" method="post" id="form-register">
                         <div class="mb-3">
                             <input type="text" class="form-control form-control-lg" name="fullName" id="fullName"
-                                   placeholder="Enter Your Full Name"required oninput="validateFullName()">
+                                   placeholder="Nhập tên đầy đủ"required oninput="validateFullName()">
                             <div id="fullNameError" style="color: red"></div>
                         </div>
                         <div class="mb-3">
@@ -113,20 +113,20 @@
                         <div class="d-flex justify-content-between">
                             <div class="mb-3">
                                 <input type="password" class="form-control form-control-lg" name="password" id="password"
-                                       placeholder="Password" required oninput="validatePassword()">
+                                       placeholder="Mật khẩu" required oninput="validatePassword()">
                                 <div id="passwordError" style="color: red"></div>
                             </div>
 
                             <div class="mb-3">
                                 <input type="password" name="retypePassword" class="form-control form-control-lg" id="retypePassword"
-                                       placeholder="Re-Password" required oninput="validateRetypePassword()">
+                                       placeholder="Nhập lại mật khẩu" required oninput="validateRetypePassword()">
                                 <div id="retypePasswordError" style="color: red"></div>
                             </div>
 
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-dark btn-lg rounded-1">Register</button>
+                            <button type="submit" class="btn btn-dark btn-lg rounded-1">Đăng ký</button>
                         </div>
                     </form>
                 </div>
@@ -261,7 +261,7 @@
             var passwordError = document.getElementById('passwordError');
 
             if (passwordInput.value.trim().length < 8) {
-                passwordError.textContent = 'Password must be more than 8 characters';
+                passwordError.textContent = 'Mật khẩu ít nhất 8 chữ số';
                 validatepassword = false;
             } else {
                 passwordError.textContent = '';
@@ -276,7 +276,7 @@
 
             if (retypePasswordInput.value !== passwordInput.value) {
                 validateRePassword = false;
-                retypePasswordError.textContent = 'Passwords do not match';
+                retypePasswordError.textContent = 'Mật khẩu không khớp';
             } else {
                 retypePasswordError.textContent = '';
                 validateRePassword = true;

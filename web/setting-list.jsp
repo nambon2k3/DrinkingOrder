@@ -19,34 +19,34 @@
         <%@ include file="admin-sidebar.jsp" %>
 
         <div class="mt-5 main-content">
-            <h2>Setting List</h2>
+            <h2>Danh sách cài đặt</h2>
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Success!
+                    Thành công!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Failed!
+                    Thất bại!
                 </div>
             </c:if>
 
-            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSettingModal">Add Setting</button>
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSettingModal">Thêm cài đặt</button>
 
             <!-- Status Filter -->
             <div class="mb-3">
-                <label for="statusFilter">Filter by Status:</label>
+                <label for="statusFilter">Lọc theo trạng thái</label>
                 <select id="statusFilter" class="form-control" style="width: auto; display: inline-block;">
-                    <option value="">All</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
+                    <option value="">Tất cả</option>
+                    <option value="Active">Hoạt động</option>
+                    <option value="Inactive">Ngừng hoạt động</option>
                 </select>
             </div>
 
             <!-- Name Search -->
             <div class="mb-3 mt-2">
-                <label for="nameSearch">Search by Type:</label>
+                <label for="nameSearch">Tìm kiếm theo loại:</label>
                 <input type="text" id="nameSearch" class="form-control" style="width: auto; display: inline-block;" placeholder="Enter name">
             </div>
 
@@ -54,11 +54,11 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Type</th>
-                        <th>Value</th>
+                        <th>Loại</th>
+                        <th>Giá trị</th>
                         <th>Order</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,7 +70,7 @@
                             <td>${setting.getOrder()}</td>
                             <td>${setting.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSettingModal_${setting.getID()}">Edit</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSettingModal_${setting.getID()}">Chỉnh sửa</button>
                             </td>
                         </tr>
                         <!-- Edit Setting Modal -->
@@ -106,7 +106,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editSettingModalLabel_${setting.getID()}">Edit Setting</h5>
+                            <h5 class="modal-title" id="editSettingModalLabel_${setting.getID()}">Chỉnh sửa</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -117,11 +117,11 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="settingId" value="${setting.getID()}">
                                 <div class="form-group">
-                                    <label for="type">Type</label>
+                                    <label for="type">Loại</label>
                                     <input type="text" class="form-control" id="type" name="type" value="${setting.getType()}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="value">Value</label>
+                                    <label for="value">Giá trị</label>
                                     <input type="text" class="form-control" id="value" name="value" value="${setting.getValue()}">
                                 </div>
                                 <div class="form-group">
@@ -129,17 +129,17 @@
                                     <input type="number" class="form-control" id="order" name="order" value="${setting.getOrder()}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="status">Status</label>
+                                    <label for="status">Trạng thái</label>
                                     <select class="form-control" id="status" name="status">
-                                        <option value="false" ${!setting.isDeleted ? "selected" : ""}>Active</option>
-                                        <option value="true" ${setting.isDeleted ? "selected" : ""}>Inactive</option>
-                                    </select>
+                                        <option value="false" ${!setting.isDeleted ? "selected" : ""}>Hoạt động</option>
+                                        <option value="true" ${setting.isDeleted ? "selected" : ""}>Không hoạt động</option>
+                                    </select> 
                                 </div>
                                 <div class="form-group">
-                                    <label for="order">Description</label>
+                                    <label for="order">Mô tả</label>
                                     <input type="text" class="form-control" id="order" name="description" value="${setting.getDescription()}">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">Lưu lại</button>
                             </form>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addSettingModalLabel">Add Setting</h5>
+                        <h5 class="modal-title" id="addSettingModalLabel">Thêm cài đặt</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -162,11 +162,11 @@
                         <form action="setting" method="post">
                             <input type="hidden" name="action" value="add">
                             <div class="form-group">
-                                <label for="type">Type</label>
+                                <label for="type">Loại</label>
                                 <input type="text" class="form-control" id="type" name="type" required>
                             </div>
                             <div class="form-group">
-                                <label for="value">Value</label>
+                                <label for="value">Giá trị</label>
                                 <input type="text" class="form-control" id="value" name="value" required>
                             </div>
                             <div class="form-group">
@@ -174,10 +174,10 @@
                                 <input type="number" class="form-control" id="order" name="order" required>
                             </div>
                             <div class="form-group">
-                                <label for="order">Description</label>
+                                <label for="order">Mô tả</label>
                                 <input type="number" class="form-control" id="order" name="description" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Add Setting</button>
+                            <button type="submit" class="btn btn-primary">Thêm</button>
                         </form>
                     </div>
                 </div>

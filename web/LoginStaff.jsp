@@ -91,7 +91,7 @@
     <body>
 
         <div class="login-container">
-            <h2 class="text-warning">Staff Login</h2>
+            <h2 class="text-warning">Đăng nhập nhân viên</h2>
 
             <!-- Display error message if any -->
             <% if (request.getAttribute("errorMessage") != null) { %>
@@ -107,11 +107,11 @@
                     <div id="emailError" class="error-message"></div>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Mật khẩu</label>
                     <input type="password" id="password" name="password" required oninput="validatePassword()">
                     <div id="passwordError" class="error-message"></div>
                 </div>
-                <button type="submit" class="btn btn-warning">Login</button>
+                <button type="submit" class="btn btn-warning">Đăng nhập</button>
             </form>
 <!--            <div class="forgot-password">
                 <a href="reset-password">Forgot Password?</a>
@@ -133,7 +133,7 @@
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
                 if (!emailRegex.test(emailInput.value)) {
-                    emailError.textContent = 'Invalid email address';
+                    emailError.textContent = 'Địa chỉ email chưa đúng';
                 } else {
                     emailError.textContent = '';
                 }
@@ -144,9 +144,9 @@
                 var passwordError = document.getElementById('passwordError');
 
                 if (passwordInput.value.trim() === '') {
-                    passwordError.textContent = 'Password cannot be empty';
+                    passwordError.textContent = 'Mật khẩu không được trống';
                 } else if (passwordInput.value.length < 8) {
-                    passwordError.textContent = 'Password need more than 8 character';
+                    passwordError.textContent = 'Mật khẩu ít nhất 8 chữ số';
                 } else {
                     passwordError.textContent = '';
                 }

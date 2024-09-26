@@ -1,4 +1,4 @@
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- Custom CSS -->
 <style>
     /* Sidebar style */
@@ -56,11 +56,11 @@
 <nav class="sidebar">
     <ul>
         <li><a href="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a></li>
-        <li><a href="user"><i class="fas fa-users mr-2"></i>Staffs</a></li>
-        <li><a href="setting"><i class="fas fa-cog mr-2"></i>Settings</a></li>
+        <li><a href="user"><i class="fas fa-users mr-2"></i>Nhân viên</a></li>
+        <li><a href="setting"><i class="fas fa-cog mr-2"></i>Cài đặt</a></li>
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
-        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
+        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất</a></li>
     </ul>
 </nav>

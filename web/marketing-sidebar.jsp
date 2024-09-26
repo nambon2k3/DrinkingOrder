@@ -1,4 +1,4 @@
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- Custom CSS -->
 <style>
     /* Sidebar style */
@@ -62,14 +62,14 @@
 <nav class="sidebar">
     <ul>
         <li><a href="dashboard"><i class="fas fa-chart-line mr-2"></i>Dashboard</a></li>
-        <li><a href="product"><i class="fas fa-tshirt mr-2"></i>Product</a></li>
-        <li><a href="user"><i class="fas fa-user-friends mr-2"></i>Customers</a></li>
-        <li><a href="feedback"><i class="fas fa-comments mr-2"></i>Feedbacks</a></li>
+        <li><a href="product"><i class="fas fa-tshirt mr-2"></i>Sản phẩm</a></li>
+        <li><a href="user"><i class="fas fa-user-friends mr-2"></i>Khách hàng</a></li>
+        <li><a href="feedback"><i class="fas fa-comments mr-2"></i>Đánh giá</a></li>
         <li><a href="slider"><i class="fas fa-images mr-2"></i>Sliders</a></li>
-        <li><a href="list-post"><i class="fas fa-images mr-2"></i>List Post</a></li>
+        <li><a href="list-post"><i class="fas fa-images mr-2"></i>Bài Đăng</a></li>
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
-        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
+        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất</a></li>
     </ul>
 </nav>

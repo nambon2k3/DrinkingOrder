@@ -125,7 +125,7 @@
                     <h2 class="display-3 fw-normal">New product</h2>
                     <div>
                         <a href="public/list-product" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
-                            See more
+                           Xem thêm
                             <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
                             <use xlink:href="#arrow-right"></use>
                             </svg></a>
@@ -163,8 +163,8 @@
                                             <h3 class="secondary-font text-primary">${p.productDetail.price}</h3>
 
                                             <div class="d-flex flex-wrap mt-3">
-                                                <a href="#" class="btn-cart me-3 px-4 pt-3 pb-3">
-                                                    <h5 class="text-uppercase m-0">Add to Cart</h5>
+                                                <a href="public/product-detail" class="btn-cart me-3 px-4 pt-3 pb-3">
+                                                    <h5 class="text-uppercase m-0">Chi tiết</h5>
                                                 </a>
                                                 <a href="#" class="btn-wishlist px-4 pt-3 ">
                                                     <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
@@ -195,10 +195,10 @@
             <div class="container py-5 my-5">
                 <div class="row mt-5">
                     <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
-                        <h2 class="display-3 fw-normal">Latest Blog Post</h2>
+                        <h2 class="display-3 fw-normal">Bài đăng mới nhất</h2>
                         <div>
                             <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
-                                Read all
+                                Xem tất cả
                                 <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
                                 <use xlink:href="#arrow-right"></use>
                                 </svg></a>
@@ -223,7 +223,7 @@
 
                                     <div class="card-text">
                                         <p class="blog-paragraph fs-6">${fn:substring(post.content, 0, 50)}...</p>
-                                        <a href="single-post.html" class="blog-read">read more</a>
+                                        <a href="single-post.html" class="blog-read">Xem thêm</a>
                                     </div>
 
                                 </div>
