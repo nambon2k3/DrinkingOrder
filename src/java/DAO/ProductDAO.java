@@ -31,19 +31,52 @@ public class ProductDAO extends DBContext {
         }
     }
 
-    public List<String> getAvailableColors() {
-        List<String> colors = new ArrayList<>();
-        String sql = "SELECT DISTINCT Color FROM ProductDetail WHERE IsDeleted = 0";
+    
+    
+    public int countTotalProducts(String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
+        String sql = "SELECT COUNT(*) FROM Product p "
+                + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
+                + "WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                colors.add(rs.getString("Color"));
-            }
-        } catch (SQLException e) {
-            System.out.println("getAvailableColors: " + e.getMessage());
+        List<Object> params = new ArrayList<>();
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql += " AND p.Name LIKE ?";
+            params.add("%" + searchQuery + "%");
+        }
+        if (categoryId != null && !categoryId.isEmpty()) {
+            sql += " AND p.CategoryID = ?";
+            params.add(categoryId);
+        }
+        if (minPrice != null) {
+            sql += " AND pd.Price >= ?";
+            params.add(minPrice);
+        }
+        if (maxPrice != null) {
+            sql += " AND pd.Price <= ?";
+            params.add(maxPrice);
+        }
+        if (size != null && !size.isEmpty()) {
+            sql += " AND pd.Size = ?";
+            params.add(size);
         }
 
-        return colors;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("countTotalProducts: " + e.getMessage());
+        }
+
+        return 0;
     }
 
     public List<String> getAvailableSizes() {
@@ -125,12 +158,12 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-    public List<Product> getProductsByPage2(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String color, String size) {
+    public List<Product> getProductsByPage2(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT p.*, c.Name as CategoryName, pd.Price,  pd.Size, pd.ID as PDID FROM Product p "
                 + "                                  JOIN ProductDetail pd ON p.ID = pd.ProductID "
                 + "                 				 Join Category c on p.CategoryID = c.ID"
-                + "                                  WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0  ";
+                + "                                  WHERE 1=1 ";
 
         List<Object> params = new ArrayList<>();
 
@@ -149,10 +182,6 @@ public class ProductDAO extends DBContext {
         if (maxPrice != null) {
             sql += " AND pd.Price <= ?";
             params.add(maxPrice);
-        }
-        if (color != null && !color.isEmpty()) {
-            sql += " AND pd.Color = ?";
-            params.add(color);
         }
         if (size != null && !size.isEmpty()) {
             sql += " AND pd.Size = ?";
@@ -193,51 +222,7 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-    public int countTotalProducts(String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
-        String sql = "SELECT COUNT(*) FROM Product p "
-                + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
-                + "WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0";
-
-        List<Object> params = new ArrayList<>();
-
-        if (searchQuery != null && !searchQuery.isEmpty()) {
-            sql += " AND p.Name LIKE ?";
-            params.add("%" + searchQuery + "%");
-        }
-        if (categoryId != null && !categoryId.isEmpty()) {
-            sql += " AND p.CategoryID = ?";
-            params.add(categoryId);
-        }
-        if (minPrice != null) {
-            sql += " AND pd.Price >= ?";
-            params.add(minPrice);
-        }
-        if (maxPrice != null) {
-            sql += " AND pd.Price <= ?";
-            params.add(maxPrice);
-        }
-        if (size != null && !size.isEmpty()) {
-            sql += " AND pd.Size = ?";
-            params.add(size);
-        }
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
-            for (int i = 0; i < params.size(); i++) {
-                stmt.setObject(i + 1, params.get(i));
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("countTotalProducts: " + e.getMessage());
-        }
-
-        return 0;
-    }
+    
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
@@ -953,17 +938,16 @@ ResultSet rs = ps.executeQuery();
 
     public boolean addProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Color, Stock, price, discount) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Stock, price, discount) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, productDetail.getProductId());
             statement.setString(2, productDetail.getImageURL());
             statement.setString(3, productDetail.getSize());
-            statement.setString(4, productDetail.getColor());
-            statement.setInt(5, productDetail.getStock());
-            statement.setDouble(6, productDetail.getPrice());
-            statement.setInt(7, productDetail.getDiscount());
+            statement.setInt(4, productDetail.getStock());
+            statement.setDouble(5, productDetail.getPrice());
+            statement.setInt(6, productDetail.getDiscount());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -978,17 +962,16 @@ ResultSet rs = ps.executeQuery();
 
     public boolean updateProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Color = ?, Stock = ?, price = ?, discount = ? "
+        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Stock = ?, price = ?, discount = ? "
                 + "WHERE ID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, productDetail.getImageURL());
             statement.setString(2, productDetail.getSize());
-            statement.setString(3, productDetail.getColor());
-            statement.setInt(4, productDetail.getStock());
-            statement.setDouble(5, productDetail.getPrice());
-            statement.setInt(6, productDetail.getDiscount());
-            statement.setInt(7, productDetail.getProductDetailId());
+            statement.setInt(3, productDetail.getStock());
+            statement.setDouble(4, productDetail.getPrice());
+            statement.setInt(5, productDetail.getDiscount());
+            statement.setInt(6, productDetail.getProductDetailId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {

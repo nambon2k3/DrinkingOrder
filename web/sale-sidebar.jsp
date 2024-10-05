@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!-- Custom CSS -->
 <style>
     /* Sidebar style */
@@ -50,18 +50,21 @@
     .sidebar ul.logout {
         margin-top: auto;
     }
+
+    .chart-container {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
 </style>
 
 <!-- Sidebar -->
 <nav class="sidebar">
     <ul>
-        <li><a href="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a></li>
-        <li><a href="user"><i class="fas fa-users mr-2"></i>Nhân viên</a></li>
-        <li><a href="product"><i class="fas fa-users mr-2"></i>Sản Phẩm</a></li>
-        <li><a href="setting"><i class="fas fa-cog mr-2"></i>Cài đặt</a></li>
+        <li><a href="dashboard"><i class="fas fa-chart-line mr-2"></i>Dashboard</a></li>
+        <li><a href="sale-order"><i class="fas fa-shopping-cart mr-2"></i>Orders</a></li>
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
-        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất</a></li>
+        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
     </ul>
 </nav>
