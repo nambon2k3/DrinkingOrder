@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/web/sale-list-order.jsp</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/LoginStaffControl.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/SaleOrderController.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/DAO/ProductDAO.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/AdminProductController.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/SaleOrderDetailController.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/web/sale-order-detail.jsp</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/web/admin-product.jsp</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/web/admin-sidebar.jsp</file>
+        </group>
     </open-files>
 </project-private>
