@@ -5,12 +5,10 @@
 package controller;
 
 import DAO.CategoryDAO;
-import DAO.PostDAO;
 import DAO.ProductDAO;
 import Model.Category;
 import Model.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,81 +17,83 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author Legion
- */
 @WebServlet(name = "ListProductController", urlPatterns = {"/public/list-product"})
 public class ListProductController extends HttpServlet {
 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pageParam = request.getParameter("page") == null || request.getParameter("page").length() == 0 ? "1" : request.getParameter("page");
-        String searchQuery = request.getParameter("searchQuery") == null ? "" : request.getParameter("searchQuery");
 
+        String pageParam = request.getParameter("page");
+        String searchQuery = request.getParameter("searchQuery");
         String minPriceParam = request.getParameter("minPrice");
         String maxPriceParam = request.getParameter("maxPrice");
-        
         String[] categoriesCheckBox = request.getParameterValues("category");
-        String arrange = request.getParameter("arrange") == null ? "ASC" : request.getParameter("arrange");
+        String arrangePrice = request.getParameter("arrangePrice");
+        String arrangeName = request.getParameter("arrangeName");
         String _categoriesCheckBox = "";
-        
-        if(categoriesCheckBox != null && categoriesCheckBox.length != 0){
-            if(categoriesCheckBox.length == 1) _categoriesCheckBox = categoriesCheckBox[0];
-            else{
+
+        double minPrice = 0;
+        double maxPrice = 999999;
+        int pageNumber = 1;
+        int pageSize = 12;
+
+        if (pageParam == null) {
+            pageParam = "1";
+        }
+        if (searchQuery == null) {
+            searchQuery = "";
+        }
+        if (arrangePrice == null) {
+            arrangePrice = "ASC";
+        }
+        if (arrangeName == null) {
+            arrangeName = "ASC";
+        }
+        if (minPriceParam != null && minPriceParam.trim().length() != 0) {
+            minPrice = Double.parseDouble(minPriceParam);
+        }
+        if (maxPriceParam != null && maxPriceParam.trim().length() != 0) {
+            maxPrice = Double.parseDouble(maxPriceParam);
+        }
+        if (pageParam != null && pageParam.trim().length() != 0) {
+            pageNumber = Integer.parseInt(pageParam);
+        }
+
+        if (categoriesCheckBox != null && categoriesCheckBox.length != 0) {
+            if (categoriesCheckBox.length == 1) {
+                _categoriesCheckBox = categoriesCheckBox[0];
+            } else {
                 _categoriesCheckBox += categoriesCheckBox[0];
                 for (String c : categoriesCheckBox) {
-                    _categoriesCheckBox += (", "+c);
+                    _categoriesCheckBox += (", " + c);
                 }
             }
             request.setAttribute("categoriesCheckBox", Arrays.asList(categoriesCheckBox));
         }
 
-        int pageNumber = pageParam == null ? 1 : Integer.parseInt(pageParam);
-        int pageSize = 12;
-
-        Double minPrice = minPriceParam == null || minPriceParam.isEmpty() ? 0 : Double.parseDouble(minPriceParam);
-        Double maxPrice = maxPriceParam == null || maxPriceParam.isEmpty() ? 10000 : Double.parseDouble(maxPriceParam);
-
-        List<Product> products = new ProductDAO().listProductsPage(searchQuery, _categoriesCheckBox, minPrice, maxPrice, pageSize, pageNumber, arrange);
+        List<Product> products = new ProductDAO().listProductsPage(searchQuery, _categoriesCheckBox, minPrice, maxPrice, pageSize, pageNumber, arrangePrice, arrangeName);
         int total = new ProductDAO().countFilter(searchQuery, _categoriesCheckBox, minPrice, maxPrice);
-
-        int endPage = (int)Math.ceil(1.0 *total / pageSize);
+        int endPage = (int) Math.ceil(1.0 * total / pageSize);
         List<Category> categories = new CategoryDAO().getCategories();
-
 
         request.setAttribute("products", products);
         request.setAttribute("endPage", endPage);
         request.setAttribute("page", pageNumber);
         request.setAttribute("categories", categories);
-
+        request.setAttribute("arrangeName", arrangeName);
         request.setAttribute("searchQuery", searchQuery);
-        request.setAttribute("arrange", arrange);
+        request.setAttribute("arrangePrice", arrangePrice);
         request.setAttribute("minPrice", minPrice);
         request.setAttribute("maxPrice", maxPrice);
-
 
         request.getRequestDispatcher("/list-product.jsp").forward(request, response);
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
-
-
 
 }

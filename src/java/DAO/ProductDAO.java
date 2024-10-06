@@ -1056,7 +1056,7 @@ ResultSet rs = ps.executeQuery();
         return products;
     }
 
-    public List<Product> listProductsPage(String name, String category, double minPrice, double maxPrice, int pageSize, int pageNumber, String arrange) {
+    public List<Product> listProductsPage(String name, String category, double minPrice, double maxPrice, int pageSize, int pageNumber, String arrangePrice, String arrangeName) {
         String sql = "SELECT p.*, pd.*, c.*\n"
                 + "FROM Product p\n"
                 + "JOIN (\n"
@@ -1077,7 +1077,7 @@ ResultSet rs = ps.executeQuery();
             sql += "  AND c.ID in (" + category + ")";
         }
 
-        sql += "ORDER BY pd.price " + arrange + "\n  OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
+        sql += "ORDER BY pd.price " + arrangePrice + ", p.name "+arrangeName+"  \n  OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
                 + " FETCH NEXT " + pageSize + " ROWS ONLY;";
 
         List<Product> products = new ArrayList<>();
@@ -1106,6 +1106,7 @@ ResultSet rs = ps.executeQuery();
 
         return products;
     }
+
 
     public int countFilter(String name, String category, double minPrice, double maxPrice) {
         String sql = "SELECT COUNT(*)\n"
