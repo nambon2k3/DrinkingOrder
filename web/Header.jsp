@@ -1,3 +1,9 @@
+<%-- 
+    Document   : Header
+    Created on : Sep 15, 2024, 2:12:19 PM
+    Author     : MSI
+--%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <header id="header">
@@ -16,7 +22,7 @@
 
                             <li><a href="cart.html"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                                 <c:if test="${sessionScope.user != null}">
-                                <li><a href="#"><i class="fa fa-user"></i> Tài khoản</a></li>
+                                <li><a href="${pageContext.request.contextPath}/common/profile"><i class="fa fa-user"></i>${sessionScope.user.fullname}</a></li>
                                 </c:if>
                                 <c:if test="${sessionScope.user == null}">
                                 <li><a href="${pageContext.request.contextPath}/login"><i class="fa fa-lock"></i> Đăng nhập</a></li>
