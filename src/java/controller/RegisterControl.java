@@ -16,73 +16,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Random;
 
-/**
- *
- * @author anhdu
- */
 @WebServlet(name = "RegisterControl", urlPatterns = {"/register"})
 public class RegisterControl extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RegisterControl</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RegisterControl at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("Register.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Retrieve parameters from the request
-
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String retypePassword = request.getParameter("retypePassword");
-
 
         // Perform additional validation checks
         String validationError = validateRegistrationInput(fullName, email, password, retypePassword, "", "");
@@ -90,6 +41,10 @@ public class RegisterControl extends HttpServlet {
         if (validationError != null) {
             // Validation failed
             request.setAttribute("errorMessage", validationError);
+            request.setAttribute("fullName", fullName);
+            request.setAttribute("email", email);
+            request.setAttribute("password", password);
+            request.setAttribute("retypePassword", retypePassword);
             request.getRequestDispatcher("Register.jsp").forward(request, response);
             return;
         }
@@ -100,13 +55,21 @@ public class RegisterControl extends HttpServlet {
         if (userDAO.getUserByEmail(email) != null) {
             // Email already exists
             // You may set an error message and forward back to the registration page
-            request.setAttribute("errorMessage", "Email is already registered");
+            request.setAttribute("errorMessage", "Tài khoản này đã tồn tại");
+            request.setAttribute("fullName", fullName);
+            request.setAttribute("email", email);
+            request.setAttribute("password", password);
+            request.setAttribute("retypePassword", retypePassword);
             request.getRequestDispatcher("Register.jsp").forward(request, response);
         } else {
             // Check if the password and retype password match
             if (!password.equals(retypePassword)) {
                 // Passwords do not match
-                request.setAttribute("errorMessage", "Passwords do not match");
+                request.setAttribute("errorMessage", "Mật khẩu không khớp");
+                request.setAttribute("fullName", fullName);
+                request.setAttribute("email", email);
+                request.setAttribute("password", password);
+                request.setAttribute("retypePassword", retypePassword);
                 request.getRequestDispatcher("Register.jsp").forward(request, response);
                 return;
             }
@@ -120,23 +83,23 @@ public class RegisterControl extends HttpServlet {
 
             // Send mail verify
             EmailService.sendEmail(email, "Verify email", "Click here to verify: " + verifyLink);
-            
+
             System.out.println(otp);
             // Set register info session
             User user = new User();
             user.setEmail(email);
             user.setPassword(password);
             user.setFullname(fullName);
-            user.setGender( "Female");
+            user.setGender("Female");
             user.setAddress("");
             user.setPhone("");
             user.setIsDeleted(false);
-            
+
             request.getSession().setAttribute("verify_" + email, user);
             request.getSession().setAttribute("verify_otp_" + email, otp);
 
             // Registration successful
-            request.setAttribute("errorMessage", "Verify link was sent!");
+            request.setAttribute("errorMessage", "Đã gửi thư xác minh tới email của bạn!");
             request.getRequestDispatcher("Register.jsp").forward(request, response);
         }
 
@@ -145,22 +108,24 @@ public class RegisterControl extends HttpServlet {
     // Additional validation method
     private String validateRegistrationInput(String fullName, String email, String password, String retypePassword, String phone, String address) {
 
-
+        //validate full name
+        if (!isValidFullName(fullName)) {
+            return "Tên cần ít nhất 1 chữ cái";
+        }
         // Validate email
         if (!isValidEmail(email)) {
-            return "Invalid email address. Please enter a valid email address.";
+            return "Địa chỉ email không hợp lệ";
         }
 
         // Validate password
         if (!isValidPassword(password)) {
-            return "Invalid password. Password must have at least 8 characters.";
+            return "Mật khẩu cần có ít nhất 8 chữ số";
         }
 
         // Validate retype password
         if (!isValidRetypePassword(password, retypePassword)) {
-            return "Passwords do not match. Please ensure that the entered passwords match.";
+            return "Mật khẩu không khớp";
         }
-
 
         return null; // No validation error
     }
@@ -187,7 +152,8 @@ public class RegisterControl extends HttpServlet {
 
     private boolean isValidPassword(String password) {
         // Implement your simplified validation logic for password length
-        return password.length() >= 8;
+        String passwordPattern = "^\\S{8,}$";
+        return password.matches(passwordPattern);
     }
 
     private boolean isValidEmail(String email) {

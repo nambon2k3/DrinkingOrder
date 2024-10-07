@@ -21,10 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- *
- * @author Anh Phuong Le
- */
 @WebServlet(name = "ResetPasswordControl", urlPatterns = {"/reset-password"})
 public class ResetPasswordControl extends HttpServlet {
     
@@ -47,7 +43,7 @@ public class ResetPasswordControl extends HttpServlet {
             // check in db
             User account = new UserDAO().getUserByEmail(emailaddress);
             if (account == null) {
-                request.setAttribute("errorMessage", "Account not found");
+                request.setAttribute("errorMessage", "Tài khoản không tồn tại!");
                 throw new Exception();
             }
 
@@ -62,7 +58,7 @@ public class ResetPasswordControl extends HttpServlet {
             sendEmail(emailaddress, "Reset password", "Your reset password link: " + resetLink);
             
 
-            request.setAttribute("errorMessage", "An email was sent!");
+            request.setAttribute("errorMessage", "Đã gửi xác minh tới email của bạn!");
             request.getRequestDispatcher("Resetpassword.jsp").forward(request, response);
 
         } catch (Exception e) {

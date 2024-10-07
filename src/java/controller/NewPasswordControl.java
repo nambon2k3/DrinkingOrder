@@ -18,10 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- *
- * @author Anh Phuong Le
- */
 @WebServlet(name = "NewPasswordControl", urlPatterns = {"/new-password"})
 public class NewPasswordControl extends HttpServlet {
 
@@ -56,28 +52,30 @@ public class NewPasswordControl extends HttpServlet {
         String msg = "";
 
         if (user == null) {
-            msg = "Email not found";
+            msg = "Không tìm thấy email";
         } else if (otp.equals(checkOtp)) {
 
             if (isExpired(expireTime)) {
-                msg = "Link expired";
+                msg = "Link đã hết hạn";
             } else {
-
-                if (password.equals(retypePassword)) {
+                
+                if (password.equals(retypePassword) && isValidPassword(password)) {
 
                     user.setPassword(password);
                     new UserDAO().updateUser(user);
-                    msg = "Reset password success";
+                    msg = "Đổi mật khẩu thành công";
                     request.getSession().removeAttribute(email + "_reset_otp");
 
-                } else {
-                    msg = "2 password not match";
+                } else if(!isValidPassword(password)){
+                    msg = "Mật khẩu cần ít nhất 8 ký tự không dấu cách";
+                } else{
+                     msg = "Mật khẩu không khớp";
                 }
 
             }
 
         } else {
-            msg = "Error! Cant reset password";
+            msg = "Không thể đổi mật khẩu!";
         }
 
         request.setAttribute("errorMessage", msg);
@@ -108,4 +106,10 @@ public class NewPasswordControl extends HttpServlet {
         }
     }
 
+    private boolean isValidPassword(String password) {
+        // Implement your simplified validation logic for password length
+        String passwordPattern = "^\\S{8,}$";
+        return password.matches(passwordPattern);
+    }
+    
 }
