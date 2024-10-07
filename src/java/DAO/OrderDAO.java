@@ -382,7 +382,7 @@ public class OrderDAO {
     public List<ProductDetail> getOrderedProductsByOrderId(int orderId) {
         List<ProductDetail> orderedProducts = new ArrayList<>();
         try {
-            String sql = "SELECT [ProductDetailID], [quantity], [ID] "
+            String sql = "SELECT [ProductDetailID], [quantity], [ID], ToppingID "
                     + "FROM [OrderDetail] od "
                     + "WHERE od.OrderID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -393,6 +393,7 @@ public class OrderDAO {
                 ProductDetail orderedProduct = new ProductDAO().getProductDetailById(rs.getInt(1));
                 orderedProduct.setBuyQuantity(rs.getInt(2));
                 orderedProduct.setOrderDetailId(rs.getInt(3));
+                orderedProduct.setListToppingIDs(rs.getString("ToppingID"));
                 orderedProducts.add(orderedProduct);
             }
         } catch (SQLException e) {

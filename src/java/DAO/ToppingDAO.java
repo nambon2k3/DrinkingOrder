@@ -46,7 +46,7 @@ public class ToppingDAO extends DBContext {
 
         // Establish the database connection
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery.toString())) {
-
+            
             // Set the values for the placeholders in the query
             for (int i = 0; i < toppingIDs.length; i++) {
                 preparedStatement.setString(i + 1, toppingIDs[i].trim());
@@ -54,9 +54,9 @@ public class ToppingDAO extends DBContext {
 
             // Execute the query
             ResultSet resultSet = preparedStatement.executeQuery();
-
             // Process the results
             while (resultSet.next()) {
+                
                 Topping topping = new Topping();
                 topping.setId(resultSet.getInt("id"));
                 topping.setToppingName(resultSet.getString("toppingName"));
@@ -66,13 +66,14 @@ public class ToppingDAO extends DBContext {
                 topping.setLastUpdated(resultSet.getDate("lastUpdated").toLocalDate());
                 topping.setImg(resultSet.getString("img"));
                 topping.setProductId(resultSet.getInt("productId"));
-
+                
                 // Add the topping to the list
                 toppingsList.add(topping);
             }
         } catch (SQLException e) {
             System.out.println("getToppingsByList: " + e.getMessage());
         }
+        
 
         // Return the list of toppings
         return toppingsList;

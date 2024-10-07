@@ -7,6 +7,7 @@ package Model;
 import DAO.CategoryDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
+import DAO.ToppingDAO;
 import java.sql.*;
 import java.util.List;
 
@@ -32,11 +33,22 @@ public class ProductDetail {
     private String productName;
     private boolean isDeleted;
     private String description;
+    private String listToppingIDs;
     
     private List<Topping> listTopping;
 
+    public String getListToppingIDs() {
+        return listToppingIDs;
+    }
+
+    public void setListToppingIDs(String listToppingIDs) {
+        this.listToppingIDs = listToppingIDs;
+    }
+    
+    
+
     public List<Topping> getListTopping() {
-        return listTopping;
+        return new ToppingDAO().getToppingsByList(listToppingIDs);
     }
 
     public void setListTopping(List<Topping> listTopping) {
