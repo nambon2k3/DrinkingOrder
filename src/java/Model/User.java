@@ -20,6 +20,7 @@ public class User {
     private int createdBy;
     private String avatar;
     private String changeHistory;
+    private String location;
 
     public String getChangeHistory() {
         return changeHistory;
@@ -116,6 +117,16 @@ public class User {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
+    
     
     public String toString(Staff staff) {
         String time = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy"));
