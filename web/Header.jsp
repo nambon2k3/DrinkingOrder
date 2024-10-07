@@ -20,9 +20,10 @@
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
 
-                            <li><a href="cart.html"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                            <li><a href="${pageContext.request.contextPath}/public/cart"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                                 <c:if test="${sessionScope.user != null}">
                                 <li><a href="${pageContext.request.contextPath}/common/profile"><i class="fa fa-user"></i>${sessionScope.user.fullname}</a></li>
+                                <li><a href="${pageContext.request.contextPath}/customer/my-order"><i class="fa fa-calendar"></i>Order</a></li>
                                 </c:if>
                                 <c:if test="${sessionScope.user == null}">
                                 <li><a href="${pageContext.request.contextPath}/login"><i class="fa fa-lock"></i> Đăng nhập</a></li>

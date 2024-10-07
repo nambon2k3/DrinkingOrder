@@ -8,6 +8,7 @@ import DAO.CategoryDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import java.sql.*;
+import java.util.List;
 
 /**
  *
@@ -31,6 +32,19 @@ public class ProductDetail {
     private String productName;
     private boolean isDeleted;
     private String description;
+    
+    private List<Topping> listTopping;
+
+    public List<Topping> getListTopping() {
+        return listTopping;
+    }
+
+    public void setListTopping(List<Topping> listTopping) {
+        this.listTopping = listTopping;
+    }
+    
+    
+    
 
     public boolean getIsDeleted() {
         return new ProductDAO().getProductById(productId).getIsDeleted();

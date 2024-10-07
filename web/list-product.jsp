@@ -36,13 +36,13 @@
 
             <form action="list-product">
                 <input type="hidden" value="${searchQuery}" name="searchQuery"/>
-                <section>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="left-sidebar">
-                                    <h2>Danh mục</h2>
-                                    <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="left-sidebar">
+                                <h2>Danh mục</h2>
+                                <div class="panel-group category-products" id="accordian"><!--category-productsr-->
                                     <c:forEach items="${categories}" var="category">
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="display: flex">
@@ -98,8 +98,7 @@
                                                     <img src="${product.productDetail.imageURL}" alt="" />
                                                     <h2>${product.productDetail.price * (1 - product.productDetail.discount)} VND</h2>
                                                     <p>${product.productName}</p>
-                                                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a>
-                                                    <a href="public/product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
+                                                    <a href="product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
                                                 </div>
                                                 <c:if test="${product.productDetail.discount != null && product.productDetail.discount != 0}">
                                                     <img src="images/home/sale.png" class="new" alt="" />
@@ -134,5 +133,29 @@
         <script src="${pageContext.request.contextPath}/js2/price-range.js"></script>
         <script src="${pageContext.request.contextPath}/js2/jquery.prettyPhoto.js"></script>
         <script src="${pageContext.request.contextPath}/js2/main.js"></script>
+
+        <script>
+                                                        function toggleActive(element, productDetailId, color, stock) {
+                                                            // Remove 'active' class from all spans
+                                                            document.querySelectorAll('.color.size').forEach(span => {
+                                                                span.classList.remove('active');
+                                                            });
+
+                                                            // Add 'active' class to the clicked span
+                                                            element.classList.add('active');
+                                                            document.getElementById('stock').innerHTML = stock;
+                                                            // Update the hidden input with the selected ProductDetail ID
+                                                            document.getElementById('selectedProductDetailId').value = productDetailId;
+
+                                                            // Update the color display
+                                                            document.getElementById('selectedColor').style.backgroundColor = color.toLowerCase();
+                                                        }
+                                                        function addToCart(id) {
+                                                            let quantity = document.getElementById('quantity').value;
+                                                            console.log(quantity);
+                                                            fetch('add-cart?id=' + id + '&quantity=' + quantity);
+                                                            window.alert('ADDED Successfully');
+                                                        }
+        </script>
     </body>
 </html>

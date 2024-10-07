@@ -2,7 +2,9 @@ package Model;
 
 import DAO.CartDAO;
 import DAO.ProductDAO;
+import DAO.ToppingDAO;
 import java.util.Date;
+import java.util.List;
 
 public class Cart {
     private int id;
@@ -13,6 +15,28 @@ public class Cart {
     private Date createdAt;
     private int createdBy;
     private ProductDetail productDetail;
+    private String toppings;
+    private List<Topping> listTopping;
+
+    public List<Topping> getListTopping() {
+        return new ToppingDAO().getToppingsByList(toppings);
+    }
+
+    public void setListTopping(List<Topping> listTopping) {
+        this.listTopping = listTopping;
+    }
+
+    public String getToppings() {
+        return toppings;
+    }
+
+    public void setToppings(String toppings) {
+        this.toppings = toppings;
+    }
+    
+    
+    
+    
 
     public Cart() {
     }
@@ -30,6 +54,9 @@ public class Cart {
         this.createdBy = createdBy;
         this.productDetail = new ProductDAO().getProductDetailById(productDetailId);
     }
+    
+    
+    
 
     public ProductDetail getProductDetail() {
         return productDetail;

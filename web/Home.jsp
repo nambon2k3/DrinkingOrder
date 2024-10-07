@@ -91,7 +91,6 @@
                                                 <img src="${product.productDetail.imageURL}" alt="" />
                                                 <h2>${product.productDetail.price * (1 - product.productDetail.discount)} VND</h2>
                                                 <p>${product.productName}</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a>
                                                 <a href="public/product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
                                             </div>
                                             <c:if test="${product.productDetail.discount != null && product.productDetail.discount != 0}">

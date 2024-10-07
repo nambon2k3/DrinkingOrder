@@ -110,41 +110,41 @@
                                     data-ride="carousel"
                                     >
                                     <!-- Wrapper for slides -->
-<!--                                    <div class="carousel-inner">
-                                        <div class="item active">
-                                            <a href=""
-                                               ><img src="images/product-details/similar1.jpg" alt=""
-                                                  /></a>
-                                            <a href=""
-                                               ><img src="images/product-details/similar2.jpg" alt=""
-                                                  /></a>
-                                            <a href=""
-                                               ><img src="images/product-details/similar3.jpg" alt=""
-                                                  /></a>
-                                        </div>
-                                        <div class="item">
-                                            <a href=""
-                                               ><img src="images/product-details/similar1.jpg" alt=""
-                                                  /></a>
-                                            <a href=""
-                                               ><img src="images/product-details/similar2.jpg" alt=""
-                                                  /></a>
-                                            <a href=""
-                                               ><img src="images/product-details/similar3.jpg" alt=""
-                                                  /></a>
-                                        </div>
-                                        <div class="item">
-                                            <a href=""
-                                               ><img src="images/product-details/similar1.jpg" alt=""
-                                                  /></a>
-                                            <a href=""
-                                               ><img src="images/product-details/similar2.jpg" alt=""
-                                                  /></a>
-                                            <a href=""
-                                               ><img src="images/product-details/similar3.jpg" alt=""
-                                                  /></a>
-                                        </div>
-                                    </div>-->
+                                    <!--                                    <div class="carousel-inner">
+                                                                            <div class="item active">
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar1.jpg" alt=""
+                                                                                      /></a>
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar2.jpg" alt=""
+                                                                                      /></a>
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar3.jpg" alt=""
+                                                                                      /></a>
+                                                                            </div>
+                                                                            <div class="item">
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar1.jpg" alt=""
+                                                                                      /></a>
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar2.jpg" alt=""
+                                                                                      /></a>
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar3.jpg" alt=""
+                                                                                      /></a>
+                                                                            </div>
+                                                                            <div class="item">
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar1.jpg" alt=""
+                                                                                      /></a>
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar2.jpg" alt=""
+                                                                                      /></a>
+                                                                                <a href=""
+                                                                                   ><img src="images/product-details/similar3.jpg" alt=""
+                                                                                      /></a>
+                                                                            </div>
+                                                                        </div>-->
 
                                     <!-- Controls -->
                                     <a
@@ -186,7 +186,7 @@
                                         <label>Số lượng</label>
                                         <input type="number" oninput="valid(this)" id="quantity" value="1" />
                                     </span>
-                                    <button type="button" class="btn btn-fefault cart" style="margin-left: 0">
+                                    <button type="button" class="btn btn-fefault cart" onclick="addToCart(${product.productDetail.productDetailId})" style="margin-left: 0">
                                         <i class="fa fa-shopping-cart"></i>
                                         Thêm vào giỏ hàng
                                     </button>
@@ -209,7 +209,7 @@
                                                 <c:forEach var="topping" items="${toppings}">
                                                     <div class="topping-item">
                                                         <label
-                                                            ><input type="checkbox" value="${topping.id}" />
+                                                            ><input type="checkbox" class="select-topping" value="${topping.id}" />
                                                             ${topping.toppingName} (${topping.price} VNĐ)</label
                                                         >
                                                         <img
@@ -311,14 +311,41 @@
         <script>
                                                 function valid(input) {
                                                     input.value = input.value.replace(/[^0-9]/g, '');
-                                                    if (input.value > ${product.productDetail.stock})
+                                                    if (input.value > ${product.productDetail.stock}) {
                                                         input.value = ${product.productDetail.stock};
-                                                    if (input.value < 1)
+                                                    }
+
+                                                    if (input.value < 1) {
                                                         input.value = 1;
+                                                    }
+
                                                 }
-                                                function changeSize(select, productID){
+
+                                                function addToCart(id) {
+                                                    let quantity = document.getElementById('quantity').value;
+                                                    var listTopping = document.getElementsByClassName('select-topping');
+                                                    let toppings = '';
+                                                    for (let i = 0; i < listTopping.length; i ++) {
+                                                       if(listTopping[i].checked) {
+                                                           if(i !== 0) {
+                                                               toppings += ',';
+                                                           }
+                                                           toppings += listTopping[i].value;
+                                                              
+                                                       } 
+                                                    }
+                                                    
+                                                    
+                                                    
+                                                    console.log(toppings);
+
+                                                    fetch('add-cart?id=' + id + '&quantity=' + quantity + '&toppings=' + toppings);
+                                                    window.alert('ADDED Successfully');
+                                                }
+
+                                                function changeSize(select, productID) {
                                                     let value = select.value;
-                                                    window.location.href = 'product-detail?pdid='+value+'&id='+productID;
+                                                    window.location.href = 'product-detail?pdid=' + value + '&id=' + productID;
                                                 }
         </script>
     </body>

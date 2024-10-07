@@ -592,20 +592,21 @@ public class OrderDAO {
     }
 
     public void createOrderDetail(OrderDetail orderDetail) {
-        String INSERT_ORDER_DETAIL_SQL = "INSERT INTO [OrderDetail] (orderId, [ProductDetailID], quantity, [CreatedBy]) VALUES (?, ?, ?, ?)";
+        String INSERT_ORDER_DETAIL_SQL = "INSERT INTO [OrderDetail] (orderId, [ProductDetailID], quantity, [CreatedBy], ToppingID) VALUES (?, ?, ?, ?, ?)";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER_DETAIL_SQL)) {
             preparedStatement.setInt(1, orderDetail.getOrderId());
             preparedStatement.setInt(2, orderDetail.getProductDetailId());
             preparedStatement.setInt(3, orderDetail.getQuantity());
             preparedStatement.setInt(4, orderDetail.getCreatedBy());
+            preparedStatement.setString(5, orderDetail.getToppingId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("createOrderDetail: " + e.getMessage());
         }
     }
 
-    public void updateOrder(String status, int orderId) throws SQLException {
+    public void updateOrder(String status, int orderId)  {
         String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ? WHERE id = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
@@ -622,7 +623,7 @@ public class OrderDAO {
                 throw new SQLException("Updating order failed, no rows affected.");
             }
         } catch (SQLException e) {
-            throw new SQLException("Error while updating the order", e);
+            System.out.println("updateOrder: " + e.getMessage());
         }
     }
 
