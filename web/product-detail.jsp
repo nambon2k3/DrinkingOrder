@@ -110,7 +110,7 @@
                                     data-ride="carousel"
                                     >
                                     <!-- Wrapper for slides -->
-                                    <div class="carousel-inner">
+<!--                                    <div class="carousel-inner">
                                         <div class="item active">
                                             <a href=""
                                                ><img src="images/product-details/similar1.jpg" alt=""
@@ -144,7 +144,7 @@
                                                ><img src="images/product-details/similar3.jpg" alt=""
                                                   /></a>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <!-- Controls -->
                                     <a
@@ -195,7 +195,7 @@
                                     <div class="product-options">
                                         <div class="size-option">
                                             <label for="size-select">Kích cỡ:</label>
-                                            <select id="size-select" onchange="window.location.href = 'product-detail?pdid=${pd.productDetailId}&id=${product.productId}'">
+                                            <select id="size-select" onchange="changeSize(this, ${product.productId})">
                                                 <c:forEach items="${listDetails}" var="pd">
                                                     <option value="${pd.productDetailId}" ${pd.size == product.productDetail.size ? 'selected' : ''}>${pd.size}</option>
 
@@ -315,6 +315,10 @@
                                                         input.value = ${product.productDetail.stock};
                                                     if (input.value < 1)
                                                         input.value = 1;
+                                                }
+                                                function changeSize(select, productID){
+                                                    let value = select.value;
+                                                    window.location.href = 'product-detail?pdid='+value+'&id='+productID;
                                                 }
         </script>
     </body>

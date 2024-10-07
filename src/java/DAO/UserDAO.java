@@ -304,8 +304,8 @@ public class UserDAO {
     }
 
     // Update (Update User)
-    public boolean updateUser(User user) {
-        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=?, ChangeHistory=? WHERE ID=?";
+   public boolean updateUser(User user) {
+        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=?, ChangeHistory=?, Location=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getEmail());
@@ -318,7 +318,8 @@ public class UserDAO {
             ps.setInt(8, user.getCreatedBy());
             ps.setString(9, user.getAvatar());
             ps.setString(10, user.getChangeHistory());
-            ps.setInt(11, user.getId());
+            ps.setString(11, user.getLocation());
+            ps.setInt(12, user.getId());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
