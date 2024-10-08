@@ -49,7 +49,7 @@ public class PaymentController extends HttpServlet {
 
         String amount_raw = request.getParameter("amount");
         double amount_d = Double.parseDouble(amount_raw);
-        int amount = (int) amount_d * 100 * 25000;
+        int amount = (int) amount_d * 100;
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_OrderInfo = "pay pay";

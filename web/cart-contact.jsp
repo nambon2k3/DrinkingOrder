@@ -17,6 +17,7 @@
                 background-color: #e6e6e6;
             }
         </style>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     </head>
@@ -102,10 +103,11 @@
                             <th>Image</th>
                             <th>Product Name</th>
                             <th>Size</th>
-                            <th>Color</th>
+                            <th>Total Topping</th>
                             <th>Price</th>
                             <th style="text-align: center">Quantity</th>
                             <th>Total Cost</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,9 +117,15 @@
                                 <td><img src="${item.productDetail.imageURL}" width="50" height="50" alt="alt"/></td>
                                 <td>${item.productDetail.getProductName()}</td>
                                 <td>${item.productDetail.size}</td>
-                                <td>${item.productDetail.color}</td>
                                 <td>
-                                    <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
+                                    <c:set value="0" var="totalTopping"/>
+                                    <c:forEach items="${item.listTopping}" var="t">
+                                        <c:set value="${totalTopping + t.price}" var="totalTopping"/>
+                                    </c:forEach>
+                                    ${totalTopping}
+                                </td>
+                                <td>
+                                    <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
                                         $${item.productDetail.price * (100.0- p.productDetail.discount)/100}
                                         <c:set value="${total + item.productDetail.price * (100.0- item.productDetail.discount)/100}" var="total"/>
                                     </c:if>
@@ -130,12 +138,75 @@
                                     <p>${item.quantity}</p>
                                 </td>
                                 <td>
-                                    <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
+                                    <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
                                         $${item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100)}
                                     </c:if>
                                     <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
                                         $${item.quantity * (item.productDetail.price)}
                                     </c:if>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#productInfoModal_${item.id}">Info</button>
+                                    <div class="modal fade" id="productInfoModal_${item.id}" tabindex="-1" role="dialog" aria-labelledby="productInfoModalLabel_${item.id}" aria-hidden="true">
+                                        <!-- Modal Content -->
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="productInfoModalLabel_${item.productDetail.productDetailId}">Product Details</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <!-- Modal Body -->
+                                                <div class="modal-body d-flex justify-content-center">
+
+                                                    <div class="text-center col-4">
+                                                        <img style="width: 100%" src="${item.productDetail.imageURL}">
+                                                        <strong class="mt-5">Ảnh sản phẩm</strong>
+                                                    </div>
+
+                                                    <!-- Product Info Table -->
+                                                    <table class="table table-bordered col-8">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Name</th>
+                                                                <td>${item.productDetail.productName}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Size</th>
+                                                                <td>${item.productDetail.size}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Price</th>
+                                                                <td>${item.productDetail.price}</td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <th>Quantity</th>
+                                                                <td>
+                                                                    ${item.quantity}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>List Topping: </th>
+                                                                <td>
+                                                                    <c:forEach items="${item.listTopping}" var="t">
+                                                                        <p>${t.toppingName}: ${t.price}$</p>
+                                                                    </c:forEach>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Description: </th>
+                                                                <td>${item.productDetail.description}</td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -158,7 +229,7 @@
                     Total Order Price: $<span id="total-price">
                         <c:set var="totalPrice" value="0" />
                         <c:forEach var="item" items="${cartItemsFull}">
-                            <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
+                            <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
                                 <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100)}" />
                             </c:if>
                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
@@ -166,7 +237,7 @@
                             </c:if>
 
                         </c:forEach>
-                        ${totalPrice}
+                        ${totalPrice + totalTopping}
                     </span>
                 </div>
                 <br>
@@ -235,7 +306,8 @@
     </body>
 
 </html>
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

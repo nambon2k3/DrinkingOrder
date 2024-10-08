@@ -94,7 +94,6 @@
                 <h2>Order Details</h2>
                 <p>Order ID: ${order.id}</p>
                 <p>Order Date: ${order.createdAt}</p>
-                <p>Total Cost: $${order.totalCost}</p>
                 <p>Status: ${order.status}</p>
                 <p>Payment Method: ${order.paymentMethod}</p>
 
@@ -121,6 +120,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <c:set value="0" var="totalToppingProducts"/>
                         <c:forEach var="product" items="${orderedProducts}">
                             <tr>
                                 <td><img src="${product.imageURL}" alt="..." width="100" height="100"></td>
@@ -132,6 +132,7 @@
                                     <c:set value="0" var="totalTopping"/>
                                     <c:forEach items="${product.listTopping}" var="t">
                                         <c:set value="${totalTopping + t.price}" var="totalTopping"/>
+                                        <c:set value="${totalToppingProducts + t.price}" var="totalToppingProducts"/>
                                     </c:forEach>
                                     $${totalTopping}
                                 </td>
@@ -209,7 +210,7 @@
                     </tbody>
                 </table>
                 <div>
-                    <strong>Total Order Price:</strong> $${order.totalCost}
+                    <strong>Total Order Price:</strong> $${order.totalCost + totalToppingProducts}
                 </div>
 
 

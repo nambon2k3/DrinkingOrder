@@ -72,6 +72,7 @@ public class OrderDetailController extends HttpServlet {
 
         Order order = orderDAO.getOrderById(orderId);
         List<ProductDetail> orderedProducts = orderDAO.getOrderedProductsByOrderId(orderId);
+        System.out.println(order);
         List<Product> latestProducts = productDAO.getThreeLastestProducts();
         List<Category> categories = new PostDAO().getUniqueCategories();
         

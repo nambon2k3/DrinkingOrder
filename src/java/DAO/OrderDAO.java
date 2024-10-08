@@ -45,7 +45,7 @@ public class OrderDAO {
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM [swp-online-shop].[dbo].[Order]";
+        String sql = "SELECT * FROM [DrinkingOrder2].[dbo].[Order]";
 
         try {
             stmt = connection.prepareStatement(sql);
@@ -80,9 +80,9 @@ public class OrderDAO {
 
     public double getTotal(int orderId) {
         String sql = "SELECT SUM(pd.price * (100 - pd.discount)/100 * od.quantity) AS total_cost "
-                + "FROM [swp-online-shop].[dbo].[Order] o "
-                + "INNER JOIN [swp-online-shop].[dbo].[OrderDetail] od ON o.ID = od.OrderID "
-                + "INNER JOIN [swp-online-shop].[dbo].[ProductDetail] pd ON od.[ProductDetailID] = pd.ID "
+                + "FROM [DrinkingOrder2].[dbo].[Order] o "
+                + "INNER JOIN [DrinkingOrder2].[dbo].[OrderDetail] od ON o.ID = od.OrderID "
+                + "INNER JOIN [DrinkingOrder2].[dbo].[ProductDetail] pd ON od.[ProductDetailID] = pd.ID "
                 + "WHERE o.ID = ? "
                 + "GROUP BY o.ID";
 
@@ -90,7 +90,7 @@ public class OrderDAO {
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, orderId);
             rs = stmt.executeQuery();
-
+            
             if (rs.next()) {
                 return rs.getDouble("total_cost");
             }
@@ -352,7 +352,7 @@ public class OrderDAO {
     public Order getOrderById(int orderId) {
         Order order = null;
         try {
-            String sql = "SELECT * FROM [swp-online-shop].[dbo].[Order] WHERE ID = ?";
+            String sql = "SELECT * FROM [DrinkingOrder2].[dbo].[Order] WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -505,9 +505,9 @@ public class OrderDAO {
                 + "        s.Email,\n"
                 + "        COUNT(o.ID) AS OrderCount\n"
                 + "    FROM \n"
-                + "        [swp-online-shop].[dbo].[Staff] s\n"
+                + "        [DrinkingOrder2].[dbo].[Staff] s\n"
                 + "    LEFT JOIN \n"
-                + "        [swp-online-shop].[dbo].[Order] o\n"
+                + "        [DrinkingOrder2].[dbo].[Order] o\n"
                 + "    ON \n"
                 + "        s.ID = o.CreatedBy\n"
                 + "    WHERE \n"
@@ -543,9 +543,9 @@ public class OrderDAO {
                 + "                         s.Email,\n"
                 + "                         COUNT(o.ID) AS OrderCount\n"
                 + "                     FROM \n"
-                + "                         [swp-online-shop].[dbo].[Staff] s\n"
+                + "                         [DrinkingOrder2].[dbo].[Staff] s\n"
                 + "                     LEFT JOIN \n"
-                + "                         [swp-online-shop].[dbo].[Order] o\n"
+                + "                         [DrinkingOrder2].[dbo].[Order] o\n"
                 + "                     ON \n"
                 + "                         s.ID = o.CreatedBy\n"
                 + "                     WHERE \n"
@@ -697,10 +697,10 @@ public class OrderDAO {
         List<OrderDetail> orderDetails = new ArrayList<>();
         String GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL
                 = "SELECT od.ID, od.OrderID, od.ProductDetailID, od.IsDeleted, od.CreatedAt, od.CreatedBy, od.quantity "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] od "
-                + "LEFT JOIN [swp-online-shop].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID "
+                + "FROM [DrinkingOrder2].[dbo].[OrderDetail] od "
+                + "LEFT JOIN [DrinkingOrder2].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID "
                 + "WHERE fb.OrderDetailID IS NULL "
-                + "AND od.OrderID IN (SELECT o.ID FROM [swp-online-shop].[dbo].[Order] o WHERE o.UserID = ?) "
+                + "AND od.OrderID IN (SELECT o.ID FROM [DrinkingOrder2].[dbo].[Order] o WHERE o.UserID = ?) "
                 + "AND od.IsDeleted = 0";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL)) {
@@ -730,8 +730,8 @@ public class OrderDAO {
     public boolean isFeedbacked(int orderDetailId) {
         String GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL
                 = "SELECT * \n"
-                + "                 FROM [swp-online-shop].[dbo].[OrderDetail] od  \n"
-                + "                  JOIN [swp-online-shop].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID  \n"
+                + "                 FROM [DrinkingOrder2].[dbo].[OrderDetail] od  \n"
+                + "                  JOIN [DrinkingOrder2].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID  \n"
                 + "                 WHERE od.IsDeleted = 0 AND od.ID = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL)) {
@@ -753,7 +753,7 @@ public class OrderDAO {
         OrderDetail orderDetail = null;
         String GET_ORDER_DETAIL_BY_ID_SQL
                 = "SELECT ID, OrderID, ProductDetailID, IsDeleted, CreatedAt, CreatedBy, quantity "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] WHERE ID = ?";
+                + "FROM [DrinkingOrder2].[dbo].[OrderDetail] WHERE ID = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAIL_BY_ID_SQL)) {
 
