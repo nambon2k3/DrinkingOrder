@@ -20,10 +20,19 @@ public class Order {
     private double totalCost;
     private String notes;
     private String paymentMethod;
+     private String location;
 
     private User user;
 
     public Order() {
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Order(int id, int userId, String fullname, String address, String phone, String status, boolean isDeleted, Date createdAt, int createdBy) {
