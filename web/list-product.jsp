@@ -108,7 +108,9 @@
                                     </div>
                                 </c:forEach>
 
-                                <ul class="pagination">
+                         
+                            </div><!--features_items-->
+                            <ul class="pagination">
                                     <c:forEach begin="1" end="${endPage}" varStatus="status">
                                         <li><button type="submit" 
                                                     class="btn btn-default add-to-cart" ${status.index == page ? 'style="background-color: #FE980F"' : ''} 
@@ -117,7 +119,6 @@
                                         </c:forEach>
                                     <!--<li><a href="">&raquo;</a></li>-->
                                 </ul>
-                            </div><!--features_items-->
                         </div>
                     </div>
                 </div>
