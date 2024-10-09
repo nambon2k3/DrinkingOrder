@@ -149,6 +149,70 @@
                 margin-top: 20px; /* Khoảng cách phía trên cho nhóm nút */
             }
 
+            .success-message {
+                background-color: #4CAF50; /* Màu xanh lá cho thành công */
+                color: white;
+                padding: 15px;
+                position: relative;
+                border-radius: 5px;
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: space-between; /* Đưa nội dung và nút đóng sang hai bên */
+                align-items: center; /* Canh giữa theo chiều dọc */
+                margin: 10px 0; /* Khoảng cách trên dưới */
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+            }
+
+            .success-message strong {
+                font-size: 16px; /* Kích thước chữ của tiêu đề */
+            }
+
+            .btn-close {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 20px; /* Kích thước của biểu tượng đóng */
+                cursor: pointer;
+                padding: 0 10px;
+                transition: color 0.3s ease; /* Hiệu ứng khi hover */
+            }
+
+            .btn-close:hover {
+                color: #d4d4d4; /* Màu khi hover */
+            }
+
+            .error-message {
+                background-color: #f8d7da; /* Màu nền đỏ nhạt */
+                color: #721c24; /* Màu chữ đỏ đậm */
+                padding: 15px;
+                position: relative;
+                border-radius: 5px;
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: space-between; /* Đưa nội dung và nút đóng sang hai bên */
+                align-items: center; /* Căn giữa theo chiều dọc */
+                margin: 10px 0;
+                border: 1px solid #f5c6cb; /* Viền màu đỏ nhạt */
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .error-message strong {
+                font-size: 16px;
+            }
+
+            .btn-close {
+                background: none;
+                border: none;
+                color: #721c24;
+                font-size: 20px;
+                cursor: pointer;
+                padding: 0 10px;
+                transition: color 0.3s ease;
+            }
+
+            .btn-close:hover {
+                color: #d4d4d4;
+            }
 
         </style>
     </head><!--/head-->
@@ -168,6 +232,19 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <h3>Giỏ hàng</h3>
+                        <c:if test="${isSuccess ne null && isSuccess}">
+                            <div class="success-message" id="mess">
+                                <strong>Thành công!</strong> Cảm ơn bạn đã mua hàng.
+                                <button type="button" class="btn-close" onclick="document.getElementById('mess').style.display = 'none'">&times;</button>
+                            </div>
+
+                        </c:if>
+                        <c:if test="${isSuccess ne null && !isSuccess}">
+                            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
+                                <strong>Thất bại!</strong> Bạn hãy kiểm tra lại kết nối.
+                                <button type="button" class="btn-close"  onclick="document.getElementById('mess').style.display = 'none'"></button>
+                            </div>
+                        </c:if>
                     </div>
                     <div class="col-sm-6">
                         <div style="width: 100%">
