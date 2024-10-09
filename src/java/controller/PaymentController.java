@@ -130,12 +130,14 @@ public class PaymentController extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String notes = request.getParameter("notes");
+        String location = request.getParameter("location");
 
         Order order = new Order();
         order.setFullname(fullname);
         order.setAddress(address);
         order.setPhone(phone);
         order.setNotes(notes);
+        order.setLocation(location);
         if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay") || method.equalsIgnoreCase("COD")) {
             order.setFullname(user.getFullname());
             order.setAddress(user.getAddress());
