@@ -368,6 +368,7 @@ public class UserDAO {
                 user.setCreatedBy(rs.getInt("CreatedBy"));
                 user.setAvatar(rs.getString("Avatar"));
                 user.setChangeHistory(rs.getString("ChangeHistory"));
+                user.setLocation(rs.getString("Location"));
                 return user;
             }
         } catch (SQLException e) {
