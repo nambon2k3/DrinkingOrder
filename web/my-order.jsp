@@ -1,204 +1,350 @@
-<%-- 
-    Document   : my-order
-    Created on : Jun 4, 2024, 10:24:19 PM
-    Author     : Legion
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
     <head>
-        <title>Shopping Cart</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Login</title>
+        <link href="${pageContext.request.contextPath}/css2/bootstrap.min.css" rel="stylesheet">
+        <script
+            src="https://kit.fontawesome.com/8e2244e830.js"
+            crossorigin="anonymous"
+        ></script>
+        <link href="${pageContext.request.contextPath}/css2/prettyPhoto.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css2/price-range.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css2/animate.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css2/main.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css2/responsive.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <script src="js/respond.min.js"></script>
+        <![endif]-->       
+        <link rel="shortcut icon" href="images/ico/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="${pageContext.request.contextPath}/images/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="${pageContext.request.contextPath}/images/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="${pageContext.request.contextPath}/images/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="${pageContext.request.contextPath}/images/ico/apple-touch-icon-57-precomposed.png">
         <style>
-            #product:hover, #product *:hover {
-                background-color: #e6e6e6;
+            /* Modal Overlay */
+            .modal-overlay {
+                display: none; /* Hidden by default */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
             }
+
+            /* Modal Content */
+            .modal-dialog {
+                background-color: white;
+                border-radius: 8px;
+                padding: 20px;
+                width: 50%;
+                max-width: 600px;
+                position: relative;
+            }
+
+            /* Modal Header */
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+            }
+
+            /* Close Button */
+            .close-button {
+                cursor: pointer;
+                font-size: 20px;
+                color: black;
+            }
+
+            /* Modal Body */
+            .modal-body {
+                margin-top: 20px;
+                display: flex;
+            }
+
+            .image-container {
+                text-align: center;
+                margin-right: 20px;
+            }
+
+            .product-image {
+                width: 100%;
+                height: auto;
+                max-width: 200px;
+            }
+
+            /* Product Info Table */
+            .product-info {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .product-info th, .product-info td {
+                padding: 8px;
+                text-align: left;
+            }
+
+            .product-info th {
+                width: 30%;
+                background-color: #f9f9f9;
+                font-weight: bold;
+            }
+
+
+
+            .total_area {
+                max-width: 600px; /* Đặt chiều rộng tối đa cho biểu mẫu */
+                padding: 20px; /* Thêm khoảng cách bên trong */
+                border: 1px solid #ccc; /* Đường viền xung quanh biểu mẫu */
+                border-radius: 10px; /* Bo góc cho đường viền */
+                background-color: #f9f9f9; /* Màu nền cho biểu mẫu */
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+            }
+
+            .form-group {
+                margin-bottom: 15px; /* Khoảng cách giữa các phần tử */
+                display: flex; /* Sử dụng Flexbox */
+                flex-direction: column; /* Đặt chiều dọc */
+            }
+
+            .form-group label {
+                display: block; /* Hiển thị label dưới dạng block */
+                font-weight: bold; /* Đậm cho label */
+                margin-bottom: 5px; /* Khoảng cách giữa label và input */
+            }
+
+            .form-control {
+                width: 100%; /* Chiều rộng 100% cho input */
+                max-width: 400px; /* Chiều rộng tối đa cho input */
+                padding: 10px; /* Khoảng cách bên trong */
+                border: 1px solid #ccc; /* Đường viền cho input */
+                border-radius: 5px; /* Bo góc cho input */
+                box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng đến chiều rộng */
+            }
+
+            .bank-info {
+                margin-top: 10px; /* Khoảng cách phía trên cho thông tin ngân hàng */
+                padding: 10px; /* Khoảng cách bên trong */
+                background-color: #eef; /* Màu nền cho thông tin ngân hàng */
+                border: 1px solid #aac; /* Đường viền cho thông tin ngân hàng */
+                border-radius: 5px; /* Bo góc cho thông tin ngân hàng */
+            }
+
+            .button-group {
+                display: flex; /* Sử dụng Flexbox cho nhóm nút */
+                justify-content: space-between; /* Khoảng cách đều giữa các nút */
+                margin-top: 20px; /* Khoảng cách phía trên cho nhóm nút */
+            }
+
+
         </style>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    </head>
+    </head><!--/head-->
 
     <body>
+
         <jsp:include page="Header.jsp"></jsp:include>
-            <!-- Header-->
-            <header class="py-5" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://w0.peakpx.com/wallpaper/752/914/HD-wallpaper-sabito-s-haori-kimetsu-no-yaiba-pattern.jpg);">
-                <div class="container px-4 px-lg-5 my-5">
-                    <div class="text-center text-white">
-                        <h1 class="display-4 fw-bolder">Shop in style</h1>
-                        <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+
+            <section id="cart_items">
+                <div class="container">
+                    <div class="breadcrumbs">
+                        <ol class="breadcrumb">
+                            <li><a href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
+                        <li class="active">Giỏ hàng</li>
+                    </ol>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>Giỏ hàng</h3>
+                    </div>
+                    <div class="col-sm-6">
+                        <div style="width: 100%">
+                            <form method="GET" action="my-order" class="form-inline mb-3">
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <label for="orderDate" class="sr-only">Ngày:</label>
+                                    <input type="date" id="orderDate" name="orderDate" class="form-control" value="${orderDate}" placeholder="Order Date">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <label for="orderTime" class="sr-only">Thời gian:</label>
+                                    <input type="time" id="orderTime" name="orderTime" class="form-control" value="${orderTime}" placeholder="Order Time">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <label for="orderStatus" class="sr-only">Trạng thái:</label>
+                                    <select id="orderStatus" name="orderStatus" class="form-control">
+                                        <option value="">Tất cả</option>
+                                        <option value="Close" ${orderStatus eq"Close" ? "selected" : ""}>Đã đóng</option>
+                                        <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Đã gửi</option>
+                                        <option value="Success" ${orderStatus eq"Success" ? "selected" : ""}>Thành công</option>
+                                        <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Yêu cầu hủy</option>
+                                        <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Đã hủy</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2" style="margin-top: 0">Lọc</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </header>
-
-            <div class="col-md-12 d-flex justify-content-center p-3">
-
-                <div id="sidebar" class="col-md-2 p-3" style="border: 1px solid rgb(144, 141, 141); height: 100vh;">
-                    <form method="get" action="../public/list-product" class="mr-0">
-                        <div id="product-search">
-                            <h3>Search Products</h3>
-                            <input type="text" id="search-box" name="searchQuery" placeholder="Search for products..." class="form-control" value="${param.searchQuery}">
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Category:</label>
-                        <select id="category" name="categoryId" class="form-control">
-                            <option value="">All</option>
-                            <c:forEach var="cat" items="${categories}">
-                                <option value="${cat.ID}" ${param.category == cat.categoryName ? 'selected' : ''}>${cat.categoryName}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                </form>
-                <div id="latest-products">
-                    <h3>Latest Products</h3>
-                    <c:forEach items="${products}" var="p">
-                        <a id="product" href="../public/product-detail?id=${p.productId}" style="text-decoration: none; color: black;">
-                            <table class="p-2">
+                <div class="table-responsive cart_info">                        
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="cart_menu">
+                                <td class="price">Mã đơn hàng</td>
+                                <td class="price">Thời gian</td>
+                                <td class="price">Địa chỉ</td>
+                                <td class="price">Số Điện thoại</td>
+                                <td class="price">Giá</td>
+                                <td class="quantity">Trạng thái</td>
+                                <td class="total">Thanh toán</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="item" items="${orders}">
                                 <tr>
-                                    <td><img src="${p.productDetail.imageURL}" style="width:50px; height: 50px" alt="..." /></td>
-                                    <td><h5 class="fw-bolder">${p.productName}</h5></td>
-                                    <td>
-                                        <div class="d-flex justify-content-center small text-warning mb-2">
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                        </div>
+                                    <td class="cart_product">
+                                        <a href="order-detail?orderId=${item.id}">${item.id}</a>
                                     </td>
-                                    <td>
-                                        <c:if test="${p.productDetail.discount != null || p.productDetail.discount != 0}">
-                                            <span class="text-muted text-decoration-line-through">$${p.productDetail.price}</span>
-                                            $${p.productDetail.price * (100.0- p.productDetail.discount)/100}
+                                    <td class="cart_price">
+                                        ${item.createdAt}
+                                    </td>
+                                    <td class="cart_price">
+                                        ${item.address}
+                                    </td>
+                                    <td class="cart_price">
+                                        ${item.phone}
+                                    </td>
+                                    <td class="cart_quantity">
+                                        ${item.totalCost}
+                                    </td>
+                                    <td class="cart_quantity">
+                                        ${item.status}
+                                    </td>
+                                    <td class="cart_total">
+                                        ${item.paymentMethod}
+                                    </td>
+                                    <td class="cart_delete">
+                                        <c:if test="${item.status eq 'Success'}">
+                                            <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Close</a>
                                         </c:if>
 
-                                        <c:if test="${p.productDetail.discount == null || p.productDetail.discount == 0}">
-                                            $${p.productDetail.price}
+                                        <c:if test="${item.status eq 'Wait for pay' && !item.isExpired()}">
+                                            <a href="../public/payment?orderId=${item.id}&method=repay&amount=${item.totalCost}" class="btn btn-primary">Continue payment</a>
                                         </c:if>
-
                                     </td>
                                 </tr>
-                            </table>
-                        </a>
 
-                    </c:forEach>
+                                <!-- Modal Structure -->
+
+
+                            </c:forEach>
+
+                        </tbody>
+                    </table>
                 </div>
-                <div id="static-contacts" style="margin-top: 15px">
-                    <h3>Contact Us</h3>
-                    <p>Email: contact@example.com</p>
-                    <p>Phone: 123-456-7890</p>
-                    <p>Address: 123 Main St, Anytown, USA</p>
+
+
+
+                <c:if test="${totalPages > 1}">
+                    <ul class="pagination" style="padding-left: 0;">
+                        <c:forEach begin="1" end="${totalPages}" var="pageNum">
+                            <c:if test="${currentPage > 1}">
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=${currentPage - 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                    <a class="page-link" href="?page=${i}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}">${i}</a>
+                                </li>
+                            </c:forEach>
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=${currentPage + 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul> 
+                </c:if>
+            </div>
+        </section> <!--/#cart_items-->
+
+
+
+        <section id="do_action">
+            <div class="container">
+                <div class="heading">
+
                 </div>
-            </div>
-            <div class="col-md-10">
-                <h2>My Orders</h2>
-                <c:if test="${isSuccess ne null && isSuccess}">
-                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                        <strong>${type} Order Successfully</strong> You should check in on some of those fields below.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('mess').style.display = 'none'"></button>
-                    </div>
-                </c:if>
-                <c:if test="${isSuccess ne null && !isSuccess}">
-                    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                        <strong>${type} Order failed!</strong> You should check your network.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-                <form method="GET" action="my-order" class="form-inline mb-3">
-                    <div class="form-group mx-sm-3 mb-2">
-                        <label for="orderDate" class="sr-only">Order Date:</label>
-                        <input type="date" id="orderDate" name="orderDate" class="form-control" value="${orderDate}" placeholder="Order Date">
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                        <label for="orderTime" class="sr-only">Order Time:</label>
-                        <input type="time" id="orderTime" name="orderTime" class="form-control" value="${orderTime}" placeholder="Order Time">
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                        <label for="orderStatus" class="sr-only">Order Status:</label>
-                        <select id="orderStatus" name="orderStatus" class="form-control">
-                            <option value="">All</option>
-                            <option value="Close" ${orderStatus eq"Close" ? "selected" : ""}>Close</option>
-                            <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Submitted</option>
-                            <option value="Success" ${orderStatus eq"Success" ? "selected" : ""}>Success</option>
-                            <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Request Cancel</option>
-                            <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Canceled</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-2">Filter</button>
-                </form>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Order Date</th>
-                            <th>Address</th>
-                            <th>Phone</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Payment Method</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="item" items="${orders}">
-                            <tr>
-                                <td><a href="order-detail?orderId=${item.id}">${item.id}</a></td>
-                                <td>${item.createdAt}</td>
-                                <td>${item.address}</td>
-                                <td>${item.phone}</td>
-                                <td>$${item.totalCost}</td>
-                                <td>${item.status}</td>
-                                <td>${item.paymentMethod}</td>
-                                <td>
-                                    <c:if test="${item.status eq 'Success'}">
-                                        <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Close</a>
-                                    </c:if>
-                                        
-                                    <c:if test="${item.status eq 'Wait for pay' && !item.isExpired()}">
-                                        <a href="../public/payment?orderId=${item.id}&method=repay&amount=${item.totalCost}" class="btn btn-primary">Continue payment</a>
-                                    </c:if>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-                <!-- Pagination Controls -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <c:if test="${currentPage > 1}">
-                            <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage - 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
-                        <c:forEach var="i" begin="1" end="${totalPages}">
-                            <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                <a class="page-link" href="?page=${i}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}">${i}</a>
-                            </li>
-                        </c:forEach>
-                        <c:if test="${currentPage < totalPages}">
-                            <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage + 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
-                    </ul>
-                </nav>
             </div>
+            <div class="recommended_items"><!--recommended_items-->
+                <h2 class="title text-center">Sản phẩm mới</h2>
 
-        </div>
+                <div id="recommended-item-carousel">
+                    <div class="container">
+                        <div class="item">	
+
+                            <c:forEach items="${products}" var="p">
+
+                                <div class="col-sm-4">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="${p.productDetail.imageURL}" alt="" />
+                                                <h2><c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
+                                                        <span class="text-muted text-decoration-line-through">$${p.productDetail.price}</span>
+                                                        $${p.productDetail.price * (100.0- p.productDetail.discount)/100}
+                                                    </c:if>
+
+                                                    <c:if test="${p.productDetail.discount == null || p.productDetail.discount == 0}">
+                                                        $${p.productDetail.price}
+                                                    </c:if></h2>
+                                                <p>${p.productName}</p>
+                                                <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </c:forEach>
+                        </div>
+                    </div>			
+                </div>
+            </div><!--/recommended_items-->
+        </section><!--/#do_action-->
+
+
+        <jsp:include page="footer.jsp"></jsp:include>
+
+
+            <script src="${pageContext.request.contextPath}/js2/jquery.js"></script>
+        <script src="${pageContext.request.contextPath}/js2/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js2/jquery.scrollUp.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js2/price-range.js"></script>
+        <script src="${pageContext.request.contextPath}/js2/jquery.prettyPhoto.js"></script>
+        <script src="${pageContext.request.contextPath}/js2/main.js"></script>
+
 
     </body>
-
 </html>
 
 
-</body>
 
-</html>
+
