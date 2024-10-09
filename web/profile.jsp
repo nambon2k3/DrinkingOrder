@@ -45,7 +45,7 @@
                 <div class="container py-5">
 
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-4" style="margin-top: 100px">
                             <div class="card mb-4">
                                 <div class="card-body text-center">
                                     <img id="image0" src="${user.avatar}" alt="avatar"
@@ -62,6 +62,7 @@
                         <div class="col-lg-8">
                             <div class="card mb-4">
                                 <div class="card-body">
+                                    <hr>
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <p class="mb-0">Họ và tên</p>
