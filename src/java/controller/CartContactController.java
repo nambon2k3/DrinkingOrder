@@ -6,6 +6,7 @@
 package controller;
 
 import DAO.CartDAO;
+import DAO.LocationDAO;
 import DAO.PostDAO;
 import DAO.ProductDAO;
 import DAO.SettingDAO;
@@ -91,6 +92,8 @@ public class CartContactController extends HttpServlet {
         if(!setting.getIsDeleted()) {
             request.setAttribute("setting", setting);
         }
+        
+        request.setAttribute("locations", new LocationDAO().getAllLocation());
         request.setAttribute("cartItemsFull", cartItemsFull);
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("products", products);
