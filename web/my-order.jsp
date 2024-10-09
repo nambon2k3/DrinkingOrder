@@ -236,11 +236,11 @@
                                     </td>
                                     <td class="cart_delete">
                                         <c:if test="${item.status eq 'Success'}">
-                                            <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Close</a>
+                                            <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Đóng</a>
                                         </c:if>
 
                                         <c:if test="${item.status eq 'Wait for pay' && !item.isExpired()}">
-                                            <a href="../public/payment?orderId=${item.id}&method=repay&amount=${item.totalCost}" class="btn btn-primary">Continue payment</a>
+                                            <a href="../public/payment?orderId=${item.id}&method=repay&amount=${item.totalCost}" class="btn btn-primary">Thanh toán</a>
                                         </c:if>
                                     </td>
                                 </tr>
