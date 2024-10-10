@@ -147,7 +147,7 @@ public class RegisterControl extends HttpServlet {
     private boolean isValidFullName(String fullName) {
         // Implement your validation logic for full name format
         // For example, you can check if it contains only letters
-        return fullName.matches("^[a-zA-Z]+( [a-zA-Z]+)*$");
+        return fullName.trim().length() > 1;
     }
 
     private boolean isValidPassword(String password) {
