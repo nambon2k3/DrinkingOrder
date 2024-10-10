@@ -96,7 +96,8 @@
                                             <div class="single-products">
                                                 <div class="productinfo text-center">
                                                     <img src="${product.productDetail.imageURL}" alt="" />
-                                                    <h2>${product.productDetail.price * (1 - product.productDetail.discount)} VND</h2>
+                                                    ${product.productDetail.price}
+                                                    <h2>${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND </h2>
                                                     <p>${product.productName}</p>
                                                     <a href="product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
                                                 </div>
@@ -155,7 +156,7 @@
                                                             let quantity = document.getElementById('quantity').value;
                                                             console.log(quantity);
                                                             fetch('add-cart?id=' + id + '&quantity=' + quantity);
-                                                            window.alert('ADDED Successfully');
+                                                            window.alert('Thêm thành công');
                                                         }
         </script>
     </body>
