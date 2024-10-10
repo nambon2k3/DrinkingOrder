@@ -461,7 +461,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="address">Địa chỉ:</label>
-                                        <input type="text" id="address" class="form-control" name="address" value="${sessionScope.user.address}">
+                                        <input type="text" id="address" class="form-control" name="address" value="${sessionScope.user.address}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
