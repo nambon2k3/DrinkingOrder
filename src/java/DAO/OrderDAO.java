@@ -8,6 +8,7 @@ import Model.Order;
 import Model.OrderDetail;
 import Model.ProductDetail;
 import Model.Staff;
+import Model.Topping;
 import Model.User;
 import jakarta.servlet.ServletException;
 import java.sql.Connection;
@@ -92,7 +93,14 @@ public class OrderDAO {
             rs = stmt.executeQuery();
             
             if (rs.next()) {
-                return rs.getDouble("total_cost");
+                List<ProductDetail> orderedProducts = getOrderedProductsByOrderId(orderId);
+                double total = 0;
+                for (ProductDetail orderedProduct : orderedProducts) {
+                    for (Topping topping : orderedProduct.getListTopping()) {
+                        total += topping.getPrice();
+                    }
+                }
+                return rs.getDouble("total_cost") + total;
             }
         } catch (SQLException ex) {
             System.out.println("getTotal: " + ex.getMessage());
@@ -153,6 +161,7 @@ public class OrderDAO {
                 Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
                 order.setPaymentMethod(paymentMethod);
                 order.setNotes(rs.getString("notes"));
+                
                 orders.add(order);
             }
         } catch (SQLException e) {

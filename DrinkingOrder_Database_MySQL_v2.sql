@@ -30,13 +30,13 @@ USE `drinkingorder`;
 --
 
 CREATE TABLE `cart` (
-  `ID` int(11) NOT NULL,
-  `UserID` int(11) DEFAULT NULL,
-  `ProductDetailID` int(11) DEFAULT NULL,
-  `Quantity` int(11) DEFAULT NULL,
+  `ID` int NOT NULL,
+  `UserID` int DEFAULT NULL,
+  `ProductDetailID` int DEFAULT NULL,
+  `Quantity` int DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
   `ToppingList` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -55,11 +55,11 @@ INSERT INTO `cart` (`ID`, `UserID`, `ProductDetailID`, `Quantity`, `IsDeleted`, 
 --
 
 CREATE TABLE `category` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `Name` varchar(100) DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -78,13 +78,13 @@ INSERT INTO `category` (`ID`, `Name`, `IsDeleted`, `CreatedAt`, `CreatedBy`) VAL
 --
 
 CREATE TABLE `feedback` (
-  `ID` int(11) NOT NULL,
-  `OrderDetailID` int(11) DEFAULT NULL,
-  `Rating` int(11) DEFAULT NULL,
+  `ID` int NOT NULL,
+  `OrderDetailID` int DEFAULT NULL,
+  `Rating` int DEFAULT NULL,
   `Comment` longtext DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
   `ImgURL` longblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -95,12 +95,12 @@ CREATE TABLE `feedback` (
 --
 
 CREATE TABLE `location` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `LocationName` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `shipperID` int(11) DEFAULT NULL,
+  `shipperID` int DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -146,15 +146,15 @@ INSERT INTO `location` (`ID`, `LocationName`, `shipperID`, `IsDeleted`, `Created
 --
 
 CREATE TABLE `order` (
-  `ID` int(11) NOT NULL,
-  `UserID` int(11) DEFAULT NULL,
+  `ID` int NOT NULL,
+  `UserID` int DEFAULT NULL,
   `Fullname` varchar(100) DEFAULT NULL,
   `Address` varchar(255) DEFAULT NULL,
   `Phone` varchar(20) DEFAULT NULL,
   `Status` varchar(100) DEFAULT 'Pending',
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
   `Notes` longtext DEFAULT NULL,
   `paymentMethod` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -166,14 +166,14 @@ CREATE TABLE `order` (
 --
 
 CREATE TABLE `orderdetail` (
-  `ID` int(11) NOT NULL,
-  `OrderID` int(11) DEFAULT NULL,
-  `ProductDetailID` int(11) DEFAULT NULL,
+  `ID` int NOT NULL,
+  `OrderID` int DEFAULT NULL,
+  `ProductDetailID` int DEFAULT NULL,
   `ToppingID` longtext DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
+  `quantity` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -183,13 +183,13 @@ CREATE TABLE `orderdetail` (
 --
 
 CREATE TABLE `post` (
-  `ID` int(11) NOT NULL,
-  `CategoryID` int(11) DEFAULT NULL,
+  `ID` int NOT NULL,
+  `CategoryID` int DEFAULT NULL,
   `Title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `Content` longtext DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
   `imgURL` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -231,13 +231,13 @@ INSERT INTO `post` (`ID`, `CategoryID`, `Title`, `Content`, `IsDeleted`, `Create
 --
 
 CREATE TABLE `product` (
-  `ID` int(11) NOT NULL,
-  `CategoryID` int(11) DEFAULT NULL,
+  `ID` int NOT NULL,
+  `CategoryID` int DEFAULT NULL,
   `Name` varchar(100) DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
   `description` longtext DEFAULT NULL,
-  `CreatedBy` int(11) DEFAULT 1
+  `CreatedBy` int DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -280,17 +280,17 @@ INSERT INTO `product` (`ID`, `CategoryID`, `Name`, `IsDeleted`, `CreatedAt`, `de
 --
 
 CREATE TABLE `productdetail` (
-  `ID` int(11) NOT NULL,
-  `ProductID` int(11) DEFAULT NULL,
+  `ID` int NOT NULL,
+  `ProductID` int DEFAULT NULL,
   `ImageURL` longtext DEFAULT NULL,
   `Size` varchar(20) DEFAULT NULL,
-  `Stock` int(11) DEFAULT NULL,
+  `Stock` int DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
   `price` double DEFAULT NULL,
-  `discount` int(11) DEFAULT NULL,
-  `hold` int(11) DEFAULT 0,
+  `discount` int DEFAULT NULL,
+  `hold` int DEFAULT 0,
   `ImportPrice` double DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -339,10 +339,10 @@ INSERT INTO `productdetail` (`ID`, `ProductID`, `ImageURL`, `Size`, `Stock`, `Is
 --
 
 CREATE TABLE `role` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `Name` varchar(50) DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3)
+  `CreatedAt` datetime(3) DEFAULT current_timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -364,11 +364,11 @@ INSERT INTO `role` (`ID`, `Name`, `IsDeleted`, `CreatedAt`) VALUES
 --
 
 CREATE TABLE `settings` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `Type` varchar(50) DEFAULT NULL,
   `Value` varchar(150) DEFAULT NULL,
-  `Order` int(11) DEFAULT NULL,
-  `CreatedBy` int(11) DEFAULT 1,
+  `Order` int DEFAULT NULL,
+  `CreatedBy` int DEFAULT 1,
   `isDeleted` tinyint(4) DEFAULT 0,
   `description` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -389,13 +389,13 @@ INSERT INTO `settings` (`ID`, `Type`, `Value`, `Order`, `CreatedBy`, `isDeleted`
 --
 
 CREATE TABLE `slider` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `Title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `ImageURL` longtext DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
-  `ProductId` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
+  `ProductId` int DEFAULT NULL,
   `Notes` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `Backlink` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -415,17 +415,17 @@ INSERT INTO `slider` (`ID`, `Title`, `ImageURL`, `IsDeleted`, `CreatedAt`, `Crea
 --
 
 CREATE TABLE `staff` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `Email` varchar(50) DEFAULT NULL,
   `Password` varchar(100) DEFAULT NULL,
   `Fullname` varchar(100) DEFAULT NULL,
   `Gender` varchar(10) DEFAULT NULL,
   `Address` varchar(255) DEFAULT NULL,
   `Phone` varchar(20) DEFAULT NULL,
-  `Role` int(11) DEFAULT NULL,
+  `Role` int DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
   `Avatar` longtext DEFAULT 'https://www.svgrepo.com/show/452030/avatar-default.svg'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -449,14 +449,14 @@ INSERT INTO `staff` (`ID`, `Email`, `Password`, `Fullname`, `Gender`, `Address`,
 --
 
 CREATE TABLE `topping` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `ToppingName` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `Price` double DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 1,
-  `CreatedDate` datetime(3) DEFAULT current_timestamp(3),
-  `LastUpdated` datetime(3) DEFAULT current_timestamp(3),
+  `CreatedDate` datetime(3) DEFAULT current_timestamp,
+  `LastUpdated` datetime(3) DEFAULT current_timestamp,
   `Img` longtext DEFAULT NULL,
-  `ProductID` int(11) DEFAULT NULL
+  `ProductID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -518,7 +518,7 @@ INSERT INTO `topping` (`ID`, `ToppingName`, `Price`, `IsDeleted`, `CreatedDate`,
 --
 
 CREATE TABLE `user` (
-  `ID` int(11) NOT NULL,
+  `ID` int NOT NULL,
   `Email` varchar(50) DEFAULT NULL,
   `Password` varchar(100) DEFAULT NULL,
   `Fullname` varchar(100) DEFAULT NULL,
@@ -526,8 +526,8 @@ CREATE TABLE `user` (
   `Address` varchar(255) DEFAULT NULL,
   `Phone` varchar(20) DEFAULT NULL,
   `IsDeleted` tinyint(4) DEFAULT 0,
-  `CreatedAt` datetime(3) DEFAULT current_timestamp(3),
-  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` datetime(3) DEFAULT current_timestamp,
+  `CreatedBy` int DEFAULT NULL,
   `Avatar` longtext DEFAULT 'https://www.svgrepo.com/show/452030/avatar-default.svg',
   `ChangeHistory` longtext DEFAULT NULL,
   `Location` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
@@ -658,91 +658,91 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `productdetail`
 --
 ALTER TABLE `productdetail`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `slider`
 --
 ALTER TABLE `slider`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `topping`
 --
 ALTER TABLE `topping`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

@@ -2,6 +2,7 @@ package Model;
 
 import DAO.OrderDAO;
 import DAO.StaffDAO;
+import DAO.ToppingDAO;
 import DAO.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,6 +47,7 @@ public class Order {
         this.createdAt = createdAt;
         this.createdBy = createdBy;
         this.totalCost = new OrderDAO().getTotal(id);
+        
     }
 
     public String getPaymentMethod() {
