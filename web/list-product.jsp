@@ -96,7 +96,6 @@
                                             <div class="single-products">
                                                 <div class="productinfo text-center">
                                                     <img src="${product.productDetail.imageURL}" alt="" />
-                                                    ${product.productDetail.price}
                                                     <h2>${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND </h2>
                                                     <p>${product.productName}</p>
                                                     <a href="product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
