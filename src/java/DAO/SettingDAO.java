@@ -29,7 +29,7 @@ public class SettingDAO {
 
     // Create
     public boolean addSetting(String type, String value, int order, String description) {
-        String query = "INSERT INTO Settings (Type, Value, [Order], description) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Settings (Type, Value, Order, description) VALUES (?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, type);
@@ -71,7 +71,7 @@ public class SettingDAO {
 
     // Update
     public boolean updateSetting(Setting setting) {
-        String query = "UPDATE Settings SET Type=?, Value=?, [Order]=?, [isDeleted]=?, [description]=? WHERE ID=?";
+        String query = "UPDATE Settings SET Type=?, Value=?, Order=?, isDeleted=?, description=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, setting.getType());
