@@ -28,7 +28,7 @@ public class StaffDAO {
 
     // Create (Register)
     public boolean registerStaff(Staff staff) {
-        String query = "INSERT INTO [Staff] (Email, Password, Fullname, Gender, Address, Phone, Role, CreatedBy, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Staff (Email, Password, Fullname, Gender, Address, Phone, Role, CreatedBy, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, staff.getEmail());
@@ -52,7 +52,7 @@ public class StaffDAO {
 
     // Read (Get Staff by Id)
     public Staff getStaffById(int id) {
-        String query = "SELECT * FROM [Staff] WHERE ID = ?";
+        String query = "SELECT * FROM Staff WHERE ID = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, id);
@@ -83,7 +83,7 @@ public class StaffDAO {
 
     // Read (Get Staff by Email)
     public Staff getStaffByEmail(String email) {
-        String query = "SELECT * FROM [Staff] WHERE Email = ?";
+        String query = "SELECT * FROM Staff WHERE Email = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
@@ -115,7 +115,7 @@ public class StaffDAO {
     // Get all staff with pagination
     public List<Staff> getAllStaff(int pageNumber, int pageSize) {
         List<Staff> staffList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Staff]) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM Staff) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
         int startIndex = (pageNumber - 1) * pageSize + 1;
         int endIndex = pageNumber * pageSize;
         try {
@@ -150,7 +150,7 @@ public class StaffDAO {
     // Get all staff with pagination
     public List<Staff> getAllStaff() {
         List<Staff> staffList = new ArrayList<>();
-        String query = "SELECT * FROM [Staff]";
+        String query = "SELECT * FROM Staff";
         try {
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -180,7 +180,7 @@ public class StaffDAO {
 
     public List<Staff> getFilteredStaff(String fullName, String email, String phone, int role, String gender, Boolean isDeleted, int pageNumber, int pageSize) {
         List<Staff> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [Staff] WHERE 1=1";
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM Staff WHERE 1=1";
         // Add filter conditions
         if (fullName != null && !fullName.isEmpty()) {
             query += " AND Fullname LIKE '%" + fullName + "%'";
@@ -233,7 +233,7 @@ public class StaffDAO {
     
     public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender, Boolean isDeleted) {
         List<Staff> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [Staff] WHERE 1=1";
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM Staff WHERE 1=1";
         // Add filter conditions
         if (fullName != null && !fullName.isEmpty()) {
             query += " AND Fullname LIKE '%" + fullName + "%'";
@@ -279,7 +279,7 @@ public class StaffDAO {
 
     // Update (Update Staff)
     public boolean updateStaff(Staff staff) {
-        String query = "UPDATE [Staff] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, Role=?, IsDeleted=?, CreatedBy=?, Avatar=? WHERE ID=?";
+        String query = "UPDATE Staff SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, Role=?, IsDeleted=?, CreatedBy=?, Avatar=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, staff.getEmail());
@@ -305,7 +305,7 @@ public class StaffDAO {
 
     // Delete (Delete Staff)
     public boolean deleteStaff(int staffID) {
-        String query = "DELETE FROM [Staff] WHERE ID=?";
+        String query = "DELETE FROM Staff WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, staffID);
@@ -321,7 +321,7 @@ public class StaffDAO {
 
     // Login
     public Staff loginStaff(String email, String password) {
-        String query = "SELECT * FROM [Staff] WHERE Email = ? AND Password = ?";
+        String query = "SELECT * FROM Staff WHERE Email = ? AND Password = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
