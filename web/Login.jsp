@@ -45,7 +45,7 @@
                         <input id="email" name="email" type="email" placeholder="Email" value="${email}" required/>
                         <input id="password" name="password" type="password" placeholder="Mật khẩu" value="${password}" required/>
                         <span>
-                            <a href="#">Quên mật khẩu?</a>
+                            <a href="reset-password">Quên mật khẩu?</a>
                         </span>
                         <button type="submit" class="btn btn-default">Xác nhận</button>
                     </form>
