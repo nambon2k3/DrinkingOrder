@@ -287,7 +287,7 @@
                             <c:forEach var="item" items="${cartItems}">
                                 <tr>
                                     <td class="cart_product">
-                                        <img src="${item.productDetail.imageURL}" alt="" style="width: 150px; height: 100; object-fit: cover">
+                                        <img src="${item.productDetail.imageURL}" alt="" style="width: 75px; height: 50px; object-fit: cover">
                                     </td>
                                     <td class="cart_description">
                                         <h4>${item.productDetail.getProductName()}</h4>
@@ -295,7 +295,7 @@
                                             <c:forEach items="${item.listTopping}" var="t">
                                                 <c:set value="${totalTopping + t.price}" var="totalTopping"/>
                                             </c:forEach>
-                                            ${totalTopping}
+                                            ${String.format('%.2f',Double.parseDouble( totalTopping))}
                                         </p>
                                     </td>
                                     <td class="cart_price">
@@ -303,11 +303,11 @@
                                     </td>
                                     <td class="cart_price">
                                         <p style="margin: 0"><c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                ${item.productDetail.price * (100.0- item.productDetail.discount)/100}
+                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price * (100.0- item.productDetail.discount)/100))}
                                                 <c:set value="${total + item.productDetail.price * (100.0- item.productDetail.discount)/100}" var="total"/>
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                ${item.productDetail.price}
+                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price))}
                                                 <c:set value="${total + item.productDetail.price}" var="total"/>
                                             </c:if>
                                         </p>
@@ -514,8 +514,8 @@
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
                                                 <h2><c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
-                                                        <span class="text-muted text-decoration-line-through">$${p.productDetail.price}</span>
-                                                        $${p.productDetail.price * (100.0- p.productDetail.discount)/100}
+                                                        <span class="text-muted text-decoration-line-through">${p.productDetail.price}</span>
+                                                        ${p.productDetail.price * (100.0- p.productDetail.discount)/100}
                                                     </c:if>
 
                                                     <c:if test="${p.productDetail.discount == null || p.productDetail.discount == 0}">

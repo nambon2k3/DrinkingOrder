@@ -203,7 +203,7 @@
                             <c:forEach var="product" items="${orderedProducts}">
                                 <tr>
                                     <td class="cart_product">
-                                        <img src="${product.imageURL}" alt="" style="width: 150px; height: 100; object-fit: cover">
+                                        <img src="${product.imageURL}" alt="" style="width: 75px; height: 50; object-fit: cover">
                                     </td>
                                     <td class="cart_description">
                                         <h4>${product.getProductName()}</h4>
@@ -213,7 +213,7 @@
                                         <p>${product.getCateogryName()}</p>
                                     </td>
                                     <td class="cart_price">
-                                        ${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price}
+                                        ${String.format("%.2f", Double.parseDouble(product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price))}
                                     </td>
                                     <td class="cart_quantity">
                                         ${product.buyQuantity}
@@ -303,7 +303,7 @@
         <section id="do_action">
             <div class="container">
                 <div class="heading">
-                    <strong>Tổng đơn hàng:</strong> ${order.totalCost + totalToppingProducts}
+                    <strong>Tổng đơn hàng:</strong>${String.format("%.2f", Double.parseDouble(order.totalCost + totalToppingProducts))}
                 </div>
                 <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Failed' && order.status ne 'Success' && order.status ne 'Rejected' && order.status ne 'Delivering'}">
                     <div class="mt-4">

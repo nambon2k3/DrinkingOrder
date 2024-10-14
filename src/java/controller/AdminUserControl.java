@@ -7,6 +7,7 @@ package controller;
 import DAO.StaffDAO;
 import Model.Staff;
 import Utils.EmailService;
+import Utils.PasswordUtil;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -100,7 +101,7 @@ public class AdminUserControl extends HttpServlet {
             // Register the staff
             Staff newStaff = new Staff();
             newStaff.setEmail(email);
-            newStaff.setPassword(password);
+            newStaff.setPassword(PasswordUtil.hashPasswordMD5(password));
             newStaff.setFullname(fullName);
             newStaff.setGender(gender ? "Male" : "Female");
             newStaff.setAddress(address);

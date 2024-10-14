@@ -31,8 +31,6 @@ public class ProductDAO extends DBContext {
         }
     }
 
-    
-    
     public int countTotalProducts(String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
         String sql = "SELECT COUNT(*) FROM Product p "
                 + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
@@ -124,9 +122,9 @@ public class ProductDAO extends DBContext {
             params.add(size);
         }
 
-        sql += " ORDER BY p.CreatedAt DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        params.add((pageNumber - 1) * pageSize);
+        sql += " ORDER BY p.CreatedAt DESC LIMIT ? OFFSET ? ROWS";     
         params.add(pageSize);
+        params.add((pageNumber - 1) * pageSize);
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -188,9 +186,9 @@ public class ProductDAO extends DBContext {
             params.add(size);
         }
 
-        sql += " ORDER BY p.CreatedAt DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        params.add((pageNumber - 1) * pageSize);
+        sql += " ORDER BY p.CreatedAt DESC LIMIT ? ?";       
         params.add(pageSize);
+        params.add((pageNumber - 1) * pageSize);
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -216,13 +214,11 @@ public class ProductDAO extends DBContext {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("getProductsByPage: " + e.getMessage());
+            System.out.println("getProductsByPage2: " + e.getMessage());
         }
 
         return products;
     }
-
-    
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
@@ -288,11 +284,11 @@ public class ProductDAO extends DBContext {
                 + "INNER JOIN Category c ON p.CategoryID = c.ID\n"
                 + "WHERE p.IsDeleted = 0\n"
                 + "ORDER BY p.ID ASC\n"
-                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+                + "LIMIT ? OFFSET ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, offset);
-            statement.setInt(2, pageSize);
+            statement.setInt(2, offset);
+            statement.setInt(1, pageSize);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -372,12 +368,12 @@ public class ProductDAO extends DBContext {
 
     public List<Topping> getAllToppings(int productId) {
         List<Topping> toppings = new ArrayList<>();
-        String query = "SELECT [ID], [ToppingName], [Price], [IsDeleted], [CreatedDate], [LastUpdated], [Img], [ProductID] FROM [Topping] WHERE [IsDeleted] = 0 and ProductID = ?";
+        String query = "SELECT ID, ToppingName, Price, IsDeleted, CreatedDate, LastUpdated, Img, ProductID FROM Topping WHERE IsDeleted = 0 and ProductID = ?";
 
         try (
-                PreparedStatement ps = connection.prepareStatement(query); ) {
+                PreparedStatement ps = connection.prepareStatement(query);) {
             ps.setInt(1, productId);
-ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Topping topping = new Topping();
                 topping.setId(rs.getInt("ID"));
@@ -565,7 +561,7 @@ ResultSet rs = ps.executeQuery();
                 + "WHERE p.IsDeleted = 0 AND c.IsDeleted = 0 "
                 + "AND (p.Name LIKE ? OR ? IS NULL) "
                 + "AND (p.CategoryID = ? OR ? IS NULL) Order by p.ID "
-                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
+                + "LIMIT ? OFFSET ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -573,8 +569,8 @@ ResultSet rs = ps.executeQuery();
             statement.setString(1, "%" + searchQuery + "%");
             statement.setString(4, categoryId != null && !categoryId.isBlank() ? categoryId : null);
             statement.setString(3, categoryId);
-            statement.setInt(6, pageSize);
-            statement.setInt(5, offset);
+            statement.setInt(5, pageSize);
+            statement.setInt(6, offset);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Product product = new Product();
@@ -599,8 +595,8 @@ ResultSet rs = ps.executeQuery();
 
     public List<ProductDetail> getListProductDetailsByProductId(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
-        String query = "SELECT [ID], [ProductID], [ImageURL], [Size], [Color], [Stock], [IsDeleted], [CreatedAt], [CreatedBy], [price], [discount] "
-                + "FROM [swp-online-shop].[dbo].[ProductDetail] WHERE [ProductID] = ? and IsDeleted != 1";
+        String query = "SELECT ID, ProductID, ImageURL, Size, Color, Stock, IsDeleted, CreatedAt, CreatedBy, price, discount "
+                + "FROM ProductDetail WHERE ProductID = ? and IsDeleted != 1";
 
         try (
                 PreparedStatement ps = connection.prepareStatement(query)) {
@@ -657,7 +653,7 @@ ResultSet rs = ps.executeQuery();
     public List<Product> getThreeLastestProducts() {
         List<Product> products = new ArrayList<>();
 
-        String sql = "SELECT TOP 3 "
+        String sql = "SELECT "
                 + "p.ID AS ProductID, "
                 + "p.Name AS ProductName, "
                 + "c.Name AS CategoryName, "
@@ -674,7 +670,7 @@ ResultSet rs = ps.executeQuery();
                 + "INNER JOIN Category c ON p.CategoryID = c.ID "
                 + "INNER JOIN ProductDetail pd ON p.ID = pd.ProductID "
                 + "WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0 "
-                + "ORDER BY p.CreatedAt ASC";
+                + "ORDER BY p.CreatedAt ASC LIMIT 3";
 
         try (PreparedStatement statement = connection.prepareStatement(sql); ResultSet resultSet = statement.executeQuery()) {
 
@@ -708,8 +704,8 @@ ResultSet rs = ps.executeQuery();
 
     public void updateQuantity(int orderId, int mode) {
         String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
-                = "SELECT ProductDetailID, [quantity] "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] "
+                = "SELECT ProductDetailID, quantity "
+                + "FROM OrderDetail "
                 + "WHERE OrderID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL)) {
 
@@ -729,8 +725,8 @@ ResultSet rs = ps.executeQuery();
 
     public void updateHoldQuantity(int orderId, int mode) {
         String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
-                = "SELECT ProductDetailID, [quantity] "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] "
+                = "SELECT ProductDetailID, quantity "
+                + "FROM OrderDetail "
                 + "WHERE OrderID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL)) {
 
@@ -750,7 +746,7 @@ ResultSet rs = ps.executeQuery();
     public void updateProductDetailQuantity(int productDetailId, int quantity) {
         String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL
                 = "UPDATE ProductDetail "
-                + "SET [Stock] = [Stock] - ? "
+                + "SET Stock = Stock - ? "
                 + "WHERE ID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_DETAIL_QUANTITY_SQL)) {
 
@@ -849,7 +845,7 @@ ResultSet rs = ps.executeQuery();
         }
 
         query += "ORDER BY p.ID "
-                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+                + "LIMIT ?  OFFSET ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             int parameterIndex = 1;
@@ -866,8 +862,8 @@ ResultSet rs = ps.executeQuery();
                 stmt.setBoolean(parameterIndex++, isDeleted);
             }
 
-            stmt.setInt(parameterIndex++, offset);
             stmt.setInt(parameterIndex++, pageSize);
+            stmt.setInt(parameterIndex++, offset);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -938,8 +934,8 @@ ResultSet rs = ps.executeQuery();
 
     public boolean addProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Stock, price, discount, importPrice) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Stock, price, discount) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, productDetail.getProductId());
@@ -948,7 +944,6 @@ ResultSet rs = ps.executeQuery();
             statement.setInt(4, productDetail.getStock());
             statement.setDouble(5, productDetail.getPrice());
             statement.setInt(6, productDetail.getDiscount());
-            statement.setFloat(7, productDetail.getImportPrice());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -963,7 +958,7 @@ ResultSet rs = ps.executeQuery();
 
     public boolean updateProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Stock = ?, price = ?, discount = ?, importPrice = ? "
+        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Stock = ?, price = ?, discount = ? "
                 + "WHERE ID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -972,8 +967,7 @@ ResultSet rs = ps.executeQuery();
             statement.setInt(3, productDetail.getStock());
             statement.setDouble(4, productDetail.getPrice());
             statement.setInt(5, productDetail.getDiscount());
-            statement.setFloat(6, productDetail.getImportPrice());
-            statement.setInt(7, productDetail.getProductDetailId());
+            statement.setInt(6, productDetail.getProductDetailId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -1010,7 +1004,7 @@ ResultSet rs = ps.executeQuery();
 
     public List<Product> homePage() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT TOP 12 \n"
+        String sql = "SELECT \n"
                 + "    p.*, \n"
                 + "    pd.*\n"
                 + "FROM \n"
@@ -1030,7 +1024,7 @@ ResultSet rs = ps.executeQuery();
                 + "WHERE \n"
                 + "    p.isDeleted = 0\n"
                 + "ORDER BY \n"
-                + "    p.CreatedAt DESC\n";
+                + "    p.CreatedAt DESC LIMIT 12\n";
         try {
             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = ps.executeQuery();
@@ -1065,22 +1059,21 @@ ResultSet rs = ps.executeQuery();
                 + "    SELECT pd1.*\n"
                 + "    FROM ProductDetail pd1\n"
                 + "    JOIN (\n"
-                + "        -- Lấy giá nhỏ nhất của từng ProductID\n"
                 + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
                 + "        FROM ProductDetail\n"
                 + "        GROUP BY ProductID\n"
                 + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
-                + "WHERE pd.Price BETWEEN "+minPrice+" AND "+maxPrice+"\n  "
-                + "  AND p.name like '%"+name+"%'  ";
+                + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
+                + "  AND p.name like '%" + name + "%'  ";
 
         if (category != null && category.length() != 0) {
             sql += "  AND c.ID in (" + category + ")";
         }
 
-        sql += "ORDER BY pd.price " + arrangePrice + ", p.name "+arrangeName+"  \n  OFFSET (" + pageNumber + " - 1) * " + pageSize + " ROWS\n"
-                + " FETCH NEXT " + pageSize + " ROWS ONLY;";
+        sql += "ORDER BY pd.price " + arrangePrice + ", p.name " + arrangeName + "  \n"
+                + "LIMIT " + pageSize + " OFFSET " + ((pageNumber - 1) * pageSize) + ";";
 
         List<Product> products = new ArrayList<>();
         try {
@@ -1109,7 +1102,6 @@ ResultSet rs = ps.executeQuery();
         return products;
     }
 
-
     public int countFilter(String name, String category, double minPrice, double maxPrice) {
         String sql = "SELECT COUNT(*)\n"
                 + "FROM Product p\n"
@@ -1124,8 +1116,8 @@ ResultSet rs = ps.executeQuery();
                 + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
-                + "WHERE pd.Price BETWEEN "+minPrice+" AND "+maxPrice+"\n  "
-                + "  AND p.name like '%"+name+"%'  ";
+                + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
+                + "  AND p.name like '%" + name + "%'  ";
 
         if (category != null && category.length() != 0) {
             sql += "  AND c.ID in (" + category + ")";

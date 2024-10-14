@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Login</title>
+        <title>Giỏ hàng</title>
         <link href="${pageContext.request.contextPath}/css2/bootstrap.min.css" rel="stylesheet">
         <script
             src="https://kit.fontawesome.com/8e2244e830.js"
@@ -190,7 +190,7 @@
                         <h3>Giỏ hàng</h3>
                         <c:if test="${isSuccess ne null && isSuccess}">
                             <div class="success-message" id="mess">
-                                <strong>Thành công!</strong> Cảm ơn bạn đã mua hàng.
+                                <strong>Thành công!</strong>
                                 <button type="button" class="btn-close" onclick="document.getElementById('mess').style.display = 'none'">&times;</button>
                             </div>
 
@@ -243,7 +243,7 @@
                             <c:forEach var="item" items="${cartItems}">
                                 <tr>
                                     <td class="cart_product">
-                                        <img src="${item.productDetail.imageURL}" alt="" style="width: 150px; height: 100; object-fit: cover">
+                                        <img src="${item.productDetail.imageURL}" alt="" style="width: 75px; height: 50px; object-fit: cover">
                                     </td>
                                     <td class="cart_description">
                                         <h4>${item.productDetail.getProductName()}</h4>
@@ -251,7 +251,7 @@
                                             <c:forEach items="${item.listTopping}" var="t">
                                                 <c:set value="${totalTopping + t.price}" var="totalTopping"/>
                                             </c:forEach>
-                                            ${totalTopping}
+                                            ${String.format('%.2f',Double.parseDouble(totalTopping) )}
                                         </p>
                                     </td>
                                     <td class="cart_price">
@@ -259,11 +259,11 @@
                                     </td>
                                     <td class="cart_price">
                                         <p style="margin: 0"><c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                ${item.productDetail.price * (100.0- item.productDetail.discount)/100}
+                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price * (100.0- item.productDetail.discount)/100) )}
                                                 <c:set value="${total + item.productDetail.price * (100.0- item.productDetail.discount)/100}" var="total"/>
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                ${item.productDetail.price}
+                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price) )}
                                                 <c:set value="${total + item.productDetail.price}" var="total"/>
                                             </c:if>
                                         </p>
@@ -281,10 +281,10 @@
                                     <td class="cart_total">
                                         <p class="cart_total_price" style="margin: 0">
                                             <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                $${String.format('%.2f', item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping)}
+                                                ${String.format('%.2f',Double.parseDouble(item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping))}
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                $${String.format('%.2f', item.quantity * (item.productDetail.price) + totalTopping)}
+                                                ${String.format('%.2f', Double.parseDouble(item.quantity * (item.productDetail.price) + totalTopping))}
                                             </c:if>
                                         </p>
                                     </td>

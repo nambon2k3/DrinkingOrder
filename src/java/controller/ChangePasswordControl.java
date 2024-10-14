@@ -6,6 +6,7 @@ package controller;
 
 import DAO.UserDAO;
 import Model.User;
+import Utils.PasswordUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -36,9 +37,9 @@ public class ChangePasswordControl extends HttpServlet {
         String password = request.getParameter("password");
         String retypepassword = request.getParameter("retypepassword");
 
-        if (password.equals(retypepassword) && user.getPassword().equals(oldPassword)) {
+        if (password.equals(retypepassword) && user.getPassword().equals(PasswordUtil.hashPasswordMD5(password))) {
 
-            user.setPassword(password);
+            user.setPassword(PasswordUtil.hashPasswordMD5(password));
             new UserDAO().updateUser(user);
 
             request.setAttribute("errorMessage", "Đổi mật khẩu thành công!");

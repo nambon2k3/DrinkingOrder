@@ -16,7 +16,7 @@ public class DBContext {
     // Method to establish a database connection
     public Connection getConnection() {
         Connection conn = null;
-        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
+        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName + "?allowPublicKeyRetrieval=true&useSSL=true&serverTimezone=UTC";
 
         try {
             // Load MySQL JDBC driver
@@ -27,7 +27,7 @@ public class DBContext {
             System.err.println("MySQL JDBC Driver not found.");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.err.println("Failed to establish a connection to the MySQL database."  + e.getMessage());
+            System.err.println("Failed to establish a connection to the MySQL database.");
             e.printStackTrace();
         }
 
