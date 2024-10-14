@@ -105,6 +105,50 @@
 
 
 
+            .total_area {
+                max-width: 600px; /* Đặt chiều rộng tối đa cho biểu mẫu */
+                padding: 20px; /* Thêm khoảng cách bên trong */
+                border: 1px solid #ccc; /* Đường viền xung quanh biểu mẫu */
+                border-radius: 10px; /* Bo góc cho đường viền */
+                background-color: #f9f9f9; /* Màu nền cho biểu mẫu */
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+            }
+
+            .form-group {
+                margin-bottom: 15px; /* Khoảng cách giữa các phần tử */
+                display: flex; /* Sử dụng Flexbox */
+                flex-direction: column; /* Đặt chiều dọc */
+            }
+
+            .form-group label {
+                display: block; /* Hiển thị label dưới dạng block */
+                font-weight: bold; /* Đậm cho label */
+                margin-bottom: 5px; /* Khoảng cách giữa label và input */
+            }
+
+            .form-control {
+                width: 100%; /* Chiều rộng 100% cho input */
+                max-width: 400px; /* Chiều rộng tối đa cho input */
+                padding: 10px; /* Khoảng cách bên trong */
+                border: 1px solid #ccc; /* Đường viền cho input */
+                border-radius: 5px; /* Bo góc cho input */
+                box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng đến chiều rộng */
+            }
+
+            .bank-info {
+                margin-top: 10px; /* Khoảng cách phía trên cho thông tin ngân hàng */
+                padding: 10px; /* Khoảng cách bên trong */
+                background-color: #eef; /* Màu nền cho thông tin ngân hàng */
+                border: 1px solid #aac; /* Đường viền cho thông tin ngân hàng */
+                border-radius: 5px; /* Bo góc cho thông tin ngân hàng */
+            }
+
+            .button-group {
+                display: flex; /* Sử dụng Flexbox cho nhóm nút */
+                justify-content: space-between; /* Khoảng cách đều giữa các nút */
+                margin-top: 20px; /* Khoảng cách phía trên cho nhóm nút */
+            }
+
             .success-message {
                 background-color: #4CAF50; /* Màu xanh lá cho thành công */
                 color: white;
@@ -204,7 +248,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div style="width: 100%">
-                            <form method="get" action="cart">
+                            <form method="get" action="cart-contact">
                                 <div class="row">
                                     <div id="product-search" class="col-sm-4">
                                         <input type="text" id="search-box" name="searchQuery" placeholder="Tìm kiếm" class="form-control" value="${param.searchQuery}">
@@ -243,7 +287,7 @@
                             <c:forEach var="item" items="${cartItems}">
                                 <tr>
                                     <td class="cart_product">
-                                        <img src="${item.productDetail.imageURL}" alt="" style="width: 150px; height: 100; object-fit: cover">
+                                        <img src="${item.productDetail.imageURL}" alt="" style="width: 75px; height: 50px; object-fit: cover">
                                     </td>
                                     <td class="cart_description">
                                         <h4>${item.productDetail.getProductName()}</h4>
@@ -251,7 +295,7 @@
                                             <c:forEach items="${item.listTopping}" var="t">
                                                 <c:set value="${totalTopping + t.price}" var="totalTopping"/>
                                             </c:forEach>
-                                            ${totalTopping}
+                                            ${String.format('%.2f',Double.parseDouble( totalTopping))}
                                         </p>
                                     </td>
                                     <td class="cart_price">
@@ -259,11 +303,11 @@
                                     </td>
                                     <td class="cart_price">
                                         <p style="margin: 0"><c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                ${item.productDetail.price * (100.0- item.productDetail.discount)/100}
+                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price * (100.0- item.productDetail.discount)/100))}
                                                 <c:set value="${total + item.productDetail.price * (100.0- item.productDetail.discount)/100}" var="total"/>
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                ${item.productDetail.price}
+                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price))}
                                                 <c:set value="${total + item.productDetail.price}" var="total"/>
                                             </c:if>
                                         </p>
@@ -273,28 +317,22 @@
                                             <form action="update-cart" method="post" style="display:inline;">
                                                 <input type="hidden" name="cartId" value="${item.id}">
                                                 <input type="number"  name="quantity" value="${item.quantity}" min="1" max="${item.productDetail.stock}"
-                                                       class="form-control" style="width: 80px; display:inline;">
-                                                <button type="submit" class="btn btn-sm btn-primary" style="margin-top: 0">Cập nhật</button>
+                                                       class="form-control" style="width: 80px; display:inline;" readonly>
                                             </form>
                                         </div>
                                     </td>
                                     <td class="cart_total">
                                         <p class="cart_total_price" style="margin: 0">
                                             <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                $${String.format('%.2f', item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping)}
+                                                ${String.format('%.2f', item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping)}
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                $${String.format('%.2f', item.quantity * (item.productDetail.price) + totalTopping)}
+                                                ${String.format('%.2f', item.quantity * (item.productDetail.price) + totalTopping)}
                                             </c:if>
                                         </p>
                                     </td>
                                     <td class="cart_delete">
-                                        <form action="delete-cart" method="post" style="display:inline;">
-                                            <input type="hidden" name="cartId" value="${item.id}">
-                                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                                        </form>
                                         <button class="btn-info btn-sm" onclick="openModal(${item.id})">Thông tin</button>
-
                                     </td>
                                 </tr>
 
@@ -359,7 +397,7 @@
                     <ul class="pagination" style="padding-left: 0;">
                         <c:forEach begin="1" end="${totalPages}" var="pageNum">
                             <li class="page-item ${pageNum == currentPage ? 'active' : ''}">
-                                <a href="cart?page=${pageNum}&searchQuery=${param.searchQuery}&category=${param.category}">${pageNum}</a>
+                                <a href="cart-contact?page=${pageNum}&searchQuery=${param.searchQuery}&category=${param.category}">${pageNum}</a>
                             </li>
                         </c:forEach>
                     </ul> 
@@ -372,53 +410,92 @@
         <section id="do_action">
             <div class="container">
                 <div class="heading">
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="total_area">
-                            <ul>
-                                <li>Giá sản phẩm <span>
-                                        <c:set var="totalPrice" value="0"/>
-                                        <c:forEach var="item" items="${cartItemsFull}">
-                                            <c:set value="0" var="totalTopping"/>
-                                            <c:forEach items="${item.listTopping}" var="t">
-                                                <c:set value="${totalTopping + t.price}" var="totalTopping"/>
-                                            </c:forEach>
-                                            <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                <c:set var="totalPrice" value="${totalPrice + totalTopping + item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100)}" />
-                                            </c:if>
-                                            <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                <c:set var="totalPrice" value="${totalPrice + totalTopping + item.quantity * (item.productDetail.price)}" />
-                                            </c:if>
-
-                                        </c:forEach>
-                                        ${String.format("%.2f", Double.parseDouble(totalPrice))}
-                                    </span></li>
-                                <li>Shipping <span>Miễn phí</span></li>
-                                <li>Tổng <span>
-                                        <c:set var="totalPrice" value="0"/>
-                                        <c:forEach var="item" items="${cartItemsFull}">
-                                            <c:set value="0" var="totalTopping"/>
-                                            <c:forEach items="${item.listTopping}" var="t">
-                                                <c:set value="${totalTopping + t.price}" var="totalTopping"/>
-                                            </c:forEach>
-                                            <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                <c:set var="totalPrice" value="${totalPrice + totalTopping + item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100)}" />
-                                            </c:if>
-                                            <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                <c:set var="totalPrice" value="${totalPrice + totalTopping + item.quantity * (item.productDetail.price)}" />
-                                            </c:if>
-
-                                        </c:forEach>
-                                        ${String.format("%.2f", Double.parseDouble(totalPrice))}
-                                    </span></li>
-                            </ul>
-                            <a class="btn btn-default update" href="list-product">Tiếp tục mua sắm</a>
-
-                            <c:if test="${cartItemsFull.size() ne 0}">
-                                <a href="cart-contact" class="btn btn-default check_out">Thanh toán</a>
+                    <h3>Tổng giá tiền: <c:set var="totalPrice" value="0" />
+                        <c:forEach var="item" items="${cartItemsFull}">
+                            <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
+                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100)}" />
                             </c:if>
+                            <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
+                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price)}" />
+                            </c:if>
+
+                        </c:forEach>
+                        ${String.format('%.2f', totalPrice + totalTopping)}</h3>
+                </div>
+                <div style="width: 100%">
+                    <div style="width: 100%">
+
+                        <div class="total_area" style="width: 100%">
+                            <form action="../public/payment" method="post">
+                                <input class="form-control" id="amount" name="amount" type="hidden" readonly value="${totalPrice}" />
+                                <input type="hidden" Checked="True" id="bankCode" name="bankcode" value="NCB">
+                                <input type="hidden" id="language" Checked="True" name="language" value="vn">
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <label for="fullname">Họ và tên:</label>
+                                        <input type="text" id="fullname" class="form-control" name="fullname" value="${sessionScope.user.fullname}">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="gender">Giới tính:</label>
+                                        <input type="text" id="gender" class="form-control" name="gender" value="${sessionScope.user.gender}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <label for="email">Email:</label>
+                                        <input type="email" id="email" class="form-control" name="email" value="${sessionScope.user.email}">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="phone">Số điện thoại:</label>
+                                        <input type="tel" id="phone" class="form-control" name="phone" value="${sessionScope.user.phone}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <label for="location">Quận/huyện:</label>
+                                        <select name="location" required>
+                                            <c:forEach items="${locations}" var="location">
+                                                <option value="${location.locationName}" ${sessionScope.user.location eq location.locationName ? 'selected' : ''}>${location.locationName}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="address">Địa chỉ:</label>
+                                        <input type="text" id="address" class="form-control" name="address" value="${sessionScope.user.address}" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="notes">Ghi chú:</label>
+                                    <input type="text" id="notes" class="form-control" name="notes" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Thanh toán:</label>
+                                    <div>
+                                        <input type="radio" name="method" value="VNPAY" checked> VNPAY <br>
+                                        <input type="radio" name="method" value="Transfer"> Chuyển khoản
+                                        <div class="bank-info">
+                                            <strong>Thông tin ngân hàng:</strong>
+                                            <ul>
+                                                <li><strong>STK:</strong> 01239817231123</li>
+                                                <li><strong>Ngân hàng:</strong> MB Bank - Hà Nội</li>
+                                                <li><strong>Chủ tài khoản:</strong> Sloth shop</li>
+                                            </ul>
+                                        </div>
+                                        <input type="radio" name="method" value="COD" ${setting ne null && totalPrice > setting.value ? "disabled" : ""}> COD
+                                        <c:if test="${totalPrice > setting.value && !setting.isDeleted}">
+                                            (Đơn hàng > ${setting.value}$ không cho phép COD)
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="button-group">
+                                    <a href="cart" class="btn btn-secondary">Thay đổi</a>
+                                    <button type="submit" class="btn btn-primary">Gửi</button>
+                                </div>
+                            </form>
                         </div>
+
+
+
                     </div>
                 </div>
             </div>
@@ -437,12 +514,12 @@
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
                                                 <h2><c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
-                                                        <span class="text-muted text-decoration-line-through">$${p.productDetail.price}</span>
+                                                        <span class="text-muted text-decoration-line-through">${p.productDetail.price}</span>
                                                         ${p.productDetail.price * (100.0- p.productDetail.discount)/100}
                                                     </c:if>
 
                                                     <c:if test="${p.productDetail.discount == null || p.productDetail.discount == 0}">
-                                                        ${p.productDetail.price}
+                                                        $${p.productDetail.price}
                                                     </c:if></h2>
                                                 <p>${p.productName}</p>
                                                 <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
@@ -496,5 +573,6 @@
 
     </body>
 </html>
+
 
 
