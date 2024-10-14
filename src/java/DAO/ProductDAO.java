@@ -94,10 +94,10 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductsByPage(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT Distinct  p.*, c.Name as CategoryName FROM Product p "
-                + "                 JOIN ProductDetail pd ON p.ID = pd.ProductID "
-                + "				 Join Category c on p.CategoryID = c.ID"
-                + "                 WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0 ";
+        String sql = "SELECT DISTINCT p.*, c.Name as CategoryName FROM Product p "
+                + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
+                + "JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0 ";
 
         List<Object> params = new ArrayList<>();
 
@@ -122,12 +122,12 @@ public class ProductDAO extends DBContext {
             params.add(size);
         }
 
-        sql += " ORDER BY p.CreatedAt DESC LIMIT ? OFFSET ? ROWS";     
+        // Adjust pagination for MySQL
+        sql += " ORDER BY p.CreatedAt DESC LIMIT ? OFFSET ?";
         params.add(pageSize);
         params.add((pageNumber - 1) * pageSize);
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
             for (int i = 0; i < params.size(); i++) {
                 stmt.setObject(i + 1, params.get(i));
             }
@@ -158,10 +158,10 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductsByPage2(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price,  pd.Size, pd.ID as PDID FROM Product p "
-                + "                                  JOIN ProductDetail pd ON p.ID = pd.ProductID "
-                + "                 				 Join Category c on p.CategoryID = c.ID"
-                + "                                  WHERE 1=1 ";
+        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price, pd.Size, pd.ID as PDID FROM Product p "
+                + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
+                + "JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE 1=1 ";
 
         List<Object> params = new ArrayList<>();
 
@@ -186,12 +186,13 @@ public class ProductDAO extends DBContext {
             params.add(size);
         }
 
-        sql += " ORDER BY p.CreatedAt DESC LIMIT ? OFFSET ? ROWS";       
+        // Adjust pagination for MySQL
+        sql += " ORDER BY p.CreatedAt DESC LIMIT ? OFFSET ?";
         params.add(pageSize);
         params.add((pageNumber - 1) * pageSize);
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
+            // Set parameters for the prepared statement
             for (int i = 0; i < params.size(); i++) {
                 stmt.setObject(i + 1, params.get(i));
             }
@@ -208,6 +209,7 @@ public class ProductDAO extends DBContext {
                     product.setDescription(rs.getString("Description"));
                     product.setIsDeleted(rs.getBoolean("IsDeleted"));
 
+                    // Fetch the product detail by its ID
                     ProductDetail productDetail = getProductDetailById(rs.getInt("PDID"));
                     product.setProductDetail(productDetail);
                     products.add(product);
@@ -276,7 +278,7 @@ public class ProductDAO extends DBContext {
         List<Product> products = new ArrayList<>();
         int offset = (pageNumber - 1) * pageSize;
 
-        String sql = "SELECT distinct\n"
+        String sql = "SELECT DISTINCT\n"
                 + "p.ID AS ProductID,\n"
                 + "p.Name AS ProductName,\n"
                 + "c.Name AS CategoryName\n"
@@ -284,11 +286,12 @@ public class ProductDAO extends DBContext {
                 + "INNER JOIN Category c ON p.CategoryID = c.ID\n"
                 + "WHERE p.IsDeleted = 0\n"
                 + "ORDER BY p.ID ASC\n"
-                + "LIMIT ? OFFSET ?";
+                + "LIMIT ? OFFSET ?"; // Correct MySQL syntax
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(2, offset);
-            statement.setInt(1, pageSize);
+            statement.setInt(1, pageSize); // First parameter for LIMIT
+            statement.setInt(2, offset);    // Second parameter for OFFSET
+
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -297,6 +300,7 @@ public class ProductDAO extends DBContext {
                 product.setProductName(resultSet.getString("ProductName"));
                 product.setCategoryName(resultSet.getString("CategoryName"));
 
+                // Assuming you have a method to get product details by product ID
                 ProductDetail productDetail = getProductDetailByProductId(product.getProductId());
                 product.setProductDetail(productDetail);
                 products.add(product);
