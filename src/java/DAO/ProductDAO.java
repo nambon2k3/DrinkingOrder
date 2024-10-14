@@ -186,7 +186,6 @@ public class ProductDAO extends DBContext {
             params.add(size);
         }
 
-
         // Adjust pagination for MySQL
         sql += " ORDER BY p.CreatedAt DESC LIMIT ? OFFSET ?";
         params.add(pageSize);
@@ -217,7 +216,7 @@ public class ProductDAO extends DBContext {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("getProductsByPage2: " + e.getMessage());
+            System.out.println("getProductsByPage: " + e.getMessage());
         }
 
         return products;
@@ -1071,7 +1070,7 @@ public class ProductDAO extends DBContext {
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
                 + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
-                + "  AND p.name like '%" + name + "%'  ";
+                + "  AND p.name like '%" + name + "%' and p.isDeleted = 0 ";
 
         if (category != null && category.length() != 0) {
             sql += "  AND c.ID in (" + category + ")";
@@ -1122,7 +1121,7 @@ public class ProductDAO extends DBContext {
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
                 + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
-                + "  AND p.name like '%" + name + "%'  ";
+                + "  AND p.name like '%" + name + "%' and p.isDeleted = 0 ";
 
         if (category != null && category.length() != 0) {
             sql += "  AND c.ID in (" + category + ")";
