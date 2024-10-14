@@ -30,7 +30,7 @@ public class CategoryDAO extends DBContext {
 
     public String getCategoryNameById(int categoryId) {
         // SQL query to retrieve category name by category ID
-        String query = "SELECT Name FROM [dbo].[Category] WHERE ID = ?";
+        String query = "SELECT Name FROM drinkingorder.`Category` WHERE ID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query);) {
             statement.setInt(1, categoryId);
 
@@ -53,7 +53,7 @@ public class CategoryDAO extends DBContext {
     public List<Category> getCategories() {
         List<Category> categories = new ArrayList<>();
 
-        String sql = "SELECT ID, Name FROM Category WHERE IsDeleted = 0;";
+        String sql = "SELECT ID, Name FROM drinkingorder.`Category` WHERE IsDeleted = 0;";
 
         try (PreparedStatement statement = connection.prepareStatement(sql); ResultSet rs = statement.executeQuery()) {
 
@@ -73,8 +73,8 @@ public class CategoryDAO extends DBContext {
 
     public List<Category> getCategories(String searchQuery, int offset, int limit) {
         List<Category> categories = new ArrayList<>();
-        String sql = "SELECT [ID], [Name], [IsDeleted], [CreatedAt], [CreatedBy] FROM [dbo].[Category] "
-                + "WHERE [Name] LIKE ? ORDER BY [CreatedAt] DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String sql = "SELECT ID, Name, IsDeleted, CreatedAt, CreatedBy FROM drinkingorder.`Category` "
+                + "WHERE Name LIKE ? ORDER BY CreatedAt DESC LIMIT ?,?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -101,7 +101,7 @@ public class CategoryDAO extends DBContext {
 
     public int getTotalCategoryCount(String searchQuery) {
         int count = 0;
-        String sql = "SELECT COUNT(*) FROM [dbo].[Category] WHERE [Name] LIKE ?";
+        String sql = "SELECT COUNT(*) FROM drinkingorder.`Category` WHERE Name LIKE ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -119,7 +119,7 @@ public class CategoryDAO extends DBContext {
     
     
     public boolean addCategory(Category category) {
-        String sql = "INSERT INTO [dbo].[Category] ([Name], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (?, ?, GETDATE(), ?)";
+        String sql = "INSERT INTO drinkingorder.`Category` (Name, IsDeleted, CreatedAt, CreatedBy) VALUES (?, ?, NOW(), ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
              
             preparedStatement.setString(1, category.getCategoryName());
@@ -134,7 +134,7 @@ public class CategoryDAO extends DBContext {
     }
 
     public boolean updateCategory(Category category) {
-        String sql = "UPDATE [dbo].[Category] SET [Name] = ?, [IsDeleted] = ? WHERE [ID] = ?";
+        String sql = "UPDATE drinkingorder.`Category` SET Name = ?, IsDeleted = ? WHERE ID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
              
             preparedStatement.setString(1, category.getCategoryName());

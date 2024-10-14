@@ -36,7 +36,7 @@ public class CartDAO {
         try {
 
             // SQL query to retrieve all cart items
-            String query = "SELECT id, userId, productDetailId, quantity, isDeleted, createdAt, createdBy, toppingList FROM [dbo].[Cart] where userId = ?";
+            String query = "SELECT id, userId, productDetailId, quantity, isDeleted, createdAt, createdBy, toppingList FROM drinkingorder.`Cart` where userId = ?";
 
             // Prepare the statement
             stmt = connection.prepareStatement(query);
@@ -79,15 +79,15 @@ public class CartDAO {
             }
             // SQL query with pagination, search, and filter
             String query = "SELECT c.id, c.userId, c.productDetailId, c.quantity, c.isDeleted, c.createdAt, c.createdBy, c.ToppingList "
-                    + "FROM [dbo].[Cart] c "
-                    + "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID "
-                    + "JOIN [dbo].Product p ON p.ID = pd.ProductID "
-                    + "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID "
+                    + "FROM drinkingorder.`Cart` c "
+                    + "JOIN drinkingorder.`ProductDetail` pd ON c.ProductDetailID = pd.ID "
+                    + "JOIN drinkingorder.`Product` p ON p.ID = pd.ProductID "
+                    + "JOIN drinkingorder.`Category` cat ON p.CategoryID = cat.ID "
                     + "WHERE c.userId = ? "
                     + "AND cat.Name LIKE '%" + category + "%'"
                     + "AND p.Name LIKE '%" + searchQuery + "%'"
                     + "ORDER BY c.createdAt DESC "
-                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+                    + "LIMIT ?, ?";
 
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, userId);
@@ -127,10 +127,10 @@ public class CartDAO {
                 searchQuery = "";
             }
             String query = "SELECT COUNT(*) AS total "
-                    + "FROM [dbo].[Cart] c "
-                    + "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID "
-                    + "JOIN [dbo].Product p ON p.ID = pd.ProductID "
-                    + "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID "
+                    + "FROM drinkingorder.`Cart` c "
+                    + "JOIN drinkingorder.`ProductDetail` pd ON c.ProductDetailID = pd.ID "
+                    + "JOIN drinkingorder.`Product` p ON p.ID = pd.ProductID "
+                    + "JOIN drinkingorder.`Category` cat ON p.CategoryID = cat.ID "
                     + "WHERE c.userId = ? "
                     + "AND cat.Name LIKE '%" + category + "%'"
                     + "AND p.Name LIKE '%" + searchQuery + "%'";
@@ -151,7 +151,7 @@ public class CartDAO {
 
     public boolean updateCart(int quantity, int cartId) {
         try {
-            String sql = "UPDATE Cart SET Quantity = ? WHERE ID = ?";
+            String sql = "UPDATE drinkingorder.`Cart` SET Quantity = ? WHERE ID = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, quantity);
             stmt.setInt(2, cartId);
@@ -166,7 +166,7 @@ public class CartDAO {
         boolean isDeleted = false;
 
         try {
-            String query = "DELETE FROM [dbo].[Cart] WHERE id = ?";
+            String query = "DELETE FROM drinkingorder.`Cart` WHERE id = ?";
 
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, cartId);
@@ -184,7 +184,7 @@ public class CartDAO {
     public void addToCart(int userId, int productDetailId, int quantity, String toppings) {
         try {
             // Check if the item already exists in the cart
-            String selectSQL = "SELECT quantity FROM Cart WHERE userId = ? AND productDetailId = ? AND isDeleted = 0 and toppingList Like ?";
+            String selectSQL = "SELECT quantity FROM drinkingorder.`Cart` WHERE userId = ? AND productDetailId = ? AND isDeleted = 0 and toppingList Like ?";
             PreparedStatement selectStmt = connection.prepareStatement(selectSQL);
             selectStmt.setInt(1, userId);
             selectStmt.setInt(2, productDetailId);
@@ -196,7 +196,7 @@ public class CartDAO {
                 int currentQuantity = rs.getInt("quantity");
                 int newQuantity = currentQuantity + quantity;
                 
-                String updateSQL = "UPDATE Cart SET quantity = ? WHERE userId = ? AND productDetailId = ? AND isDeleted = 0 and toppingList Like ?";
+                String updateSQL = "UPDATE drinkingorder.`Cart` SET quantity = ? WHERE userId = ? AND productDetailId = ? AND isDeleted = 0 and toppingList Like ?";
                 PreparedStatement updateStmt = connection.prepareStatement(updateSQL);
                 updateStmt.setInt(1, newQuantity);
                 updateStmt.setInt(2, userId);
@@ -205,7 +205,7 @@ public class CartDAO {
                 updateStmt.executeUpdate();
             } else {
                 // Item does not exist, insert a new record
-                String insertSQL = "INSERT INTO Cart (userId, productDetailId, quantity, isDeleted, createdAt, createdBy, toppingList) VALUES (?, ?, ?, 0, ?, ?, ?)";
+                String insertSQL = "INSERT INTO drinkingorder.`Cart` (userId, productDetailId, quantity, isDeleted, createdAt, createdBy, toppingList) VALUES (?, ?, ?, 0, ?, ?, ?)";
                 PreparedStatement insertStmt = connection.prepareStatement(insertSQL);
                 insertStmt.setInt(1, userId);
                 insertStmt.setInt(2, productDetailId);
@@ -223,7 +223,7 @@ public class CartDAO {
     public int getTotalProductCount(int userId) {
         int totalQuantity = 0;
         try {
-            String query = "SELECT Count(*) AS totalQuantity FROM [Cart] WHERE [UserID] = ? AND isDeleted = 0";
+            String query = "SELECT Count(*) AS totalQuantity FROM drinkingorder.`Cart` WHERE UserID = ? AND isDeleted = 0";
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, userId);
             rs = stmt.executeQuery();
@@ -238,7 +238,7 @@ public class CartDAO {
     
     public void clearCart(int userId) {
         try {
-            String query = "Delete from cart where userid = ?";
+            String query = "Delete from drinkingorder.`Cart` where userid = ?";
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, userId);
             stmt.executeUpdate();

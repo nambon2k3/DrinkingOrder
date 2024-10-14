@@ -27,7 +27,7 @@ public class FeedbackDAO {
 
     // Create (Add new Feedback)
     public boolean addFeedback(Feedback feedback) {
-        String query = "INSERT INTO [Feedback] (OrderDetailId, Rating, Comment, IsDeleted, CreatedAt, CreatedBy) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO drinkingorder.`Feedback` (OrderDetailId, Rating, Comment, IsDeleted, CreatedAt, CreatedBy) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, feedback.getOrderDetailId());
@@ -46,7 +46,7 @@ public class FeedbackDAO {
 
     // Read (Get Feedback by Id)
     public Feedback getFeedbackById(int id) {
-        String query = "SELECT * FROM [Feedback] WHERE ID = ?";
+        String query = "SELECT * FROM drinkingorder.`Feedback` WHERE ID = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, id);
@@ -71,7 +71,12 @@ public class FeedbackDAO {
     // Read (Get all Feedbacks with pagination)
     public List<Feedback> getAllFeedbacks(int pageNumber, int pageSize) {
         List<Feedback> feedbackList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Feedback]) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        String query = "SELECT * \n"
+                + "FROM (\n"
+                + "    SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, Feedback.* \n"
+                + "    FROM drinkingorder.Feedback\n"
+                + ") AS SubQuery \n"
+                + "WHERE RowNum BETWEEN ? AND ?";
         int startIndex = (pageNumber - 1) * pageSize + 1;
         int endIndex = pageNumber * pageSize;
         try {
@@ -99,7 +104,7 @@ public class FeedbackDAO {
     // Read (Get filtered Feedbacks with pagination)
     public List<Feedback> getFilteredFeedbacks(String comment, Boolean isDeleted, String rating, int pageNumber, int pageSize) {
         List<Feedback> feedbackList = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Feedback] WHERE 1=1");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, Feedback.* FROM drinkingorder.`Feedback` WHERE 1=1");
 
         if (comment != null && !comment.isEmpty()) {
             queryBuilder.append(" AND Comment LIKE ?");
@@ -147,7 +152,7 @@ public class FeedbackDAO {
 
     public List<Feedback> getFilteredFeedbacks(String comment, Boolean isDeleted, String rating) {
         List<Feedback> feedbackList = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Feedback] WHERE 1=1");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, Feedback.* FROM drinkingorder.`Feedback` WHERE 1=1");
 
         if (comment != null && !comment.isEmpty()) {
             queryBuilder.append(" AND Comment LIKE ?");
@@ -191,7 +196,7 @@ public class FeedbackDAO {
 
     // Update (Update Feedback)
     public boolean updateFeedback(Feedback feedback) {
-        String query = "UPDATE [Feedback] SET OrderDetailId=?, Rating=?, Comment=?, IsDeleted=?, CreatedAt=?, CreatedBy=? WHERE ID=?";
+        String query = "UPDATE drinkingorder.`Feedback` SET OrderDetailId=?, Rating=?, Comment=?, IsDeleted=?, CreatedAt=?, CreatedBy=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, feedback.getOrderDetailId());
@@ -211,7 +216,7 @@ public class FeedbackDAO {
 
     // Delete (Delete Feedback)
     public boolean deleteFeedback(int feedbackID) {
-        String query = "DELETE FROM [Feedback] WHERE ID=?";
+        String query = "DELETE FROM drinkingorder.`Feedback` WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, feedbackID);
@@ -224,7 +229,7 @@ public class FeedbackDAO {
     }
 
     public boolean addFeedbackVer2(Feedback feedback) {
-        String query = "INSERT INTO [Feedback] (OrderDetailId, Rating, Comment, IsDeleted, CreatedBy, imgURL) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO  drinkingorder.`Feedback` (OrderDetailId, Rating, Comment, IsDeleted, CreatedBy, imgURL) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, feedback.getOrderDetailId());
@@ -243,15 +248,14 @@ public class FeedbackDAO {
 
     public List<Feedback> getFeedbackByProductDetailID(int productDetailID, int offset, int pageSize) {
         List<Feedback> feedbackList = new ArrayList<>();
-        String query = "SELECT [ID], [OrderDetailID], [Rating], [Comment], [IsDeleted], [CreatedAt], [CreatedBy], [ImgURL] "
-                + "FROM [swp-online-shop].[dbo].[Feedback] "
-                + "WHERE [OrderDetailID] IN ("
-                + "    SELECT [ID] "
-                + "    FROM [swp-online-shop].[dbo].[OrderDetail] "
-                + "    WHERE [ProductDetailID] = ?) "
-                + "ORDER BY [CreatedAt] DESC "
-                + "OFFSET ? ROWS "
-                + "FETCH NEXT ? ROWS ONLY";
+        String query = "SELECT ID, OrderDetailID, Rating, Comment, IsDeleted, CreatedAt, CreatedBy, ImgURL "
+                + "FROM drinkingorder.`Feedback` "
+                + "WHERE OrderDetailID IN ("
+                + "    SELECT ID "
+                + "    FROM drinkingorder.`OrderDetail` "
+                + "    WHERE ProductDetailID = ?) "
+                + "ORDER BY CreatedAt DESC "
+                + "LIMIT ?, ?";
 
         try (
                 PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -280,15 +284,15 @@ public class FeedbackDAO {
 
     public String getUserNameFeedback(int feedbackID) {
         String query = "select o.Fullname \n"
-                + "  from Feedback f\n"
-                + "  join OrderDetail od on od.ID = f.OrderDetailID\n"
-                + "  join [Order] o on o.ID = od.OrderID\n"
+                + "  from drinkingorder.`Feedback` f\n"
+                + "  join drinkingorder.`OrderDetail` od on od.ID = f.OrderDetailID\n"
+                + "  join drinkingorder.`Order` o on o.ID = od.OrderID\n"
                 + "  where f.ID = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, feedbackID);
             rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 return rs.getString(1);
             }
         } catch (SQLException e) {

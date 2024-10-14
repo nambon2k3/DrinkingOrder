@@ -9,8 +9,6 @@ import Model.OrderDetail;
 import Model.ProductDetail;
 import Model.Staff;
 import Model.Topping;
-import Model.User;
-import jakarta.servlet.ServletException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +16,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.sql.Statement;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +43,7 @@ public class OrderDAO {
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM [DrinkingOrder2].[dbo].[Order]";
+        String sql = "SELECT * FROM drinkingorder.`Order`";
 
         try {
             stmt = connection.prepareStatement(sql);
@@ -81,9 +78,9 @@ public class OrderDAO {
 
     public double getTotal(int orderId) {
         String sql = "SELECT SUM(pd.price * (100 - pd.discount)/100 * od.quantity) AS total_cost "
-                + "FROM [DrinkingOrder2].[dbo].[Order] o "
-                + "INNER JOIN [DrinkingOrder2].[dbo].[OrderDetail] od ON o.ID = od.OrderID "
-                + "INNER JOIN [DrinkingOrder2].[dbo].[ProductDetail] pd ON od.[ProductDetailID] = pd.ID "
+                + "FROM drinkingorder.`Order` o "
+                + "INNER JOIN drinkingorder.`OrderDetail` od ON o.ID = od.OrderID "
+                + "INNER JOIN drinkingorder.`ProductDetail` pd ON od.ProductDetailID = pd.ID "
                 + "WHERE o.ID = ? "
                 + "GROUP BY o.ID";
 
@@ -114,19 +111,19 @@ public class OrderDAO {
         int start = (currentPage - 1) * ordersPerPage;
 
         try {
-            String sql = "SELECT * FROM [dbo].[Order] WHERE 1=1 ";
+            String sql = "SELECT * FROM drinkingorder.`Order` WHERE 1=1 ";
 
             if (orderDate != null && !orderDate.isEmpty()) {
-                sql += " AND CONVERT(date, [CreatedAt]) = ?";
+                sql += " AND DATE(CreatedAt) = ?";
             }
             if (orderTime != null && !orderTime.isEmpty()) {
-                sql += " AND CONVERT(time, [CreatedAt]) >= ?";
+                sql += " AND TIME(CreatedAt) >= ?";
             }
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 sql += " AND status = ?";
             }
 
-            sql += " AND [UserID] = ? ORDER BY createdAt OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            sql += " AND UserID = ? ORDER BY createdAt LIMIT ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             int index = 1;
@@ -173,10 +170,10 @@ public class OrderDAO {
     public boolean autoCanceled() {
         try {
             String UPDATE_ORDER_STATUS_SQL
-                    = "UPDATE [dbo].[Order] "
-                    + "SET [Status] = 'Canceled' "
-                    + "WHERE [Status] Like 'Not yet' "
-                    + "AND [CreatedAt] < DATEADD(DAY, -1, GETDATE())";
+                    = "UPDATE drinkingorder.`Order` "
+                    + "SET Status = 'Canceled' "
+                    + "WHERE Status Like 'Not yet' "
+                    + "AND CreatedAt < DATEADD(DAY, -1, GETDATE())";
             // Execute the update statement
             PreparedStatement pstmt = connection.prepareStatement(UPDATE_ORDER_STATUS_SQL);
             int rowsUpdated = pstmt.executeUpdate();
@@ -191,12 +188,12 @@ public class OrderDAO {
     public int getTotalOrderCount(int userId, String orderDate, String orderTime, String orderStatus) {
         int count = 0;
         try {
-            String sql = "SELECT COUNT(*) FROM [dbo].[Order] WHERE [UserID] = ?";
+            String sql = "SELECT COUNT(*) FROM drinkingorder.`Order` WHERE UserID = ?";
             if (orderDate != null && !orderDate.isEmpty()) {
-                sql += " AND CONVERT(date, [CreatedAt]) = ?";
+                sql += " AND CONVERT(date, CreatedAt) = ?";
             }
             if (orderTime != null && !orderTime.isEmpty()) {
-                sql += " AND CONVERT(time, [CreatedAt]) >= ?";
+                sql += " AND CONVERT(time, CreatedAt) >= ?";
             }
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 sql += " AND status = ?";
@@ -232,8 +229,8 @@ public class OrderDAO {
         try {
             StringBuilder query = new StringBuilder(
                     "SELECT * "
-                    + "FROM [Order] o "
-                    + "JOIN Staff s on s.ID = o.CreatedBy"
+                    + "FROM drinkingorder.`Order` o "
+                    + "JOIN drinkingorder.`Staff` s on s.ID = o.CreatedBy"
                     + " WHERE o.CreatedAt BETWEEN ? AND ?");
 
             if (staff.getRole() == 3) {
@@ -247,17 +244,17 @@ public class OrderDAO {
             }
             
             if (idd != null && !idd.isEmpty()) {
-                String condition = " AND o.[ID] = " + idd;
+                String condition = " AND o.ID = " + idd;
                 query.append(condition);
             }
 
             if (customername != null && !customername.isEmpty()) {
-                String condition = " AND o.[Fullname] LIKE '%" + customername.trim() + "%' ";
+                String condition = " AND o.Fullname LIKE '%" + customername.trim() + "%' ";
                 query.append(condition);
             }
             
             if (salesperson != null && !salesperson.isEmpty()) {
-                String condition = " AND s.[fullname] LIKE '%" + salesperson.trim() + "%' ";
+                String condition = " AND s.fullname LIKE '%" + salesperson.trim() + "%' ";
                 query.append(condition);
             }
             if (orderStatus != null && !orderStatus.isEmpty()) {
@@ -265,7 +262,7 @@ public class OrderDAO {
             }
 
             query.append(" ORDER BY o.CreatedAt DESC "
-                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+                    + "LIMIT ?, ?");
 
             PreparedStatement stmt = connection.prepareStatement(query.toString());
             stmt.setString(1, startDate);
@@ -314,8 +311,8 @@ public class OrderDAO {
         try {
             StringBuilder query = new StringBuilder(
                     "SELECT COUNT(*) as totalOrders "
-                    + "FROM [Order] o "
-                    + "JOIN Staff s on s.ID = o.CreatedBy"
+                    + "FROM drinkingorder.`Order` o "
+                    + "JOIN drinkingorder.`Staff` s on s.ID = o.CreatedBy"
                     + " WHERE o.CreatedAt BETWEEN ? AND ?");
 
             if (staff.getRole() == 3) {
@@ -329,7 +326,7 @@ public class OrderDAO {
             }
 
             if (salesperson != null && !salesperson.isEmpty()) {
-                String condition = " AND s.[fullname] LIKE '%" + salesperson + "%' ";
+                String condition = " AND s.fullname LIKE '%" + salesperson + "%' ";
                 query.append(condition);
             }
             if (orderStatus != null && !orderStatus.isEmpty()) {
@@ -361,7 +358,7 @@ public class OrderDAO {
     public Order getOrderById(int orderId) {
         Order order = null;
         try {
-            String sql = "SELECT * FROM [DrinkingOrder2].[dbo].[Order] WHERE ID = ?";
+            String sql = "SELECT * FROM drinkingorder.`Order` WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -391,8 +388,8 @@ public class OrderDAO {
     public List<ProductDetail> getOrderedProductsByOrderId(int orderId) {
         List<ProductDetail> orderedProducts = new ArrayList<>();
         try {
-            String sql = "SELECT [ProductDetailID], [quantity], [ID], ToppingID "
-                    + "FROM [OrderDetail] od "
+            String sql = "SELECT ProductDetailID, quantity, ID, ToppingID "
+                    + "FROM drinkingorder.`OrderDetail` od "
                     + "WHERE od.OrderID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
@@ -415,7 +412,7 @@ public class OrderDAO {
     public boolean cancelOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Request cancel' WHERE ID = ?";
+            String sql = "UPDATE drinkingorder.`Order`  SET status = 'Request cancel' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -432,7 +429,7 @@ public class OrderDAO {
     public boolean failOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Failed' WHERE ID = ?";
+            String sql = "UPDATE drinkingorder.`Order`  SET status = 'Failed' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -451,7 +448,7 @@ public class OrderDAO {
     public boolean saleCanceledOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Canceled' WHERE ID = ?";
+            String sql = "UPDATE drinkingorder.`Order`  SET status = 'Canceled' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -469,7 +466,7 @@ public class OrderDAO {
     public boolean shippingOrder(int orderId, String status) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = ? WHERE ID = ?";
+            String sql = "UPDATE drinkingorder.`Order`  SET status = ? WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, status);
             statement.setInt(2, orderId);
@@ -492,7 +489,7 @@ public class OrderDAO {
     public boolean confirmOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Close' WHERE ID = ?";
+            String sql = "UPDATE drinkingorder.`Order`  SET status = 'Close' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -514,9 +511,9 @@ public class OrderDAO {
                 + "        s.Email,\n"
                 + "        COUNT(o.ID) AS OrderCount\n"
                 + "    FROM \n"
-                + "        [DrinkingOrder2].[dbo].[Staff] s\n"
+                + "        drinkingorder.`Staff` s\n"
                 + "    LEFT JOIN \n"
-                + "        [DrinkingOrder2].[dbo].[Order] o\n"
+                + "        drinkingorder.`Order` o\n"
                 + "    ON \n"
                 + "        s.ID = o.CreatedBy\n"
                 + "    WHERE \n"
@@ -552,9 +549,9 @@ public class OrderDAO {
                 + "                         s.Email,\n"
                 + "                         COUNT(o.ID) AS OrderCount\n"
                 + "                     FROM \n"
-                + "                         [DrinkingOrder2].[dbo].[Staff] s\n"
+                + "                         drinkingorder.`Staff` s\n"
                 + "                     LEFT JOIN \n"
-                + "                         [DrinkingOrder2].[dbo].[Order] o\n"
+                + "                         drinkingorder.`Order` o\n"
                 + "                     ON \n"
                 + "                         s.ID = o.CreatedBy\n"
                 + "                     WHERE \n"
@@ -576,7 +573,7 @@ public class OrderDAO {
 
     public int createOrder(Order order) {
         int orderId = 0;
-        String INSERT_ORDER_SQL = "INSERT INTO [Order] (userId, fullname, address, phone, status, isDeleted, createdBy, notes, [paymentMethod]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String INSERT_ORDER_SQL = "INSERT INTO drinkingorder.`Order` (userId, fullname, address, phone, status, isDeleted, createdBy, notes, paymentMethod) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, order.getUserId());
             preparedStatement.setString(2, order.getFullname());
@@ -602,7 +599,7 @@ public class OrderDAO {
     }
 
     public void createOrderDetail(OrderDetail orderDetail) {
-        String INSERT_ORDER_DETAIL_SQL = "INSERT INTO [OrderDetail] (orderId, [ProductDetailID], quantity, [CreatedBy], ToppingID) VALUES (?, ?, ?, ?, ?)";
+        String INSERT_ORDER_DETAIL_SQL = "INSERT INTO drinkingorder.`OrderDetail` (orderId, ProductDetailID, quantity, CreatedBy, ToppingID) VALUES (?, ?, ?, ?, ?)";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER_DETAIL_SQL)) {
             preparedStatement.setInt(1, orderDetail.getOrderId());
@@ -617,7 +614,7 @@ public class OrderDAO {
     }
 
     public void updateOrder(String status, int orderId)  {
-        String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ? WHERE id = ?";
+        String UPDATE_ORDER_SQL = "UPDATE drinkingorder.`Order`  SET status = ? WHERE id = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
 
@@ -638,7 +635,7 @@ public class OrderDAO {
     }
 
     public boolean updateOrderStatus(String status, int orderId) {
-        String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ? WHERE id = ?";
+        String UPDATE_ORDER_SQL = "UPDATE drinkingorder.`Order`  SET status = ? WHERE id = ?";
         boolean isSuccess = false;
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
@@ -659,7 +656,7 @@ public class OrderDAO {
     }
 
     public boolean updateOrderStatus(String status, int orderId, String notes, String saleId) {
-        String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ?, notes = ?, createdBy = ? WHERE id = ?";
+        String UPDATE_ORDER_SQL = "UPDATE drinkingorder.`Order`  SET status = ?, notes = ?, createdBy = ? WHERE id = ?";
         boolean isSuccess = false;
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
@@ -682,7 +679,7 @@ public class OrderDAO {
     }
 
     public boolean updateOrderSale(String saleId, int orderId) {
-        String UPDATE_ORDER_SQL = "UPDATE [Order] SET [CreatedBy] = ? WHERE id = ?";
+        String UPDATE_ORDER_SQL = "UPDATE drinkingorder.`Order`  SET CreatedBy = ? WHERE id = ?";
         boolean isSuccess = false;
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
@@ -706,10 +703,10 @@ public class OrderDAO {
         List<OrderDetail> orderDetails = new ArrayList<>();
         String GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL
                 = "SELECT od.ID, od.OrderID, od.ProductDetailID, od.IsDeleted, od.CreatedAt, od.CreatedBy, od.quantity "
-                + "FROM [DrinkingOrder2].[dbo].[OrderDetail] od "
-                + "LEFT JOIN [DrinkingOrder2].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID "
+                + "FROM drinkingorder.`OrderDetail` od "
+                + "LEFT JOIN drinkingorder.`Feedback` fb ON od.ID = fb.OrderDetailID "
                 + "WHERE fb.OrderDetailID IS NULL "
-                + "AND od.OrderID IN (SELECT o.ID FROM [DrinkingOrder2].[dbo].[Order] o WHERE o.UserID = ?) "
+                + "AND od.OrderID IN (SELECT o.ID FROM drinkingorder.`Order` o WHERE o.UserID = ?) "
                 + "AND od.IsDeleted = 0";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL)) {
@@ -739,8 +736,8 @@ public class OrderDAO {
     public boolean isFeedbacked(int orderDetailId) {
         String GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL
                 = "SELECT * \n"
-                + "                 FROM [DrinkingOrder2].[dbo].[OrderDetail] od  \n"
-                + "                  JOIN [DrinkingOrder2].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID  \n"
+                + "                 FROM drinkingorder.`OrderDetail` od  \n"
+                + "                  JOIN drinkingorder.`Feedback` fb ON od.ID = fb.OrderDetailID  \n"
                 + "                 WHERE od.IsDeleted = 0 AND od.ID = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL)) {
@@ -762,7 +759,7 @@ public class OrderDAO {
         OrderDetail orderDetail = null;
         String GET_ORDER_DETAIL_BY_ID_SQL
                 = "SELECT ID, OrderID, ProductDetailID, IsDeleted, CreatedAt, CreatedBy, quantity "
-                + "FROM [DrinkingOrder2].[dbo].[OrderDetail] WHERE ID = ?";
+                + "FROM drinkingorder.`OrderDetail` WHERE ID = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAIL_BY_ID_SQL)) {
 
@@ -795,9 +792,9 @@ public class OrderDAO {
 
         try {
             String orderQuery = "SELECT o.CreatedAt, o.Status, od.quantity, p.price "
-                    + "FROM [Order] o "
-                    + "JOIN [OrderDetail] od ON o.ID = od.OrderID "
-                    + "JOIN [ProductDetail] p ON od.ProductDetailID = p.ID "
+                    + "FROM drinkingorder.`Order` o "
+                    + "JOIN drinkingorder.`OrderDetail` od ON o.ID = od.OrderID "
+                    + "JOIN drinkingorder.`ProductDetail` p ON od.ProductDetailID = p.ID "
                     + "WHERE o.CreatedAt BETWEEN ? AND ?";
 
             if (salesperson != null && !salesperson.isEmpty()) {
@@ -842,7 +839,7 @@ public class OrderDAO {
     }
 
     public List<Staff> getAllSale() {
-        String sql = "select distinct [ID] from [dbo].[Staff] where role = 3";
+        String sql = "select distinct ID from drinkingorder.`Staff` where role = 3";
 
         List<Staff> staffs = new ArrayList<>();
         try {
@@ -860,7 +857,7 @@ public class OrderDAO {
     
     public List<Order> getOrdersByStatus(String status, int saleId) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM [Order] WHERE LOWER(Status) = LOWER(?) AND CreatedBy = ?";
+        String query = "SELECT * FROM drinkingorder.`Order` WHERE LOWER(Status) = LOWER(?) AND CreatedBy = ?";
         try {
             stmt = connection.prepareStatement(query);
             stmt.setString(1, status);

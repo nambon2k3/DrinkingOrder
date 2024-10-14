@@ -202,15 +202,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="productName">Quantity</label>
-                                    <input type="text" class="form-control" id="quantity" name="quantity" value="${product.productDetail.stock}" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="productName">Hold</label>
-                                    <input type="text" class="form-control" id="quantity" name="hold" value="${product.productDetail.hold}" readonly>
+                                    <input type="text" class="form-control" id="quantity" name="quantity" value="${product.productDetail.stock}">
                                 </div>
                                 <div class="form-group">
                                     <label for="productName">Import Price</label>
-                                    <input type="text" class="form-control" id="quantity" name="importPrice" value="${product.productDetail.importPrice}" readonly>
+                                    <input type="text" class="form-control" id="quantity" name="importPrice" value="${product.productDetail.importPrice}">
                                 </div>
                                 <div class="form-group">
                                     <label for="isDeleted">Is Deleted</label>
@@ -343,7 +339,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="quantity">Quantity</label>
-                                <input type="text" class="form-control" id="quantity" name="quantity" value="0" readonly>
+                                <input type="text" class="form-control" id="quantity" name="quantity" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Import Price: </label>
+                                <input type="text" class="form-control" id="quantity" name="importPrice" value="0">
                             </div>
                             <div class="form-group">
                                 <label>Size</label>

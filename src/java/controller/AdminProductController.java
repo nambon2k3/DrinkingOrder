@@ -92,6 +92,7 @@ public class AdminProductController extends HttpServlet {
         String imageUrl = request.getParameter("imageUrl");
         double price = Double.parseDouble(request.getParameter("price"));
         int quantity = Integer.parseInt(request.getParameter("quantity"));
+        float importPrice = Float.parseFloat(request.getParameter("importPrice"));
 
         // Create a new Product object
         Product newProduct = new Product();
@@ -109,6 +110,7 @@ public class AdminProductController extends HttpServlet {
         productDetail.setImageURL(imageUrl);
         productDetail.setPrice(price);
         productDetail.setStock(quantity);
+        productDetail.setImportPrice(importPrice);
 
         String[] sizes = request.getParameterValues("size");
 
@@ -138,6 +140,7 @@ public class AdminProductController extends HttpServlet {
         double price = Double.parseDouble(request.getParameter("price"));
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String size = request.getParameter("size");
+        float importPrice = Float.parseFloat(request.getParameter("importPrice"));
         // Create a Product object with the updated data
         Product product = new Product();
         product.setProductId(productId);
@@ -151,6 +154,7 @@ public class AdminProductController extends HttpServlet {
         productDetail.setPrice(price);
         productDetail.setSize(size);
         productDetail.setStock(quantity);
+        productDetail.setImportPrice(importPrice);
         new ProductDAO().updateProductDetail(productDetail);
 
         // Update the product in the database

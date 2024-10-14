@@ -71,7 +71,9 @@ public class MyOrderController extends HttpServlet {
         int currentPage = 1;
         int ordersPerPage = 10; // Set the number of orders per page
 
-        int userId = 2;//((User) request.getSession().getAttribute("user")).getId();
+        int userId = ((User) request.getSession().getAttribute("user")).getId();
+        
+        System.out.println(userId);
         
         if (request.getParameter("page") != null) {
             currentPage = Integer.parseInt(request.getParameter("page"));

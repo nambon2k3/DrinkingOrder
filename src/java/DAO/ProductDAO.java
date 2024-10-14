@@ -938,8 +938,8 @@ ResultSet rs = ps.executeQuery();
 
     public boolean addProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Stock, price, discount) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Stock, price, discount, importPrice) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, productDetail.getProductId());
@@ -948,6 +948,7 @@ ResultSet rs = ps.executeQuery();
             statement.setInt(4, productDetail.getStock());
             statement.setDouble(5, productDetail.getPrice());
             statement.setInt(6, productDetail.getDiscount());
+            statement.setFloat(7, productDetail.getImportPrice());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -962,7 +963,7 @@ ResultSet rs = ps.executeQuery();
 
     public boolean updateProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Stock = ?, price = ?, discount = ? "
+        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Stock = ?, price = ?, discount = ?, importPrice = ? "
                 + "WHERE ID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -971,7 +972,8 @@ ResultSet rs = ps.executeQuery();
             statement.setInt(3, productDetail.getStock());
             statement.setDouble(4, productDetail.getPrice());
             statement.setInt(5, productDetail.getDiscount());
-            statement.setInt(6, productDetail.getProductDetailId());
+            statement.setFloat(6, productDetail.getImportPrice());
+            statement.setInt(7, productDetail.getProductDetailId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {

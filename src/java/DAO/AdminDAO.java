@@ -33,7 +33,7 @@ public class AdminDAO {
     // Read (Get Orders by Status)
     public List<Order> getOrdersByStatus(String status) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM [Order] WHERE LOWER(Status) = LOWER(?)";
+        String query = "SELECT * FROM drinkingorder.`Order` WHERE LOWER(Status) = LOWER(?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, status);
@@ -58,7 +58,7 @@ public class AdminDAO {
 
     public int countFeedback() {
         int count = 0;
-        String query = "SELECT * FROM Feedback";
+        String query = "SELECT * FROM drinkingorder.`Feedback`";
         try {
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -86,9 +86,9 @@ public class AdminDAO {
 
         String query;
         if (n == -1) {
-            query = "SELECT * FROM [Order]"; // Query all orders
+            query = "SELECT * FROM drinkingorder.`Order`"; // Query all orders
         } else {
-            query = "SELECT * FROM [Order] WHERE CreatedAt >= ? AND CreatedAt <= ?"; // Query orders within the date range
+            query = "SELECT * FROM drinkingorder.`Order` WHERE CreatedAt >= ? AND CreatedAt <= ?"; // Query orders within the date range
         }
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -120,14 +120,18 @@ public class AdminDAO {
     public double getTotalCostByCategory(int id) {
         double totalCost = 0.0;
 
-        String query = "SELECT ROUND(CAST(SUM(pd.price * od.quantity / 100 * (100 - pd.discount)) AS FLOAT), 2) as TotalCost FROM OrderDetail od, ProductDetail pd, Product p WHERE od.ProductDetailID = pd.ID AND pd.ProductID = p.ID AND (? = -1 OR p.CategoryID = ?)";
+        String query = "SELECT ROUND(SUM(pd.price * od.quantity / 100 * (100 - pd.discount)), 2) AS TotalCost\n"
+                + "FROM drinkingorder.OrderDetail od\n"
+                + "JOIN drinkingorder.ProductDetail pd ON od.ProductDetailID = pd.ID\n"
+                + "JOIN drinkingorder.Product p ON pd.ProductID = p.ID\n"
+                + "WHERE (? = -1 OR p.CategoryID = ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, id);
             ps.setInt(2, id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                
+
                 totalCost += rs.getDouble("TotalCost");
             }
         } catch (SQLException e) {
@@ -139,7 +143,12 @@ public class AdminDAO {
     public double getAverageFeedbackByCategoryId(int id) {
         double avg = 0.0;
 
-        String query = "SELECT ROUND(CAST(SUM(Rating) AS FLOAT) / COUNT(*), 2) AS Average FROM Feedback f, OrderDetail od, ProductDetail pd, Product p WHERE f.OrderDetailID = od.ID AND od.ProductDetailID = pd.ID AND pd.ProductID = p.ID AND (? = -1 OR p.CategoryID = ?)";
+        String query = "SELECT ROUND(SUM(f.Rating) / COUNT(*), 2) AS Average\n"
+                + "FROM drinkingorder.Feedback f\n"
+                + "JOIN drinkingorder.OrderDetail od ON f.OrderDetailID = od.ID\n"
+                + "JOIN drinkingorder.ProductDetail pd ON od.ProductDetailID = pd.ID\n"
+                + "JOIN drinkingorder.Product p ON pd.ProductID = p.ID\n"
+                + "WHERE (? = -1 OR p.CategoryID = ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, id);
@@ -159,7 +168,11 @@ public class AdminDAO {
     // Read (Get Orders by Status and Date Range)
     public List<Order> getOrdersByStatusAndDateRange(String status, LocalDateTime startDate, LocalDateTime endDate) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM [Order] WHERE LOWER(Status) = LOWER(?) AND [CreatedAt] >= ? AND [CreatedAt] <= ?";
+        String query = "SELECT * \n"
+                + "FROM drinkingorder.`Order` \n"
+                + "WHERE LOWER(Status) = LOWER(?) \n"
+                + "  AND CreatedAt >= ? \n"
+                + "  AND CreatedAt <= ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, status);
@@ -183,12 +196,20 @@ public class AdminDAO {
         }
         return orders;
     }
-    
+
     public List<Order> getOrdersByStatusAndDateRange(String status, LocalDateTime startDate, LocalDateTime endDate, String name) {
-        if (name == null || name.trim().isBlank()) return getOrdersByStatusAndDateRange(status, startDate, endDate);
-        
+        if (name == null || name.trim().isBlank()) {
+            return getOrdersByStatusAndDateRange(status, startDate, endDate);
+        }
+
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT o.* FROM [Order] o, Staff s WHERE LOWER(o.Status) = LOWER(?) AND o.[CreatedAt] >= ? AND o.[CreatedAt] <= ? AND o.CreatedBy = s.id AND s.Fullname = LOWER(?)";
+        String query = "SELECT o.*\n"
+                + "FROM drinkingorder.`Order` o\n"
+                + "JOIN drinkingorder.Staff s ON o.CreatedBy = s.ID\n"
+                + "WHERE LOWER(o.Status) = LOWER(?)\n"
+                + "  AND o.CreatedAt >= ?\n"
+                + "  AND o.CreatedAt <= ?\n"
+                + "  AND LOWER(s.Fullname) = LOWER(?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, status);
@@ -213,9 +234,9 @@ public class AdminDAO {
         }
         return orders;
     }
-    
+
     public User getLastOrderCustomer() {
-        String sql = "SELECT TOP 1 * FROM [swp-online-shop].[dbo].[Order] ORDER BY ID DESC";
+        String sql = "SELECT TOP 1 * FROM drinkingorder.`Order` ORDER BY ID DESC";
 
         try {
             ps = conn.prepareStatement(sql);
@@ -238,7 +259,7 @@ public class AdminDAO {
         } catch (SQLException ex) {
             System.out.println("getAllOrders: " + ex.getMessage());
         }
-        
+
         return new User();
     }
 

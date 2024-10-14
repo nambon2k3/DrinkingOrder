@@ -6,6 +6,7 @@ package controller;
 
 import DAO.UserDAO;
 import Model.User;
+import Utils.PasswordUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -33,7 +34,7 @@ public class LoginControl extends HttpServlet {
         String password = request.getParameter("password");
 
         UserDAO userDAO = new UserDAO();
-        User user = userDAO.loginUser(email, password);
+        User user = userDAO.loginUser(email, PasswordUtil.hashPasswordMD5(password));
 
         if (user != null) {
             // save user info to session

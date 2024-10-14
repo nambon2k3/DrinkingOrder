@@ -6,6 +6,7 @@ package controller;
 
 import DAO.UserDAO;
 import Model.User;
+import Utils.PasswordUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -61,7 +62,7 @@ public class NewPasswordControl extends HttpServlet {
                 
                 if (password.equals(retypePassword) && isValidPassword(password)) {
 
-                    user.setPassword(password);
+                    user.setPassword(PasswordUtil.hashPasswordMD5(password));
                     new UserDAO().updateUser(user);
                     msg = "Đổi mật khẩu thành công";
                     request.getSession().removeAttribute(email + "_reset_otp");

@@ -30,7 +30,7 @@ public class LocationDAO {
     }
     
     public List<Location> getAllLocation(){
-        String sql = "select * from Location where isDeleted = 0";
+        String sql = "select * from drinkingorder.`Location` where isDeleted = 0";
         List<Location> list = new ArrayList<>();
         try {
             ps = conn.prepareStatement(sql);

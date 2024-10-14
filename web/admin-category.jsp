@@ -19,7 +19,7 @@
         <%@ include file="admin-sidebar.jsp" %>
 
         <div class="mt-5 main-content">
-            <h2>Danh sách nhân viên</h2>
+            <h2>Danh sách loại sản phẩm</h2>
 
 
             <c:if test="${param.success ne null}">
