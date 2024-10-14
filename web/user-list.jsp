@@ -151,7 +151,7 @@
                                 <input type="hidden" name="userId" value="${user.id}">
                                 <div class="form-group">
                                     <label for="fullName">Họ và tên</label>
-                                    <input type="text" class="form-control" id="fullName" name="Họ và tên" value="${user.fullname}" readonly>
+                                    <input type="text" class="form-control" id="fullName" name="fullName" value="${user.fullname}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>

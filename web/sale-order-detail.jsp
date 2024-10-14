@@ -75,7 +75,16 @@
             <div>
                 <strong>Total Order Price:</strong> $${order.totalCost}
             </div>
-
+            <div class="mt-4">
+                <c:if test="${(order.status eq 'Submitted' || order.status eq 'COD') && sessionScope.staff.role ne 4}">
+                    <a class="btn btn-success" href="approve-order?orderId=${order.id}&status=Approved">
+                        Approved
+                    </a>
+                    <a class="btn btn-danger" href="approve-order?orderId=${order.id}&status=Rejected"">
+                        Rejected
+                    </a>
+                </c:if>
+            </div>
         </div>
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

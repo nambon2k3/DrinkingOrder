@@ -88,7 +88,7 @@ public class OrderDAO {
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, orderId);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 List<ProductDetail> orderedProducts = getOrderedProductsByOrderId(orderId);
                 double total = 0;
@@ -158,7 +158,7 @@ public class OrderDAO {
                 Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
                 order.setPaymentMethod(paymentMethod);
                 order.setNotes(rs.getString("notes"));
-                
+
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -173,7 +173,7 @@ public class OrderDAO {
                     = "UPDATE drinkingorder.`Order` "
                     + "SET Status = 'Canceled' "
                     + "WHERE Status Like 'Not yet' "
-                    + "AND CreatedAt < DATEADD(DAY, -1, GETDATE())";
+                    + "AND CreatedAt < DATE_SUB(NOW(), INTERVAL 1 DAY)";
             // Execute the update statement
             PreparedStatement pstmt = connection.prepareStatement(UPDATE_ORDER_STATUS_SQL);
             int rowsUpdated = pstmt.executeUpdate();
@@ -230,19 +230,8 @@ public class OrderDAO {
             StringBuilder query = new StringBuilder(
                     "SELECT * "
                     + "FROM drinkingorder.`Order` o "
-                    + "JOIN drinkingorder.`Staff` s on s.ID = o.CreatedBy"
                     + " WHERE o.CreatedAt BETWEEN ? AND ?");
 
-            if (staff.getRole() == 3) {
-                query.append(" AND o.CreatedBy = ");
-                query.append(String.valueOf(staff.getId()));
-            }
-
-            if (staff.getRole() == 6) {
-                query.append(" AND o.Status IN  ");
-                query.append(String.valueOf("('Approved', 'Packaging', 'Delivering', 'Rejected', 'Success', 'Close', 'Canceled', 'Request cancel', 'Failed')"));
-            }
-            
             if (idd != null && !idd.isEmpty()) {
                 String condition = " AND o.ID = " + idd;
                 query.append(condition);
@@ -250,11 +239,6 @@ public class OrderDAO {
 
             if (customername != null && !customername.isEmpty()) {
                 String condition = " AND o.Fullname LIKE '%" + customername.trim() + "%' ";
-                query.append(condition);
-            }
-            
-            if (salesperson != null && !salesperson.isEmpty()) {
-                String condition = " AND s.fullname LIKE '%" + salesperson.trim() + "%' ";
                 query.append(condition);
             }
             if (orderStatus != null && !orderStatus.isEmpty()) {
@@ -443,8 +427,7 @@ public class OrderDAO {
         }
         return isCanceled;
     }
-    
-    
+
     public boolean saleCanceledOrder(int orderId) {
         boolean isCanceled = false;
         try {
@@ -475,8 +458,8 @@ public class OrderDAO {
             if (rowsUpdated > 0) {
                 isCanceled = true;
             }
-            
-            if(status.equalsIgnoreCase("Delivering")) {
+
+            if (status.equalsIgnoreCase("Delivering")) {
                 new ProductDAO().updateQuantity(orderId, 1);
                 new ProductDAO().updateHoldQuantity(orderId, 1);
             }
@@ -613,7 +596,7 @@ public class OrderDAO {
         }
     }
 
-    public void updateOrder(String status, int orderId)  {
+    public void updateOrder(String status, int orderId) {
         String UPDATE_ORDER_SQL = "UPDATE drinkingorder.`Order`  SET status = ? WHERE id = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
@@ -854,7 +837,7 @@ public class OrderDAO {
         }
         return staffs;
     }
-    
+
     public List<Order> getOrdersByStatus(String status, int saleId) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM drinkingorder.`Order` WHERE LOWER(Status) = LOWER(?) AND CreatedBy = ?";
