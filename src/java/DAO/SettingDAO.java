@@ -58,7 +58,7 @@ public class SettingDAO {
                         rs.getString("Value"),
                         rs.getInt("Order")
                 );
-                
+
                 setting.setIsDeleted(rs.getBoolean("isDeleted"));
                 setting.setDescription(rs.getString("description"));
                 return setting;
@@ -128,27 +128,31 @@ public class SettingDAO {
     // Get all settings with pagination
     public List<Setting> getAllSettings(int pageNumber, int pageSize) {
         List<Setting> settingsList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM Settings) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, startIndex);
-            ps.setInt(2, endIndex);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Setting setting = new Setting();
-                setting.setID(rs.getInt("ID"));
-                setting.setType(rs.getString("Type"));
-                setting.setValue(rs.getString("Value"));
-                setting.setOrder(rs.getInt("Order"));
-                setting.setIsDeleted(rs.getBoolean("isDeleted"));
-                setting.setDescription(rs.getString("description"));
-                settingsList.add(setting);
+        String query = "SELECT * FROM Settings LIMIT ? OFFSET ?";
+
+        // Calculate the offset
+        int offset = (pageNumber - 1) * pageSize;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, pageSize); // Set the limit
+            ps.setInt(2, offset);    // Set the offset
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Setting setting = new Setting();
+                    setting.setID(rs.getInt("ID"));
+                    setting.setType(rs.getString("Type"));
+                    setting.setValue(rs.getString("Value"));
+                    setting.setOrder(rs.getInt("Order"));
+                    setting.setIsDeleted(rs.getBoolean("isDeleted"));
+                    setting.setDescription(rs.getString("description"));
+                    settingsList.add(setting);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return settingsList;
     }
 
