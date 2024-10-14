@@ -74,14 +74,15 @@ public class SliderDAO {
     // Read (Get all Sliders with pagination)
     public List<Slider> getAllSliders(int pageNumber, int pageSize) {
         List<Slider> sliderList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM Slider) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
+        String query = "SELECT * FROM Slider ORDER BY ID LIMIT ? OFFSET ?";
+        int offset = (pageNumber - 1) * pageSize;
+
         try {
             ps = conn.prepareStatement(query);
-            ps.setInt(1, startIndex);
-            ps.setInt(2, endIndex);
+            ps.setInt(1, pageSize);  // Limit number of rows per page
+            ps.setInt(2, offset);    // Offset for pagination
             rs = ps.executeQuery();
+
             while (rs.next()) {
                 Slider slider = new Slider();
                 slider.setId(rs.getInt("ID"));
@@ -99,7 +100,7 @@ public class SliderDAO {
         }
         return sliderList;
     }
-    
+
     // Read (Get all Sliders with pagination)
     public List<Slider> getAllSliders() {
         List<Slider> sliderList = new ArrayList<>();
@@ -129,31 +130,34 @@ public class SliderDAO {
     // Read (Get filtered Sliders with pagination)
     public List<Slider> getFilteredSliders(String searchText, Boolean isDeleted, int pageNumber, int pageSize) {
         List<Slider> sliderList = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM Slider WHERE 1=1");
-        
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Slider WHERE 1=1");
+
         if (searchText != null && !searchText.isEmpty()) {
             queryBuilder.append(" AND Title LIKE ?");
         }
         if (isDeleted != null) {
             queryBuilder.append(" AND IsDeleted = ?");
         }
-        
-        queryBuilder.append(") AS SubQuery WHERE RowNum BETWEEN ? AND ?");
+
+        queryBuilder.append(" ORDER BY ID LIMIT ? OFFSET ?");
 
         String query = queryBuilder.toString();
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
+        int offset = (pageNumber - 1) * pageSize;
+
         try {
             ps = conn.prepareStatement(query);
             int paramIndex = 1;
+
             if (searchText != null && !searchText.isEmpty()) {
                 ps.setString(paramIndex++, "%" + searchText + "%");
             }
             if (isDeleted != null) {
                 ps.setBoolean(paramIndex++, isDeleted);
             }
-            ps.setInt(paramIndex++, startIndex);
-            ps.setInt(paramIndex, endIndex);
+
+            ps.setInt(paramIndex++, pageSize);  // Limit number of records per page
+            ps.setInt(paramIndex, offset);      // Offset for pagination
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 Slider slider = new Slider();
@@ -172,31 +176,33 @@ public class SliderDAO {
         }
         return sliderList;
     }
-    
+
     public List<Slider> getFilteredSliders(String imageUrl, Boolean isDeleted) {
         List<Slider> sliderList = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM Slider WHERE 1=1");
-        
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Slider WHERE 1=1");
+
         if (imageUrl != null && !imageUrl.isEmpty()) {
             queryBuilder.append(" AND ImageUrl LIKE ?");
         }
         if (isDeleted != null) {
             queryBuilder.append(" AND IsDeleted = ?");
         }
-        
-        queryBuilder.append(") AS SubQuery");
 
         String query = queryBuilder.toString();
+
         try {
             ps = conn.prepareStatement(query);
             int paramIndex = 1;
+
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 ps.setString(paramIndex++, "%" + imageUrl + "%");
             }
             if (isDeleted != null) {
                 ps.setBoolean(paramIndex++, isDeleted);
             }
+
             rs = ps.executeQuery();
+
             while (rs.next()) {
                 Slider slider = new Slider();
                 slider.setId(rs.getInt("ID"));
@@ -212,6 +218,7 @@ public class SliderDAO {
         } catch (SQLException e) {
             Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+
         return sliderList;
     }
 
