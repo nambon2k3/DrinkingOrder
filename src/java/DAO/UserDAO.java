@@ -48,7 +48,7 @@ public class UserDAO {
         }
         return false;
     }
-    
+
     // Read (Get User by Id)
     public User getUserById(int id) {
         String query = "SELECT * FROM User WHERE ID = ?";
@@ -110,7 +110,7 @@ public class UserDAO {
         }
         return null;
     }
-    
+
     // Get all users
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
@@ -141,161 +141,207 @@ public class UserDAO {
         }
         return userList;
     }
-    
+
     // Get all users with pagination
     public List<User> getAllUsers(int pageNumber, int pageSize) {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM User) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, startIndex);
-            ps.setInt(2, endIndex);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("ID"));
-                user.setEmail(rs.getString("Email"));
-                user.setPassword(rs.getString("Password"));
-                user.setFullname(rs.getString("Fullname"));
-                user.setGender(rs.getString("Gender"));
-                user.setAddress(rs.getString("Address"));
-                user.setPhone(rs.getString("Phone"));
-                user.setIsDeleted(rs.getBoolean("IsDeleted"));
-                user.setCreatedAt(rs.getDate("CreatedAt"));
-                user.setCreatedBy(rs.getInt("CreatedBy"));
-                user.setAvatar(rs.getString("Avatar"));
-                user.setChangeHistory(rs.getString("ChangeHistory"));
-                userList.add(user);
+        String query = "SELECT * FROM User ORDER BY ID LIMIT ? OFFSET ?";
+        int offset = (pageNumber - 1) * pageSize;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, pageSize);   // Set the maximum number of results
+            ps.setInt(2, offset);      // Set the offset (starting point)
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("ID"));
+                    user.setEmail(rs.getString("Email"));
+                    user.setPassword(rs.getString("Password"));
+                    user.setFullname(rs.getString("Fullname"));
+                    user.setGender(rs.getString("Gender"));
+                    user.setAddress(rs.getString("Address"));
+                    user.setPhone(rs.getString("Phone"));
+                    user.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    user.setCreatedAt(rs.getDate("CreatedAt"));
+                    user.setCreatedBy(rs.getInt("CreatedBy"));
+                    user.setAvatar(rs.getString("Avatar"));
+                    user.setChangeHistory(rs.getString("ChangeHistory"));
+
+                    userList.add(user);
+                }
             }
         } catch (SQLException e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
-            closeResources();
         }
         return userList;
     }
-    
+
     public List<User> getAllPagination(int pageNumber, int pageSize) {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum, * FROM User) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, startIndex);
-            ps.setInt(2, endIndex);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("ID"));
-                user.setEmail(rs.getString("Email"));
-                user.setPassword(rs.getString("Password"));
-                user.setFullname(rs.getString("Fullname"));
-                user.setGender(rs.getString("Gender"));
-                user.setAddress(rs.getString("Address"));
-                user.setPhone(rs.getString("Phone"));
-                user.setIsDeleted(rs.getBoolean("IsDeleted"));
-                user.setCreatedAt(rs.getDate("CreatedAt"));
-                user.setCreatedBy(rs.getInt("CreatedBy"));
-                user.setAvatar(rs.getString("Avatar"));
-                user.setChangeHistory(rs.getString("ChangeHistory"));
-                userList.add(user);
+        String query = "SELECT * FROM User ORDER BY UserID LIMIT ? OFFSET ?";
+        int offset = (pageNumber - 1) * pageSize;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, pageSize);  // Limit the number of results
+            ps.setInt(2, offset);     // Skip the appropriate number of rows
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("ID"));
+                    user.setEmail(rs.getString("Email"));
+                    user.setPassword(rs.getString("Password"));
+                    user.setFullname(rs.getString("Fullname"));
+                    user.setGender(rs.getString("Gender"));
+                    user.setAddress(rs.getString("Address"));
+                    user.setPhone(rs.getString("Phone"));
+                    user.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    user.setCreatedAt(rs.getDate("CreatedAt"));
+                    user.setCreatedBy(rs.getInt("CreatedBy"));
+                    user.setAvatar(rs.getString("Avatar"));
+                    user.setChangeHistory(rs.getString("ChangeHistory"));
+                    userList.add(user);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return userList;
     }
-    
+
     public List<User> getFilteredUsers(String fullName, String email, String phone, String gender, Boolean status, int pageNumber, int pageSize) {
         List<User> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM User WHERE 1=1";
-        // Add filter conditions
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM User WHERE 1=1");
+
+        // Add filter conditions dynamically
         if (fullName != null && !fullName.isEmpty()) {
-            query += " AND Fullname LIKE '%" + fullName + "%'";
+            queryBuilder.append(" AND Fullname LIKE ?");
         }
         if (email != null && !email.isEmpty()) {
-            query += " AND Email LIKE '%" + email + "%'";
+            queryBuilder.append(" AND Email LIKE ?");
         }
         if (phone != null && !phone.isEmpty()) {
-            query += " AND Phone LIKE '%" + phone + "%'";
+            queryBuilder.append(" AND Phone LIKE ?");
         }
         if (gender != null && !gender.isEmpty()) {
-            query += " AND Gender = '" + gender + "'";
+            queryBuilder.append(" AND Gender = ?");
         }
         if (status != null) {
-            query += " AND IsDeleted = '" + status.toString() + "'";
+            queryBuilder.append(" AND IsDeleted = ?");
         }
-        // Add pagination
-        query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        System.out.println(query);
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, startIndex);
-            ps.setInt(2, endIndex);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("ID"));
-                user.setEmail(rs.getString("Email"));
-                user.setPassword(rs.getString("Password"));
-                user.setFullname(rs.getString("Fullname"));
-                user.setGender(rs.getString("Gender"));
-                user.setAddress(rs.getString("Address"));
-                user.setPhone(rs.getString("Phone"));
-                user.setIsDeleted(rs.getBoolean("IsDeleted"));
-                user.setCreatedAt(rs.getDate("CreatedAt"));
-                user.setCreatedBy(rs.getInt("CreatedBy"));
-                user.setAvatar(rs.getString("Avatar"));
-                user.setChangeHistory(rs.getString("ChangeHistory"));
-                filteredUserList.add(user);
+
+        // Add pagination with ORDER BY, LIMIT, and OFFSET
+        queryBuilder.append(" ORDER BY ID LIMIT ? OFFSET ?");
+
+        String query = queryBuilder.toString();
+        System.out.println(query);  // Debugging purposes
+
+        int offset = (pageNumber - 1) * pageSize;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            int paramIndex = 1;
+
+            // Set parameters dynamically
+            if (fullName != null && !fullName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + fullName + "%");
+            }
+            if (email != null && !email.isEmpty()) {
+                ps.setString(paramIndex++, "%" + email + "%");
+            }
+            if (phone != null && !phone.isEmpty()) {
+                ps.setString(paramIndex++, "%" + phone + "%");
+            }
+            if (gender != null && !gender.isEmpty()) {
+                ps.setString(paramIndex++, gender);
+            }
+            if (status != null) {
+                ps.setBoolean(paramIndex++, status);
+            }
+
+            // Set pagination parameters
+            ps.setInt(paramIndex++, pageSize);
+            ps.setInt(paramIndex, offset);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("ID"));
+                    user.setEmail(rs.getString("Email"));
+                    user.setPassword(rs.getString("Password"));
+                    user.setFullname(rs.getString("Fullname"));
+                    user.setGender(rs.getString("Gender"));
+                    user.setAddress(rs.getString("Address"));
+                    user.setPhone(rs.getString("Phone"));
+                    user.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    user.setCreatedAt(rs.getDate("CreatedAt"));
+                    user.setCreatedBy(rs.getInt("CreatedBy"));
+                    user.setAvatar(rs.getString("Avatar"));
+                    user.setChangeHistory(rs.getString("ChangeHistory"));
+                    filteredUserList.add(user);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return filteredUserList;
     }
-    
+
     public List<User> getFilteredUsers(String fullName, String email, String gender, Boolean status) {
         List<User> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM User WHERE 1=1";
-        // Add filter conditions
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM User WHERE 1=1");
+
+        // Add filter conditions dynamically
         if (fullName != null && !fullName.isEmpty()) {
-            query += " AND Fullname LIKE '%" + fullName + "%'";
+            queryBuilder.append(" AND Fullname LIKE ?");
         }
         if (email != null && !email.isEmpty()) {
-            query += " AND Email LIKE '%" + email + "%'";
+            queryBuilder.append(" AND Email LIKE ?");
         }
         if (gender != null && !gender.isEmpty()) {
-            query += " AND Gender = '" + gender + "'";
+            queryBuilder.append(" AND Gender = ?");
         }
         if (status != null) {
-            query += " AND IsDeleted = '" + status.toString() + "'";
+            queryBuilder.append(" AND IsDeleted = ?");
         }
-        // Add pagination
-        query += ") AS SubQuery";
-        try {
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                User staff = new User();
-                staff.setId(rs.getInt("ID"));
-                staff.setEmail(rs.getString("Email"));
-                staff.setPassword(rs.getString("Password"));
-                staff.setFullname(rs.getString("Fullname"));
-                staff.setGender(rs.getString("Gender"));
-                staff.setAddress(rs.getString("Address"));
-                staff.setPhone(rs.getString("Phone"));
-                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
-                staff.setCreatedAt(rs.getDate("CreatedAt"));
-                staff.setCreatedBy(rs.getInt("CreatedBy"));
-                staff.setAvatar(rs.getString("Avatar"));
-                staff.setChangeHistory(rs.getString("ChangeHistory"));
-                filteredUserList.add(staff);
+
+        String query = queryBuilder.toString();
+        System.out.println(query);  // Debugging purposes
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            int paramIndex = 1;
+
+            // Set parameters for the prepared statement
+            if (fullName != null && !fullName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + fullName + "%");
+            }
+            if (email != null && !email.isEmpty()) {
+                ps.setString(paramIndex++, "%" + email + "%");
+            }
+            if (gender != null && !gender.isEmpty()) {
+                ps.setString(paramIndex++, gender);
+            }
+            if (status != null) {
+                ps.setBoolean(paramIndex++, status);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("ID"));
+                    user.setEmail(rs.getString("Email"));
+                    user.setPassword(rs.getString("Password"));
+                    user.setFullname(rs.getString("Fullname"));
+                    user.setGender(rs.getString("Gender"));
+                    user.setAddress(rs.getString("Address"));
+                    user.setPhone(rs.getString("Phone"));
+                    user.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    user.setCreatedAt(rs.getDate("CreatedAt"));
+                    user.setCreatedBy(rs.getInt("CreatedBy"));
+                    user.setAvatar(rs.getString("Avatar"));
+                    user.setChangeHistory(rs.getString("ChangeHistory"));
+                    filteredUserList.add(user);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -304,7 +350,7 @@ public class UserDAO {
     }
 
     // Update (Update User)
-   public boolean updateUser(User user) {
+    public boolean updateUser(User user) {
         String query = "UPDATE User SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=?, ChangeHistory=?, Location=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
@@ -380,6 +426,6 @@ public class UserDAO {
     }
 
     private void closeResources() {
-        
+
     }
 }
