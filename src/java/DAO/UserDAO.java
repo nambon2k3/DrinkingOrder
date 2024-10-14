@@ -145,7 +145,7 @@ public class UserDAO {
     // Get all users with pagination
     public List<User> getAllUsers(int pageNumber, int pageSize) {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM User ORDER BY ID LIMIT ? OFFSET ?";
+        String query = "SELECT * FROM `User` ORDER BY ID LIMIT ? OFFSET ?";
         int offset = (pageNumber - 1) * pageSize;
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -163,7 +163,7 @@ public class UserDAO {
                     user.setAddress(rs.getString("Address"));
                     user.setPhone(rs.getString("Phone"));
                     user.setIsDeleted(rs.getBoolean("IsDeleted"));
-                    user.setCreatedAt(rs.getDate("CreatedAt"));
+                    user.setCreatedAt(rs.getTimestamp("CreatedAt")); // Use Timestamp if needed
                     user.setCreatedBy(rs.getInt("CreatedBy"));
                     user.setAvatar(rs.getString("Avatar"));
                     user.setChangeHistory(rs.getString("ChangeHistory"));
@@ -179,7 +179,7 @@ public class UserDAO {
 
     public List<User> getAllPagination(int pageNumber, int pageSize) {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM User ORDER BY UserID LIMIT ? OFFSET ?";
+        String query = "SELECT * FROM `User` ORDER BY UserID LIMIT ? OFFSET ?"; // Use backticks for the table name
         int offset = (pageNumber - 1) * pageSize;
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -189,7 +189,7 @@ public class UserDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     User user = new User();
-                    user.setId(rs.getInt("ID"));
+                    user.setId(rs.getInt("ID")); // Check if the ID matches the correct column
                     user.setEmail(rs.getString("Email"));
                     user.setPassword(rs.getString("Password"));
                     user.setFullname(rs.getString("Fullname"));
@@ -197,7 +197,7 @@ public class UserDAO {
                     user.setAddress(rs.getString("Address"));
                     user.setPhone(rs.getString("Phone"));
                     user.setIsDeleted(rs.getBoolean("IsDeleted"));
-                    user.setCreatedAt(rs.getDate("CreatedAt"));
+                    user.setCreatedAt(rs.getTimestamp("CreatedAt")); // Use Timestamp for complete date and time
                     user.setCreatedBy(rs.getInt("CreatedBy"));
                     user.setAvatar(rs.getString("Avatar"));
                     user.setChangeHistory(rs.getString("ChangeHistory"));
@@ -205,14 +205,14 @@ public class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Error retrieving users", e); // Use logging
         }
         return userList;
     }
 
     public List<User> getFilteredUsers(String fullName, String email, String phone, String gender, Boolean status, int pageNumber, int pageSize) {
         List<User> filteredUserList = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM User WHERE 1=1");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM `User` WHERE 1=1");
 
         // Add filter conditions dynamically
         if (fullName != null && !fullName.isEmpty()) {
@@ -274,7 +274,7 @@ public class UserDAO {
                     user.setAddress(rs.getString("Address"));
                     user.setPhone(rs.getString("Phone"));
                     user.setIsDeleted(rs.getBoolean("IsDeleted"));
-                    user.setCreatedAt(rs.getDate("CreatedAt"));
+                    user.setCreatedAt(rs.getTimestamp("CreatedAt")); // Use Timestamp for complete date and time
                     user.setCreatedBy(rs.getInt("CreatedBy"));
                     user.setAvatar(rs.getString("Avatar"));
                     user.setChangeHistory(rs.getString("ChangeHistory"));
@@ -282,7 +282,7 @@ public class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Error retrieving filtered users", e); // Use logging
         }
         return filteredUserList;
     }

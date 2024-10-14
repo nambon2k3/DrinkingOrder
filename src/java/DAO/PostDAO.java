@@ -39,10 +39,10 @@ public class PostDAO extends DBContext {
                 + "JOIN Category c ON po.CategoryId = c.ID "
                 + "WHERE 1=1");
 
-        if(isManage.equalsIgnoreCase("no")) {
+        if (isManage != null && isManage.equalsIgnoreCase("no")) {
             query.append(" AND po.IsDeleted = 0");
         }
-        
+
         if (category != null && !category.isEmpty()) {
             query.append(" AND c.Name = ?");
         }
@@ -60,7 +60,7 @@ public class PostDAO extends DBContext {
         } else {
             query.append(" ORDER BY po.CreatedAt DESC");
         }
-        query.append("LIMIT ? OFFSET ? ROWS");
+        query.append(" LIMIT ?, ?"); // Corrected LIMIT syntax
 
         try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
             int paramIndex = 1;
@@ -76,13 +76,13 @@ public class PostDAO extends DBContext {
             if (search != null && !search.isEmpty()) {
                 stmt.setString(paramIndex++, "%" + search + "%");
             }
-            stmt.setInt(paramIndex++, pageSize);
-            stmt.setInt(paramIndex, offset);
+            stmt.setInt(paramIndex++, offset); // First parameter for offset
+            stmt.setInt(paramIndex++, pageSize); // Second parameter for pageSize
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("ID");
-                int categoryId = rs.getInt("categoryId");
+                int categoryId = rs.getInt("CategoryId");
                 String title = rs.getString("Title");
                 String content = rs.getString("Content");
                 boolean isDeleted = rs.getBoolean("IsDeleted");
@@ -93,6 +93,7 @@ public class PostDAO extends DBContext {
                 posts.add(post);
             }
         } catch (SQLException e) {
+            // Consider using a logging framework
             e.printStackTrace();
         }
         return posts;
@@ -315,14 +316,14 @@ public class PostDAO extends DBContext {
         }
         return totalPosts;
     }
-    
-    public List<Post> homePage(){
+
+    public List<Post> homePage() {
         String sql = "SELECT * FROM post where isDeleted = 0 ORDER BY CreatedAt DESC LIMIT 3";
         List<Post> posts = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Post post = new Post();
                 post.setId(rs.getInt("ID"));
                 post.setTitle(rs.getString("Title"));
