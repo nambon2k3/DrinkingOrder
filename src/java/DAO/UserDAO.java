@@ -28,7 +28,7 @@ public class UserDAO {
 
     // Create (Register)
     public boolean registerUser(User user) {
-        String query = "INSERT INTO [User] (Email, Password, Fullname, Gender, Address, Phone, CreatedBy, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO User (Email, Password, Fullname, Gender, Address, Phone, CreatedBy, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getEmail());
@@ -51,7 +51,7 @@ public class UserDAO {
     
     // Read (Get User by Id)
     public User getUserById(int id) {
-        String query = "SELECT * FROM [User] WHERE ID = ?";
+        String query = "SELECT * FROM User WHERE ID = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, id);
@@ -82,7 +82,7 @@ public class UserDAO {
 
     // Read (Get User by Email)
     public User getUserByEmail(String email) {
-        String query = "SELECT * FROM [User] WHERE Email = ?";
+        String query = "SELECT * FROM User WHERE Email = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
@@ -114,7 +114,7 @@ public class UserDAO {
     // Get all users
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM [User]";
+        String query = "SELECT * FROM User";
         try {
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -145,7 +145,7 @@ public class UserDAO {
     // Get all users with pagination
     public List<User> getAllUsers(int pageNumber, int pageSize) {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [User]) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM User) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
         int startIndex = (pageNumber - 1) * pageSize + 1;
         int endIndex = pageNumber * pageSize;
         try {
@@ -211,7 +211,7 @@ public class UserDAO {
     
     public List<User> getFilteredUsers(String fullName, String email, String phone, String gender, Boolean status, int pageNumber, int pageSize) {
         List<User> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [User] WHERE 1=1";
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM User WHERE 1=1";
         // Add filter conditions
         if (fullName != null && !fullName.isEmpty()) {
             query += " AND Fullname LIKE '%" + fullName + "%'";
@@ -262,7 +262,7 @@ public class UserDAO {
     
     public List<User> getFilteredUsers(String fullName, String email, String gender, Boolean status) {
         List<User> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [User] WHERE 1=1";
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM User WHERE 1=1";
         // Add filter conditions
         if (fullName != null && !fullName.isEmpty()) {
             query += " AND Fullname LIKE '%" + fullName + "%'";
@@ -305,7 +305,7 @@ public class UserDAO {
 
     // Update (Update User)
    public boolean updateUser(User user) {
-        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=?, ChangeHistory=?, Location=? WHERE ID=?";
+        String query = "UPDATE User SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=?, ChangeHistory=?, Location=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getEmail());
@@ -332,7 +332,7 @@ public class UserDAO {
 
     // Delete (Delete User)
     public boolean deleteUser(int userID) {
-        String query = "DELETE FROM [User] WHERE ID=?";
+        String query = "DELETE FROM User WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, userID);
@@ -348,7 +348,7 @@ public class UserDAO {
 
     // Login
     public User loginUser(String email, String password) {
-        String query = "SELECT * FROM [user] WHERE Email = ? AND Password = ?";
+        String query = "SELECT * FROM user WHERE Email = ? AND Password = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
