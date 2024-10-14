@@ -39,7 +39,7 @@ public class StaffDAO {
             ps.setString(6, staff.getPhone());
             ps.setInt(7, staff.getRole());
             ps.setInt(8, staff.getCreatedBy());
-            ps.setString(9, staff.getAvatar());
+            ps.setString(9, "https://www.svgrepo.com/show/452030/avatar-default.svg");
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
