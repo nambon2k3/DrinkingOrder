@@ -115,35 +115,39 @@ public class StaffDAO {
     // Get all staff with pagination
     public List<Staff> getAllStaff(int pageNumber, int pageSize) {
         List<Staff> staffList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM Staff) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, startIndex);
-            ps.setInt(2, endIndex);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Staff staff = new Staff();
-                staff.setId(rs.getInt("ID"));
-                staff.setEmail(rs.getString("Email"));
-                staff.setPassword(rs.getString("Password"));
-                staff.setFullname(rs.getString("Fullname"));
-                staff.setGender(rs.getString("Gender"));
-                staff.setAddress(rs.getString("Address"));
-                staff.setPhone(rs.getString("Phone"));
-                staff.setRole(rs.getInt("Role"));
-                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
-                staff.setCreatedAt(rs.getDate("CreatedAt"));
-                staff.setCreatedBy(rs.getInt("CreatedBy"));
-                staff.setAvatar(rs.getString("Avatar"));
-                staffList.add(staff);
+        String query = "SELECT * FROM Staff LIMIT ? OFFSET ?";
+
+        // Calculate the offset
+        int offset = (pageNumber - 1) * pageSize;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, pageSize); // Set the limit
+            ps.setInt(2, offset);    // Set the offset
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Staff staff = new Staff();
+                    staff.setId(rs.getInt("ID"));
+                    staff.setEmail(rs.getString("Email"));
+                    staff.setPassword(rs.getString("Password"));
+                    staff.setFullname(rs.getString("Fullname"));
+                    staff.setGender(rs.getString("Gender"));
+                    staff.setAddress(rs.getString("Address"));
+                    staff.setPhone(rs.getString("Phone"));
+                    staff.setRole(rs.getInt("Role"));
+                    staff.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    staff.setCreatedAt(rs.getDate("CreatedAt"));
+                    staff.setCreatedBy(rs.getInt("CreatedBy"));
+                    staff.setAvatar(rs.getString("Avatar"));
+                    staffList.add(staff);
+                }
             }
         } catch (SQLException e) {
             Logger.getLogger(StaffDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             closeResources();
         }
+
         return staffList;
     }
 
@@ -178,98 +182,153 @@ public class StaffDAO {
         return staffList;
     }
 
-    public List<Staff> getFilteredStaff(String fullName, String email, String phone, int role, String gender, Boolean isDeleted, int pageNumber, int pageSize) {
+    public List<Staff> getFilteredStaff(String fullName, String email, String phone, int role,
+            String gender, Boolean isDeleted, int pageNumber, int pageSize) {
         List<Staff> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM Staff WHERE 1=1";
-        // Add filter conditions
+        StringBuilder queryBuilder = new StringBuilder(
+                "SELECT * FROM Staff WHERE 1=1");
+
+        // Add filter conditions dynamically
         if (fullName != null && !fullName.isEmpty()) {
-            query += " AND Fullname LIKE '%" + fullName + "%'";
+            queryBuilder.append(" AND Fullname LIKE ?");
         }
         if (email != null && !email.isEmpty()) {
-            query += " AND Email LIKE '%" + email + "%'";
+            queryBuilder.append(" AND Email LIKE ?");
         }
         if (phone != null && !phone.isEmpty()) {
-            query += " AND Phone LIKE '%" + phone + "%'";
+            queryBuilder.append(" AND Phone LIKE ?");
         }
         if (role != -1) {
-            query += " AND Role = " + role;
+            queryBuilder.append(" AND Role = ?");
         }
         if (gender != null && !gender.isEmpty()) {
-            query += " AND Gender = '" + gender + "'";
+            queryBuilder.append(" AND Gender = ?");
         }
         if (isDeleted != null) {
-            query += "AND IsDeleted = " + (isDeleted ? "1" : "0");
+            queryBuilder.append(" AND IsDeleted = ?");
         }
-        // Add pagination
-        query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        int startIndex = (pageNumber - 1) * pageSize + 1;
-        int endIndex = pageNumber * pageSize;
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, startIndex);
-            ps.setInt(2, endIndex);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Staff staff = new Staff();
-                staff.setId(rs.getInt("ID"));
-                staff.setEmail(rs.getString("Email"));
-                staff.setPassword(rs.getString("Password"));
-                staff.setFullname(rs.getString("Fullname"));
-                staff.setGender(rs.getString("Gender"));
-                staff.setAddress(rs.getString("Address"));
-                staff.setPhone(rs.getString("Phone"));
-                staff.setRole(rs.getInt("Role"));
-                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
-                staff.setCreatedAt(rs.getDate("CreatedAt"));
-                staff.setCreatedBy(rs.getInt("CreatedBy"));
-                staff.setAvatar(rs.getString("Avatar"));
-                filteredUserList.add(staff);
+
+        // Add pagination logic
+        queryBuilder.append(" LIMIT ? OFFSET ?");
+
+        String query = queryBuilder.toString();
+        System.out.println(query); // Debugging purpose
+
+        int offset = (pageNumber - 1) * pageSize; // Calculate the offset
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            int paramIndex = 1;
+
+            // Set dynamic parameters for the prepared statement
+            if (fullName != null && !fullName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + fullName + "%");
+            }
+            if (email != null && !email.isEmpty()) {
+                ps.setString(paramIndex++, "%" + email + "%");
+            }
+            if (phone != null && !phone.isEmpty()) {
+                ps.setString(paramIndex++, "%" + phone + "%");
+            }
+            if (role != -1) {
+                ps.setInt(paramIndex++, role);
+            }
+            if (gender != null && !gender.isEmpty()) {
+                ps.setString(paramIndex++, gender);
+            }
+            if (isDeleted != null) {
+                ps.setBoolean(paramIndex++, isDeleted);
+            }
+
+            // Set pagination parameters
+            ps.setInt(paramIndex++, pageSize); // Set the limit
+            ps.setInt(paramIndex, offset);      // Set the offset
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Staff staff = new Staff();
+                    staff.setId(rs.getInt("ID"));
+                    staff.setEmail(rs.getString("Email"));
+                    staff.setPassword(rs.getString("Password"));
+                    staff.setFullname(rs.getString("Fullname"));
+                    staff.setGender(rs.getString("Gender"));
+                    staff.setAddress(rs.getString("Address"));
+                    staff.setPhone(rs.getString("Phone"));
+                    staff.setRole(rs.getInt("Role"));
+                    staff.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    staff.setCreatedAt(rs.getDate("CreatedAt"));
+                    staff.setCreatedBy(rs.getInt("CreatedBy"));
+                    staff.setAvatar(rs.getString("Avatar"));
+                    filteredUserList.add(staff);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return filteredUserList;
     }
-    
+
     public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender, Boolean isDeleted) {
         List<Staff> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM Staff WHERE 1=1";
-        // Add filter conditions
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Staff WHERE 1=1");
+
+        // Dynamically build query conditions
         if (fullName != null && !fullName.isEmpty()) {
-            query += " AND Fullname LIKE '%" + fullName + "%'";
+            queryBuilder.append(" AND Fullname LIKE ?");
         }
         if (email != null && !email.isEmpty()) {
-            query += " AND Email LIKE '%" + email + "%'";
+            queryBuilder.append(" AND Email LIKE ?");
         }
         if (role != -1) {
-            query += " AND Role = " + role;
+            queryBuilder.append(" AND Role = ?");
         }
         if (gender != null && !gender.isEmpty()) {
-            query += " AND Gender LIKE '%" + gender + "%'";
+            queryBuilder.append(" AND Gender LIKE ?");
         }
         if (isDeleted != null) {
-            query += "AND IsDeleted = " + (isDeleted ? "1" : "0");
+            queryBuilder.append(" AND IsDeleted = ?");
         }
-        // Add pagination
-        query += ") AS SubQuery";
-        try {
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Staff staff = new Staff();
-                staff.setId(rs.getInt("ID"));
-                staff.setEmail(rs.getString("Email"));
-                staff.setPassword(rs.getString("Password"));
-                staff.setFullname(rs.getString("Fullname"));
-                staff.setGender(rs.getString("Gender"));
-                staff.setAddress(rs.getString("Address"));
-                staff.setPhone(rs.getString("Phone"));
-                staff.setRole(rs.getInt("Role"));
-                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
-                staff.setCreatedAt(rs.getDate("CreatedAt"));
-                staff.setCreatedBy(rs.getInt("CreatedBy"));
-                staff.setAvatar(rs.getString("Avatar"));
-                filteredUserList.add(staff);
+
+        String query = queryBuilder.toString();
+        System.out.println(query); // For debugging
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            int paramIndex = 1;
+
+            // Set parameters for the prepared statement
+            if (fullName != null && !fullName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + fullName + "%");
+            }
+            if (email != null && !email.isEmpty()) {
+                ps.setString(paramIndex++, "%" + email + "%");
+            }
+            if (role != -1) {
+                ps.setInt(paramIndex++, role);
+            }
+            if (gender != null && !gender.isEmpty()) {
+                ps.setString(paramIndex++, "%" + gender + "%");
+            }
+            if (isDeleted != null) {
+                ps.setBoolean(paramIndex++, isDeleted);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Staff staff = new Staff();
+                    staff.setId(rs.getInt("ID"));
+                    staff.setEmail(rs.getString("Email"));
+                    staff.setPassword(rs.getString("Password"));
+                    staff.setFullname(rs.getString("Fullname"));
+                    staff.setGender(rs.getString("Gender"));
+                    staff.setAddress(rs.getString("Address"));
+                    staff.setPhone(rs.getString("Phone"));
+                    staff.setRole(rs.getInt("Role"));
+                    staff.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    staff.setCreatedAt(rs.getDate("CreatedAt"));
+                    staff.setCreatedBy(rs.getInt("CreatedBy"));
+                    staff.setAvatar(rs.getString("Avatar"));
+                    filteredUserList.add(staff);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
