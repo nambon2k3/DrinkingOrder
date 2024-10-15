@@ -105,7 +105,7 @@
                 <tbody>
                     <c:forEach var="product" items="${productList}">
                         <tr>
-                            <td>${product.productId}</td>
+                            <td>${product.productDetail.productDetailId}</td>
                             <td style="width: 20%" class="text-center"><img class="w-50 rounded" src="${product.thumb}"></td>
                             <td>${product.productName}</td>
                             <td>${product.categoryName}</td>
