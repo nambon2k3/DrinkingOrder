@@ -235,7 +235,7 @@
                         <h3>Giỏ hàng</h3>
                         <c:if test="${isSuccess ne null && isSuccess}">
                             <div class="success-message" id="mess">
-                                <strong>Thành công!</strong> Cảm ơn bạn đã mua hàng.
+                                <strong>Thành công!</strong>
                                 <button type="button" class="btn-close" onclick="document.getElementById('mess').style.display = 'none'">&times;</button>
                             </div>
 
