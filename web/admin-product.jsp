@@ -408,10 +408,10 @@
                 // check file uploaded
                 if (fileInput.files && fileInput.files[0]) {
                     const file = fileInput.files[0];
-                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+                    const maxSize = 1024 * 1024; // 1 MB in bytes
 
                     if (file.size > maxSize) {
-                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        alert("Ảnh chỉ có thể có dung lượng dưới 1MB");
                         fileInput.value = ''; // Clear the file input
                         return;
                     }
