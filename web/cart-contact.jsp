@@ -472,15 +472,6 @@
                                     <label>Thanh toán:</label>
                                     <div>
                                         <input type="radio" name="method" value="VNPAY" checked> VNPAY <br>
-                                        <input type="radio" name="method" value="Transfer"> Chuyển khoản
-                                        <div class="bank-info">
-                                            <strong>Thông tin ngân hàng:</strong>
-                                            <ul>
-                                                <li><strong>STK:</strong> 01239817231123</li>
-                                                <li><strong>Ngân hàng:</strong> MB Bank - Hà Nội</li>
-                                                <li><strong>Chủ tài khoản:</strong> Sloth shop</li>
-                                            </ul>
-                                        </div>
                                         <input type="radio" name="method" value="COD" ${setting ne null && totalPrice > setting.value ? "disabled" : ""}> COD
                                         <c:if test="${totalPrice > setting.value && !setting.isDeleted}">
                                             (Đơn hàng > ${setting.value}$ không cho phép COD)
