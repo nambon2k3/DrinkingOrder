@@ -59,16 +59,16 @@
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="gender">
-                        <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="">Giới tính</option>
+                        <option value="Male" ${paramGender == 'Male' ? 'selected' : ''}>Nam</option>
+                        <option value="Female" ${paramGender == 'Female' ? 'selected' : ''}>Nữ</option>
                     </select>
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
-                        <option value="">Select Status</option>
-                        <option value="false">Hoạt động</option>
-                        <option value="true">Không hoạt động</option>
+                        <option value="">Trạng thái</option>
+                        <option value="false" ${paramStatus == 'false' ? 'selected' : ''}>Hoạt động</option>
+                        <option value="true" ${paramStatus == 'true' ? 'selected' : ''}>Không hoạt động</option>
                     </select>
                 </div>
 
@@ -100,7 +100,7 @@
                             <td>${user.gender}</td>
                             <td>${user.address}</td>
                             <td>${user.phone}</td>
-                            <td>${user.isDeleted ? 'Inactive' : 'Active'}</td>
+                            <td>${user.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Info</button>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Edit</button>
