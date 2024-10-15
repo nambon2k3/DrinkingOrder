@@ -494,17 +494,18 @@ public class OrderDAO {
                 + "        s.Email,\n"
                 + "        COUNT(o.ID) AS OrderCount\n"
                 + "    FROM \n"
-                + "        drinkingorder.`Staff` s\n"
+                + "        drinkingorder.Staff s\n"
                 + "    LEFT JOIN \n"
                 + "        drinkingorder.`Order` o\n"
                 + "    ON \n"
                 + "        s.ID = o.CreatedBy\n"
                 + "    WHERE \n"
-                + "        s.Role = 3 and o.Status in ('Submitted', 'Approved', 'Request Cancel', 'Packaging', 'Delivering', 'Success')\n"
+                + "        s.Role = 3 \n"
+                + "        AND o.Status IN ('Submitted', 'Approved', 'Request Cancel', 'Packaging', 'Delivering', 'Success')\n"
                 + "    GROUP BY \n"
                 + "        s.ID, s.Fullname, s.Email\n"
                 + ")\n"
-                + "SELECT TOP 1\n"
+                + "SELECT \n"
                 + "    StaffID,\n"
                 + "    Fullname,\n"
                 + "    Email,\n"
@@ -512,7 +513,8 @@ public class OrderDAO {
                 + "FROM \n"
                 + "    StaffOrderCounts\n"
                 + "ORDER BY \n"
-                + "    OrderCount ASC;";
+                + "    OrderCount ASC\n"
+                + "LIMIT 1;";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL);
             ResultSet rs = ps.executeQuery();

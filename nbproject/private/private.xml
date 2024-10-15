@@ -2,6 +2,19 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/web/user-list.jsp</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/DAO/OrderDAO.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/LoginControl.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/RegisterControl.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/SaleOrderController.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/DAO/DBContext.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/VerifyControl.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/NewPasswordControl.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/AdminProductController.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/DAO/UserDAO.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/ListProductController.java</file>
+            <file>file:/C:/Users/Legion/Documents/NetBeansProjects/DrinkingOrder/src/java/controller/AdminUserControl.java</file>
+        </group>
     </open-files>
 </project-private>
