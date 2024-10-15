@@ -1016,7 +1016,7 @@ public class ProductDAO extends DBContext {
                 + "INNER JOIN (\n"
                 + "    SELECT \n"
                 + "        ProductID, \n"
-                + "        MIN(Price) AS MinPrice\n"
+                + "        MIN(Price) AS MinPrice\n, MIN(ID) AS MinProductDetailID"
                 + "    FROM \n"
                 + "        productDetail\n"
                 + "    WHERE \n"
@@ -1024,7 +1024,8 @@ public class ProductDAO extends DBContext {
                 + "    GROUP BY \n"
                 + "        ProductID\n"
                 + ") AS MinPrices ON p.ID = MinPrices.ProductID\n"
-                + "INNER JOIN productDetail pd ON p.ID = pd.ProductID AND pd.Price = MinPrices.MinPrice\n"
+                + "INNER JOIN productDetail pd ON p.ID = pd.ProductID AND pd.Price = MinPrices.MinPrice"
+                + "  AND pd.ID = MinPrices.MinProductDetailID \n"
                 + "WHERE \n"
                 + "    p.isDeleted = 0\n"
                 + "ORDER BY \n"
@@ -1063,10 +1064,10 @@ public class ProductDAO extends DBContext {
                 + "    SELECT pd1.*\n"
                 + "    FROM ProductDetail pd1\n"
                 + "    JOIN (\n"
-                + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
+                + "        SELECT ProductID, MIN(Price) AS MinPrice, MIN(ID) AS MinProductDetailID\n"
                 + "        FROM ProductDetail\n"
                 + "        GROUP BY ProductID\n"
-                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
+                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice and pd1.ID = pd2.MinProductDetailID \n"
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
                 + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
@@ -1114,14 +1115,14 @@ public class ProductDAO extends DBContext {
                 + "    FROM ProductDetail pd1\n"
                 + "    JOIN (\n"
                 + "        -- Lấy giá nhỏ nhất của từng ProductID\n"
-                + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
+                + "        SELECT ProductID, MIN(Price) AS MinPrice, MIN(ID) AS MinProductDetailID\n"
                 + "        FROM ProductDetail\n"
                 + "        GROUP BY ProductID\n"
-                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
+                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice and pd1.ID = pd2.MinProductDetailID \n"
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
                 + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
-                + "  AND p.name like '%" + name + "%' and p.isDeleted = 0 ";
+                + "  AND p.name like '%" + name + "%'  ";
 
         if (category != null && category.length() != 0) {
             sql += "  AND c.ID in (" + category + ")";
@@ -1140,5 +1141,6 @@ public class ProductDAO extends DBContext {
 
         return products;
     }
+
 
 }
