@@ -60,6 +60,8 @@ public class AdminUserControl extends HttpServlet {
         request.setAttribute("currentPage", pageNumber);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
+                request.setAttribute("paramGender", gender);
+        request.setAttribute("paramStatus", statusString);
 
         request.getRequestDispatcher("../user-list.jsp").forward(request, response);
     }
