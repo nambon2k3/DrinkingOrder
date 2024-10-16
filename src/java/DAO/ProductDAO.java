@@ -1015,21 +1015,22 @@ public class ProductDAO extends DBContext {
                 + "    product p\n"
                 + "INNER JOIN (\n"
                 + "    SELECT \n"
-                + "        ProductID, \n"
-                + "        MIN(Price) AS MinPrice\n, MIN(ID) AS MinProductDetailID"
+                + "        pd1.ProductID, \n"
+                + "        MIN(pd1.Price) AS MinPrice\n"
                 + "    FROM \n"
-                + "        productDetail\n"
+                + "        productDetail pd1\n"
                 + "    WHERE \n"
-                + "        isDeleted = 0\n"
+                + "        pd1.isDeleted = 0\n"
                 + "    GROUP BY \n"
-                + "        ProductID\n"
+                + "        pd1.ProductID\n"
                 + ") AS MinPrices ON p.ID = MinPrices.ProductID\n"
-                + "INNER JOIN productDetail pd ON p.ID = pd.ProductID AND pd.Price = MinPrices.MinPrice"
-                + "  AND pd.ID = MinPrices.MinProductDetailID \n"
+                + "INNER JOIN productDetail pd ON p.ID = pd.ProductID AND pd.Price = MinPrices.MinPrice\n"
+                + "    AND pd.ID = (SELECT MIN(pd2.ID) FROM productDetail pd2 WHERE pd2.ProductID = pd.ProductID AND pd2.Price = MinPrices.MinPrice)\n"
                 + "WHERE \n"
                 + "    p.isDeleted = 0\n"
                 + "ORDER BY \n"
                 + "    p.CreatedAt DESC LIMIT 12\n";
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = ps.executeQuery();
@@ -1064,13 +1065,16 @@ public class ProductDAO extends DBContext {
                 + "    SELECT pd1.*\n"
                 + "    FROM ProductDetail pd1\n"
                 + "    JOIN (\n"
-                + "        SELECT ProductID, MIN(Price) AS MinPrice, MIN(ID) AS MinProductDetailID\n"
+                + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
                 + "        FROM ProductDetail\n"
                 + "        GROUP BY ProductID\n"
-                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice and pd1.ID = pd2.MinProductDetailID \n"
+                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
+                + "    WHERE pd1.ID = (SELECT MIN(ID)\n"
+                + "                   FROM ProductDetail\n"
+                + "                   WHERE ProductID = pd1.ProductID AND Price = pd2.MinPrice)\n"
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
-                + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
+                + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n"
                 + "  AND p.name like '%" + name + "%' and p.isDeleted = 0 ";
 
         if (category != null && category.length() != 0) {
@@ -1115,10 +1119,15 @@ public class ProductDAO extends DBContext {
                 + "    FROM ProductDetail pd1\n"
                 + "    JOIN (\n"
                 + "        -- Lấy giá nhỏ nhất của từng ProductID\n"
-                + "        SELECT ProductID, MIN(Price) AS MinPrice, MIN(ID) AS MinProductDetailID\n"
+                + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
                 + "        FROM ProductDetail\n"
                 + "        GROUP BY ProductID\n"
-                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice and pd1.ID = pd2.MinProductDetailID \n"
+                + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice \n "
+                + "WHERE pd1.ID = (\n"
+                + "    SELECT MIN(ID)\n"
+                + "    FROM ProductDetail\n"
+                + "    WHERE ProductID = pd1.ProductID AND Price = pd2.MinPrice\n"
+                + ")"
                 + ") pd ON p.ID = pd.ProductID\n"
                 + "JOIN Category c ON p.CategoryID = c.ID\n"
                 + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
@@ -1141,6 +1150,7 @@ public class ProductDAO extends DBContext {
 
         return products;
     }
+
 
 
 }
