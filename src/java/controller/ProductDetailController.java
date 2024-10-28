@@ -28,7 +28,6 @@ import java.util.List;
 public class ProductDetailController extends HttpServlet {
    
 
-    private static final int PAGE_SIZE = 10;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
@@ -39,9 +38,6 @@ public class ProductDetailController extends HttpServlet {
             int pdid = Integer.parseInt(request.getParameter("pdid"));
             product.setProductDetail(new ProductDAO().getProductDetailById(pdid));
         }
-        
-        
-        //List<Feedback> feedbackList = new FeedbackDAO().getFeedbackByProductDetailID(product.getProductDetail().getProductDetailId(), offset, PAGE_SIZE);
         
        
         List<Topping> toppings = new ProductDAO().getAllToppings(id);

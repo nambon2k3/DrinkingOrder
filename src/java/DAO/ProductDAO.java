@@ -344,11 +344,10 @@ public class ProductDAO extends DBContext {
 
     public List<Topping> getAllToppings(int productId) {
         List<Topping> toppings = new ArrayList<>();
-        String query = "SELECT ID, ToppingName, Price, IsDeleted, CreatedDate, LastUpdated, Img, ProductID FROM Topping WHERE IsDeleted = 0 and ProductID = ?";
+        String query = "SELECT ID, ToppingName, Price, IsDeleted, CreatedDate, LastUpdated, Img FROM Topping WHERE IsDeleted = 0";
 
         try (
                 PreparedStatement ps = connection.prepareStatement(query);) {
-            ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Topping topping = new Topping();
@@ -359,7 +358,6 @@ public class ProductDAO extends DBContext {
                 topping.setCreatedDate(rs.getDate("CreatedDate").toLocalDate());
                 topping.setLastUpdated(rs.getDate("LastUpdated").toLocalDate());
                 topping.setImg(rs.getString("Img"));
-                topping.setProductId(rs.getInt("ProductID"));
                 toppings.add(topping);
             }
         } catch (SQLException e) {
@@ -367,7 +365,7 @@ public class ProductDAO extends DBContext {
         }
         return toppings;
     }
-
+    
     public List<ProductDetail> getProductDetailsByProductId(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
 
@@ -417,8 +415,7 @@ public class ProductDAO extends DBContext {
                 + "p.CreatedAt AS ProductCreatedAt, "
                 + "p.description AS description, "
                 + "p.CreatedBy AS ProductCreatedBy, "
-                + "p.CategoryID ,"
-                + "p.baseImageURL"
+                + "p.CategoryID "
                 + "FROM Product p "
                 + "INNER JOIN Category c ON p.CategoryID = c.ID "
                 + "WHERE p.ID = ? AND p.IsDeleted = 0";
@@ -436,7 +433,6 @@ public class ProductDAO extends DBContext {
                     product.setCreatedAt(resultSet.getTimestamp("ProductCreatedAt"));
                     product.setCreatedBy(resultSet.getInt("ProductCreatedBy"));
                     product.setDescription(resultSet.getString("description"));
-                    product.setBaseImageURL(resultSet.getString("baseImageURL"));
                     product.setProductDetail(getProductDetailByProductId(productId));
                 }
             }

@@ -59,7 +59,8 @@ public class ResetPasswordControl extends HttpServlet {
             
 
             request.setAttribute("errorMessage", "Đã gửi xác minh tới email của bạn!");
-            request.getRequestDispatcher("Resetpassword.jsp").forward(request, response);
+            request.setAttribute("email", emailaddress);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
 
         } catch (Exception e) {
             request.getRequestDispatcher("Resetpassword.jsp").forward(request, response);

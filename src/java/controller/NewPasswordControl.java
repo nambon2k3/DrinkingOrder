@@ -66,7 +66,10 @@ public class NewPasswordControl extends HttpServlet {
                     new UserDAO().updateUser(user);
                     msg = "Đổi mật khẩu thành công";
                     request.getSession().removeAttribute(email + "_reset_otp");
-
+                    request.setAttribute("errorMessage", msg);
+                    request.setAttribute("email", email);
+                    request.getRequestDispatcher("Login.jsp").forward(request, response);
+                    return;
                 } else if(!isValidPassword(password)){
                     msg = "Mật khẩu cần ít nhất 8 ký tự không dấu cách";
                 } else{

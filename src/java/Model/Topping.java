@@ -12,6 +12,14 @@ import java.time.LocalDate;
 
 public class Topping {
     private int id;
+
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
     private String toppingName;
     private double price;
     private boolean isDeleted;
