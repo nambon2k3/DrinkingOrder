@@ -28,7 +28,7 @@ public class HomeController extends HttpServlet {
         request.setAttribute("sliders", new SliderDAO().getAllSliders());
         request.setAttribute("products", new ProductDAO().homePage());
         request.setAttribute("posts", new PostDAO().homePage());
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     } 
 
     @Override
