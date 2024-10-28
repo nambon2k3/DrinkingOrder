@@ -24,8 +24,14 @@ public class ProductDAO extends DBContext {
     private Connection connection;
 
     public ProductDAO() {
+        reconnect();
+    }
+
+    private void reconnect() {
         try {
-            this.connection = getConnection();
+            if (connection == null || connection.isClosed()) {
+                this.connection = getConnection();
+            }
         } catch (Exception e) {
             System.out.println("Connect failed");
         }
