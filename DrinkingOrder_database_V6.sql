@@ -19,7 +19,7 @@
 -- Table structure for table `cart`
 --
 
-
+DROP TABLE IF EXISTS `cart`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cart` (
@@ -30,14 +30,13 @@ CREATE TABLE `cart` (
   `IsDeleted` tinyint DEFAULT '0',
   `CreatedAt` datetime(3) DEFAULT CURRENT_TIMESTAMP(3),
   `CreatedBy` int DEFAULT NULL,
-  `ToppingList` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ToppingList` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `ProductDetailID` (`ProductDetailID`),
   KEY `UserID` (`UserID`),
   CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`ProductDetailID`) REFERENCES `productdetail` (`ID`),
   CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `user` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
