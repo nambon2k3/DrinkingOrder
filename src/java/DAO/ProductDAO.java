@@ -31,10 +31,9 @@ public class ProductDAO extends DBContext {
         }
     }
 
-    public int countTotalProducts(String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
+    public int countTotalProducts(String searchQuery, String categoryId) {
         String sql = "SELECT COUNT(*) FROM Product p "
-                + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
-                + "WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0";
+                + "WHERE p.IsDeleted = 0";
 
         List<Object> params = new ArrayList<>();
 
@@ -45,18 +44,6 @@ public class ProductDAO extends DBContext {
         if (categoryId != null && !categoryId.isEmpty()) {
             sql += " AND p.CategoryID = ?";
             params.add(categoryId);
-        }
-        if (minPrice != null) {
-            sql += " AND pd.Price >= ?";
-            params.add(minPrice);
-        }
-        if (maxPrice != null) {
-            sql += " AND pd.Price <= ?";
-            params.add(maxPrice);
-        }
-        if (size != null && !size.isEmpty()) {
-            sql += " AND pd.Size = ?";
-            params.add(size);
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -156,12 +143,11 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-    public List<Product> getProductsByPage2(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String size) {
+    public List<Product> getProductsByPage2(int pageNumber, int pageSize, String searchQuery, String categoryId) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price, pd.Size, pd.ID as PDID FROM Product p "
-                + "JOIN ProductDetail pd ON p.ID = pd.ProductID "
+        String sql = "SELECT p.*, c.Name as CategoryName FROM Product p "
                 + "JOIN Category c ON p.CategoryID = c.ID "
-                + "WHERE 1=1 ";
+                + "WHERE p.isDeleted = 0 AND 1=1 ";
 
         List<Object> params = new ArrayList<>();
 
@@ -172,18 +158,6 @@ public class ProductDAO extends DBContext {
         if (categoryId != null && !categoryId.isEmpty()) {
             sql += " AND p.CategoryID = ?";
             params.add(categoryId);
-        }
-        if (minPrice != null) {
-            sql += " AND pd.Price >= ?";
-            params.add(minPrice);
-        }
-        if (maxPrice != null) {
-            sql += " AND pd.Price <= ?";
-            params.add(maxPrice);
-        }
-        if (size != null && !size.isEmpty()) {
-            sql += " AND pd.Size = ?";
-            params.add(size);
         }
 
         // Adjust pagination for MySQL
@@ -208,10 +182,8 @@ public class ProductDAO extends DBContext {
                     product.setCreatedBy(rs.getInt("CreatedBy"));
                     product.setDescription(rs.getString("Description"));
                     product.setIsDeleted(rs.getBoolean("IsDeleted"));
-
-                    // Fetch the product detail by its ID
-                    ProductDetail productDetail = getProductDetailById(rs.getInt("PDID"));
-                    product.setProductDetail(productDetail);
+                    product.setBaseImageURL(rs.getString("BaseImageURL"));
+                    product.setProductDetail(null);
                     products.add(product);
                 }
             }
@@ -445,7 +417,8 @@ public class ProductDAO extends DBContext {
                 + "p.CreatedAt AS ProductCreatedAt, "
                 + "p.description AS description, "
                 + "p.CreatedBy AS ProductCreatedBy, "
-                + "p.CategoryID "
+                + "p.CategoryID ,"
+                + "p.baseImageURL"
                 + "FROM Product p "
                 + "INNER JOIN Category c ON p.CategoryID = c.ID "
                 + "WHERE p.ID = ? AND p.IsDeleted = 0";
@@ -463,6 +436,7 @@ public class ProductDAO extends DBContext {
                     product.setCreatedAt(resultSet.getTimestamp("ProductCreatedAt"));
                     product.setCreatedBy(resultSet.getInt("ProductCreatedBy"));
                     product.setDescription(resultSet.getString("description"));
+                    product.setBaseImageURL(resultSet.getString("baseImageURL"));
                     product.setProductDetail(getProductDetailByProductId(productId));
                 }
             }
@@ -483,6 +457,7 @@ public class ProductDAO extends DBContext {
                 + "c.ID AS CategoryID, "
                 + "p.CreatedAt AS ProductCreatedAt, "
                 + "p.description AS description, "
+                + "p.baseImageURL,"
                 + "p.CreatedBy AS ProductCreatedBy "
                 + "FROM Product p "
                 + "INNER JOIN Category c ON p.CategoryID = c.ID "
@@ -501,6 +476,7 @@ public class ProductDAO extends DBContext {
                     product.setCreatedAt(resultSet.getTimestamp("ProductCreatedAt"));
                     product.setCreatedBy(resultSet.getInt("ProductCreatedBy"));
                     product.setDescription(resultSet.getString("description"));
+                    product.setBaseImageURL(resultSet.getString("baseImageURL"));
                     product.setProductDetail(getProductDetailByProductId(productId));
                 }
             }
@@ -627,32 +603,7 @@ public class ProductDAO extends DBContext {
         return productDetails;
     }
 
-    public int countTotalProducts(String searchQuery, String categoryId) {
-        int total = 0;
-        String sql = "SELECT COUNT(*) FROM Product p "
-                + "JOIN Category c ON p.CategoryID = c.ID "
-                + "WHERE p.IsDeleted = 0 AND c.IsDeleted = 0 "
-                + "AND (p.Name LIKE ? OR ? IS NULL) "
-                + "AND (p.CategoryID = ? OR ? IS NULL);";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(2, searchQuery != null && !searchQuery.isBlank() ? "%" + searchQuery + "%" : null);
-            statement.setString(1, "%" + searchQuery + "%");
-            statement.setString(4, categoryId != null && !categoryId.isBlank() ? categoryId : null);
-            statement.setString(3, categoryId);
-
-            try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    total = rs.getInt(1);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return total;
-    }
+    
 
     public List<Product> getThreeLastestProducts() {
         List<Product> products = new ArrayList<>();
@@ -778,18 +729,32 @@ public class ProductDAO extends DBContext {
             System.out.println("updateProductDetailQuantity: " + e.getMessage());
         }
     }
+    
+    public boolean checkExistedProductName(String productName) {
+        String SELECT_SQL
+                = "SELET * FROM Product WHERE Name LIKE ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
+            preparedStatement.setString(1, productName);
+            ResultSet rs = preparedStatement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println("checkExistedProductName: " + e.getMessage());
+        }
+        return false;
+    }
 
     public int addProduct(Product product) {
         int generatedId = -1; // Initialize to a default value if insertion fails
-        String query = "INSERT INTO Product (Name, CategoryID, CreatedBy, Description, IsDeleted) "
-                + "VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Product (Name, CategoryID, CreatedBy, Description, IsDeleted, baseImageURL) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, product.getProductName());
             statement.setInt(2, product.getCategoryId());
             statement.setInt(3, product.getCreatedBy());
             statement.setString(4, product.getDescription());
-            statement.setBoolean(5, product.getIsDeleted());
+            statement.setString(5, product.getBaseImageURL());
+            statement.setBoolean(6, product.getIsDeleted());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -808,14 +773,35 @@ public class ProductDAO extends DBContext {
 
     public boolean updateProduct(Product product) {
         boolean success = false;
-        String query = "UPDATE Product SET Name = ?, Description = ?, IsDeleted = ? "
+        String query = "UPDATE Product SET Name = ?, Description = ?, IsDeleted = ?, baseImageURL = ? "
                 + "WHERE ID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, product.getProductName());
             statement.setString(2, product.getDescription());
             statement.setInt(3, product.getIsDeleted() ? 1 : 0);
-            statement.setInt(4, product.getProductId());
+            statement.setString(4, product.getBaseImageURL());
+            statement.setInt(5, product.getProductId());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return success;
+    }
+    
+    
+    public boolean updateProductStatusByCategoryID(int categoryId, boolean isDeleted) {
+        boolean success = false;
+        String query = "UPDATE Product SET IsDeleted = ? WHERE categoryID = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(2, categoryId);
+            statement.setInt(1, isDeleted ? 1 : 0);
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {

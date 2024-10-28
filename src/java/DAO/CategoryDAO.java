@@ -118,6 +118,22 @@ public class CategoryDAO extends DBContext {
     }
     
     
+    public boolean checkExistedCategoryName(String categoryName) {
+        int count = 0;
+        String sql = "SELECT * FROM drinkingorder.`Category` WHERE Name LIKE ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1,  categoryName);
+            ResultSet rs = preparedStatement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    
+    
     public boolean addCategory(Category category) {
         String sql = "INSERT INTO drinkingorder.`Category` (Name, IsDeleted, CreatedAt, CreatedBy) VALUES (?, ?, NOW(), ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

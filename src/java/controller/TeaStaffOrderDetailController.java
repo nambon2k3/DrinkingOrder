@@ -5,8 +5,15 @@
 
 package controller;
 
+import DAO.OrderDAO;
 import DAO.PostDAO;
-import Model.Post;
+import DAO.ProductDAO;
+import Model.Category;
+import Model.Order;
+import Model.Product;
+import Model.ProductDetail;
+import Model.Staff;
+import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,13 +21,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author Legion
  */
-@WebServlet(name="PostDetailController", urlPatterns={"/marketing/post-detail"})
-public class PostDetailController extends HttpServlet {
+@WebServlet(name="TeaStaffOrderDetailController", urlPatterns={"/teastaff/order-detail"})
+public class TeaStaffOrderDetailController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +45,10 @@ public class PostDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PostDetailController</title>");  
+            out.println("<title>Servlet SaleOrderDetailController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet PostDetailController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet SaleOrderDetailController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,39 +65,18 @@ public class PostDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
 
-        String postIdStr = request.getParameter("id");
-        if (postIdStr == null || postIdStr.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+        OrderDAO orderDAO = new OrderDAO();
 
-        int postId = Integer.parseInt(postIdStr);
-        Post post = new PostDAO().getPostById(postId);
-
-
-        if (post == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        // Convert post object to JSON
-        String jsonPost = "[{\"id\":" + post.getId()+ ","
-                + "\"categoryId\":\"" + post.getCategoryId()+ "\","
-                + "\"title\":\"" + post.getTitle()+ "\","
-                + "\"content\":\"" + post.getContent().replace("\"", "\\\"") + "\","
-                + "\"isDeleted\":\"" + post.isIsDeleted() + "\","
-                + "\"createdAt\":\"" + post.getCreatedAt() + "\","
-                + "\"imgURL\":\"" + post.getImgURL()+ "\","
-                + "\"createdBy\":\"" + post.getAuthorName()+ "\""
-                + "}]";
-
-        PrintWriter out = response.getWriter();
-        out.print(jsonPost);
-        out.flush();
-
+        Order order = orderDAO.getOrderById(orderId);
+        List<ProductDetail> orderedProducts = orderDAO.getOrderedProductsByOrderId(orderId);
+        List<Staff> sales = orderDAO.getAllSale();
+        request.setAttribute("order", order);
+        request.setAttribute("sales", sales);
+        request.setAttribute("orderedProducts", orderedProducts);
+        request.setAttribute("isSuccess", request.getParameter("isSuccess"));
+        request.getRequestDispatcher("/tea-staff-order-detail.jsp").forward(request, response);
     } 
 
     /** 

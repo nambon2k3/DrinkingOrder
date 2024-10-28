@@ -15,7 +15,7 @@
     </head>
     <body>
         <!-- Sidebar -->
-        <%@ include file="sale-sidebar.jsp" %>
+        <%@ include file="tea-staff-sidebar.jsp" %>
 
         <!-- Main content -->
         <div class="main-content text-center" style="margin-top: 2%">

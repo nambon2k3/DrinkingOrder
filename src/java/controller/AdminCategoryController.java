@@ -5,6 +5,7 @@
 package controller;
 
 import DAO.CategoryDAO;
+import DAO.ProductDAO;
 import Model.Category;
 import Model.Staff;
 import java.io.IOException;
@@ -126,14 +127,17 @@ public class AdminCategoryController extends HttpServlet {
 
         String name = request.getParameter("name");
         boolean isDeleted = request.getParameter("isDeleted").equalsIgnoreCase("true");
-        int createdBy = staff.getId();
+        int createdBy = staff.getId(); 
 
         Category newCategory = new Category();
-        newCategory.setCategoryName(name);
+        newCategory.setCategoryName(name.trim());
         newCategory.setIsDeleted(isDeleted);
         newCategory.setCreatedBy(createdBy);
+        boolean success = false;
+        if(!categoryDAO.checkExistedCategoryName(name.trim())) {
+            success = categoryDAO.addCategory(newCategory);
+        }
 
-        boolean success = categoryDAO.addCategory(newCategory);
         if (success) {
             // Redirect to staff list page after successful addition
             response.sendRedirect("category?success");
@@ -152,9 +156,16 @@ public class AdminCategoryController extends HttpServlet {
         updatedCategory.setID(id);
         updatedCategory.setCategoryName(name);
         updatedCategory.setIsDeleted(isDeleted);
-
-        boolean success = categoryDAO.updateCategory(updatedCategory);
+        boolean success = false;
         
+        if(!categoryDAO.checkExistedCategoryName(name.trim())) {
+            success = categoryDAO.updateCategory(updatedCategory);
+        }
+        if(success) {
+            success = new ProductDAO().updateProductStatusByCategoryID(id, isDeleted);
+        }
+        
+        System.out.println(success);
         if (success) {
             // Redirect to staff list page after successful addition
             response.sendRedirect("category?success");

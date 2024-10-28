@@ -45,12 +45,10 @@
                 </div>
             </c:if>
 
-            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addProductModal">
-                Thêm sản phẩm
-            </button>
+
 
             <!-- Filter Form -->
-            <form id="searchForm" action="product" method="get" class="d-flex mb-4 justify-content-between">
+            <form id="searchForm" action="product" method="get" class="d-flex mb-4 justify-content-center">
                 <input type="hidden" name="page" id="pageInput" value="1">
                 <div class="form-group mr-2 col-2">
                     <input class="form-control me-2 mb-4" type="search" name="searchQuery" placeholder="Tìm kiếm" aria-label="Search" value="${searchQuery}">
@@ -64,26 +62,11 @@
                         </c:forEach>
                     </select>
                 </div>
-
-                <div class="form-group mr-2  col-2">
-                    <input class="form-control me-2 mb-4" type="number" name="minPrice" placeholder="Giá bắt đầu" value="${minPrice}">
-                    
-                </div>
-                <div class="form-group mr-2  col-2">
-                    <input class="form-control me-2 mb-4" type="number" name="maxPrice" placeholder="Giá kết thúc" value="${maxPrice}">
-                </div>
-                <div class="form-group mr-2  col-2">
-                    <select class="form-control me-2 mb-4" name="size">
-                        <option value="">All Sizes</option>
-                        <c:forEach items="${sizes}" var="size">
-                            <option value="${size}" <c:if test="${selectedSize == size}">selected</c:if>>${size}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-
-
                 <div class="form-group mr-2">
                     <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">
+                        Thêm sản phẩm
+                    </button>
                 </div>
             </form>
 
@@ -95,9 +78,7 @@
                         <th style="width: 20%">Image</th>
                         <th>Product Name</th>
                         <th>Category</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Size</th>
+                        <th>Description</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -105,17 +86,15 @@
                 <tbody>
                     <c:forEach var="product" items="${productList}">
                         <tr>
-                            <td>${product.productDetail.productDetailId}</td>
-                            <td style="width: 20%" class="text-center"><img class="w-50 rounded" src="${product.thumb}"></td>
+                            <td>${product.productId}</td>
+                            <td style="width: 20%" class="text-center"><img class="w-50 rounded" src="${product.baseImageURL}"></td>
                             <td>${product.productName}</td>
                             <td>${product.categoryName}</td>
-                            <td>${product.productDetail.price}</td>
-                            <td>${product.productDetail.stock}</td>
-                            <td>${product.productDetail.size}</td>
+                            <td>${product.description}</td>
                             <td>${product.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#productInfoModal_${product.productDetail.productDetailId}">Info</button>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProductModal_${product.productDetail.productDetailId}">Edit</button>
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal">Info</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProductModal_${product.productId}">Edit</button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -146,13 +125,13 @@
         <!-- Edit Product Modals -->
         <c:forEach var="product" items="${productList}">
             <!-- Edit Product Modal -->
-            <div class="modal fade" id="editProductModal_${product.productDetail.productDetailId}" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel_${product.productDetail.productDetailId}" aria-hidden="true">
+            <div class="modal fade" id="editProductModal_${product.productId}" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel_${product.productId}" aria-hidden="true">
                 <!-- Modal Content -->
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editProductModalLabel_${product.productDetail.productDetailId}">Edit Product</h5>
+                            <h5 class="modal-title" id="editProductModalLabel_${product.productId}">Edit Product</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -166,9 +145,9 @@
                                 <input type="hidden" name="productId" value="${product.productId}">
                                 <div class="form-group">
                                     <label for="imageUrl">Image</label>
-                                    <img id="image${product.productId}" class="w-100" src="${product.thumb}">
+                                    <img id="image${product.productId}" class="w-100" src="${product.baseImageURL}">
                                     <input type="file" class="form-control" id="imageFile${product.productId}" accept="image/*" onchange="updateImage(${product.productId})">
-                                    <input type="hidden" class="form-control" id="imageUrl${product.productId}" name="imageUrl" value="${product.thumb}">
+                                    <input type="hidden" class="form-control" id="imageUrl${product.productId}" name="imageUrl" value="${product.baseImageURL}">
                                 </div>
                                 <div class="form-group">
                                     <label for="productName">Product Name</label>
@@ -187,28 +166,6 @@
                                     <input type="text" class="form-control" id="createdBy" name="createdBy" value="${product.createdBy}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="productName">Price</label>
-                                    <input type="text" class="form-control" id="price" name="price" value="${product.productDetail.price}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Size</label>
-                                    <select class=" form-control" name="size" required>
-                                        <option value="S" ${product.productDetail.size eq 'S' ? 'selected' : ''}>S</option>
-                                        <option value="M" ${product.productDetail.size eq 'M' ? 'selected' : ''}>M</option>
-                                        <option value="L" ${product.productDetail.size eq 'L' ? 'selected' : ''}>L</option>
-                                        <option value="XL" ${product.productDetail.size eq 'XL' ? 'selected' : ''}>XL</option>
-                                        <option value="XXL" ${product.productDetail.size eq 'XXL' ? 'selected' : ''}>XXL</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="productName">Quantity</label>
-                                    <input type="text" class="form-control" id="quantity" name="quantity" value="${product.productDetail.stock}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="productName">Import Price</label>
-                                    <input type="text" class="form-control" id="quantity" name="importPrice" value="${product.productDetail.importPrice}">
-                                </div>
-                                <div class="form-group">
                                     <label for="isDeleted">Is Deleted</label>
                                     <select class="form-control" id="isDeleted" name="isDeleted">
                                         <option value="false" ${!product.isDeleted ? 'selected' : ''}>Active</option>
@@ -220,82 +177,6 @@
                                 <!-- Add other fields as needed -->
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Info Modal -->
-            <div class="modal fade" id="productInfoModal_${product.productDetail.productDetailId}" tabindex="-1" role="dialog" aria-labelledby="productInfoModalLabel_${product.productDetail.productDetailId}" aria-hidden="true">
-                <!-- Modal Content -->
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="productInfoModalLabel_${product.productDetail.productDetailId}">Product Details</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <!-- Modal Body -->
-                        <div class="modal-body d-flex justify-content-center">
-
-                            <div class="text-center col-4">
-                                <img style="width: 100%" src="${product.thumb}">
-                                <strong class="mt-5">Ảnh sản phẩm</strong>
-                            </div>
-
-                            <!-- Product Info Table -->
-                            <table class="table table-bordered col-8">
-                                <tbody>
-                                    <tr>
-                                        <th>ID</th>
-                                        <td>${product.productId}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Product Name</th>
-                                        <td>${product.productName}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Size</th>
-                                        <td>${product.productDetail.size}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Category</th>
-                                        <td>${product.categoryName}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Created At</th>
-                                        <td>${product.createdAt}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Description</th>
-                                        <td>${product.description}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Price</th>
-                                        <td>${product.productDetail.price}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Quantity</th>
-                                        <td>
-                                            ${product.productDetail.stock}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Hold</th>
-                                        <td>
-                                            ${product.productDetail.hold}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Import Price</th>
-                                        <td>
-                                            ${product.productDetail.importPrice}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -331,28 +212,6 @@
                                     <c:forEach var="category" items="${categories}">
                                         <option value="${category.getID()}">${category.categoryName}</option>
                                     </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="price">Price</label>
-                                <input type="text" class="form-control" id="price" name="price" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="quantity">Quantity</label>
-                                <input type="text" class="form-control" id="quantity" name="quantity" value="0">
-                            </div>
-                            <div class="form-group">
-                                <label for="quantity">Import Price: </label>
-                                <input type="text" class="form-control" id="quantity" name="importPrice" value="0">
-                            </div>
-                            <div class="form-group">
-                                <label>Size</label>
-                                <select class="sizeSelect form-control" name="size" multiple required>
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="L">L</option>
-                                    <option value="XL">XL</option>
-                                    <option value="XXL">XXL</option>
                                 </select>
                             </div>
                             <div class="form-group">

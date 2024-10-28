@@ -111,7 +111,7 @@
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="categoryName">Tên</label>
-                                        <input type="text" class="form-control" name="name" id="updateCategoryName" value="${category.categoryName}" required>
+                                        <input type="text" class="form-control" name="name" id="updateCategoryName" pattern="^(?!\s+$)[a-zA-Z\s]+$" title="Must enter text" value="${category.categoryName}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="isDeleted">Trạng thái</label>
@@ -147,7 +147,7 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="categoryName">Tên</label>
-                                <input type="text" class="form-control" name="name" required>
+                                <input type="text" class="form-control" name="name" pattern="^(?!\s+$)[a-zA-Z\s]+$" title="Must enter text" required>
                             </div>
                             <div class="form-group">
                                 <label for="isDeleted">Trạng thái</label>

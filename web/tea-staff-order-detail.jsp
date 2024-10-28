@@ -16,7 +16,7 @@
     <body>
 
         <!-- Sidebar -->
-        <%@ include file="sale-sidebar.jsp" %>
+        <%@ include file="tea-staff-sidebar.jsp" %>
 
         <!-- Main content -->
         <div class="main-content" style="margin-top: 10%; margin-bottom: 10%">
@@ -65,15 +65,15 @@
                             <td><img src="${product.imageURL}" alt="..." width="100" height="100"></td>
                             <td>${product.getProductName()}</td>
                             <td>${product.getCateogryName()}</td>
-                            <td>$${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price}</td>
+                            <td>${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price} VND</td>
                             <td>${product.buyQuantity}</td>
-                            <td>$${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity}</td>
+                            <td>${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity} VND</td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
             <div>
-                <strong>Total Order Price:</strong> $${order.totalCost}
+                <strong>Total Order Price:</strong> ${order.totalCost} VND
             </div>
             <div class="mt-4">
                 <c:if test="${(order.status eq 'Submitted' || order.status eq 'COD') && sessionScope.staff.role ne 4}">

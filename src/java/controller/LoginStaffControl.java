@@ -83,9 +83,8 @@ public class LoginStaffControl extends HttpServlet {
             request.getSession().setAttribute("staff", staff); 
 
             if (staff.getRole() == 1) response.sendRedirect("admin/user");
-            if (staff.getRole() == 2) response.sendRedirect("marketing/list-post");
-            if (staff.getRole() == 3 || staff.getRole() == 4) response.sendRedirect("sale/sale-order");
-            if (staff.getRole() == 6) response.sendRedirect("inventory/list-order");
+            if (staff.getRole() == 2) response.sendRedirect("teastaff/teastaff-order");
+            if (staff.getRole() == 4) response.sendRedirect("inventory/list-order");
 //            response.sendRedirect("home");
         } else {
             // Login failed

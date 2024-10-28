@@ -37,7 +37,7 @@ public class ChangePasswordControl extends HttpServlet {
         String password = request.getParameter("password");
         String retypepassword = request.getParameter("retypepassword");
 
-        if (password.equals(retypepassword) && user.getPassword().equals(PasswordUtil.hashPasswordMD5(password))) {
+        if (password.equals(retypepassword) && user.getPassword().equals(PasswordUtil.hashPasswordMD5(oldPassword))) {
 
             user.setPassword(PasswordUtil.hashPasswordMD5(password));
             new UserDAO().updateUser(user);
