@@ -39,13 +39,14 @@
                 <c:if test="${errorMessage != null}">
                     <div style="color: red">${errorMessage}</div>
                 </c:if>
+                <p id="error-message" style="color: red; display: none;">Mật khẩu không khớp!</p>
                 <div class="login-form" style="width: 500px;"><!--login form-->
                     <h2>Mật khẩu mới</h2>
-                    <form action="new-password" method="post">
+                    <form id="passwordForm" action="new-password" method="post">
                         <input type="hidden" name="email" value="${email}">
                         <input type="hidden" name="otp" value="${otp}">
-                        <input id="password" name="password" type="password" placeholder="Mật khẩu" value="${password}" required/>
-                        <input id="retypePassword" name="retypePassword" type="password" placeholder="Nhập lại mật khẩu" value="${retypePassword}" required/>
+                        <input id="password" name="password" type="password" placeholder="Mật khẩu" required/>
+                        <input id="retypePassword" name="retypePassword" type="password" placeholder="Nhập lại mật khẩu" required/>
                         <button type="submit" class="btn btn-default">Xác nhận</button>
                     </form>
                 </div><!--/login form-->
@@ -64,6 +65,44 @@
         <script src="js2/price-range.js"></script>
         <script src="js2/jquery.prettyPhoto.js"></script>
         <script src="js2/main.js"></script>
+        <script>
+            const password = document.getElementById('password');
+            const retypePassword = document.getElementById('retypePassword');
+            const form = document.getElementById('passwordForm');
+            const errorMessage = document.getElementById('error-message');
+
+            function checkPasswordsMatch() {
+                let message = '';
+
+                // Kiểm tra độ dài và khoảng trắng
+                if (password.value.length < 8) {
+                    message = 'Mật khẩu phải có ít nhất 8 ký tự.';
+                } else if (/\s/.test(password.value)) {
+                    message = 'Mật khẩu không được chứa khoảng trắng.';
+                } else if (password.value !== retypePassword.value) {
+                    message = 'Mật khẩu không khớp!';
+                }
+
+                // Hiển thị hoặc ẩn thông báo lỗi
+                if (message) {
+                    errorMessage.textContent = message;
+                    errorMessage.style.display = 'block';
+                    return false;
+                } else {
+                    errorMessage.style.display = 'none';
+                    return true;
+                }
+            }
+
+            password.addEventListener('input', checkPasswordsMatch);
+            retypePassword.addEventListener('input', checkPasswordsMatch);
+
+            form.addEventListener('submit', function (event) {
+                if (!checkPasswordsMatch()) {
+                    event.preventDefault(); // Ngăn gửi form nếu điều kiện không đúng
+                }
+            });
+        </script>
 
     </body>
 </html>
