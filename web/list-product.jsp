@@ -35,14 +35,20 @@
         <jsp:include page="Header.jsp"></jsp:include>
 
             <form action="list-product">
-                <input type="hidden" value="${searchQuery}" name="searchQuery"/>
-            <section>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="left-sidebar">
-                                <h2>Danh mục</h2>
+                <section>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="left-sidebar">
+
+                                    <div class="search_box">
+                                        <h2>Tìm kiếm</h2>
+                                        <input style="background-image: none; width: 233px" type="text" placeholder="Tìm kiếm ... " value="${searchQuery}" name="searchQuery"/>
+                                    <button type="submit" style="height: 35px; color: #B2B2B2; border: none"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+
                                 <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                                    <h2>Danh mục</h2>
                                     <c:forEach items="${categories}" var="category">
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="display: flex">
@@ -108,17 +114,17 @@
                                     </div>
                                 </c:forEach>
 
-                         
+
                             </div><!--features_items-->
                             <ul class="pagination">
-                                    <c:forEach begin="1" end="${endPage}" varStatus="status">
-                                        <li><button type="submit" 
-                                                    class="btn btn-default add-to-cart" ${status.index == page ? 'style="background-color: #FE980F"' : ''} 
-                                                    name="page" value="${status.index}">${status.index}
-                                            </button></li>
-                                        </c:forEach>
-                                    <!--<li><a href="">&raquo;</a></li>-->
-                                </ul>
+                                <c:forEach begin="1" end="${endPage}" varStatus="status">
+                                    <li><button type="submit" 
+                                                class="btn btn-default add-to-cart" ${status.index == page ? 'style="background-color: #FE980F"' : ''} 
+                                                name="page" value="${status.index}">${status.index}
+                                        </button></li>
+                                    </c:forEach>
+                                <!--<li><a href="">&raquo;</a></li>-->
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -135,28 +141,6 @@
         <script src="${pageContext.request.contextPath}/js2/jquery.prettyPhoto.js"></script>
         <script src="${pageContext.request.contextPath}/js2/main.js"></script>
 
-        <script>
-                                                        function toggleActive(element, productDetailId, color, stock) {
-                                                            // Remove 'active' class from all spans
-                                                            document.querySelectorAll('.color.size').forEach(span => {
-                                                                span.classList.remove('active');
-                                                            });
 
-                                                            // Add 'active' class to the clicked span
-                                                            element.classList.add('active');
-                                                            document.getElementById('stock').innerHTML = stock;
-                                                            // Update the hidden input with the selected ProductDetail ID
-                                                            document.getElementById('selectedProductDetailId').value = productDetailId;
-
-                                                            // Update the color display
-                                                            document.getElementById('selectedColor').style.backgroundColor = color.toLowerCase();
-                                                        }
-                                                        function addToCart(id) {
-                                                            let quantity = document.getElementById('quantity').value;
-                                                            console.log(quantity);
-                                                            fetch('add-cart?id=' + id + '&quantity=' + quantity);
-                                                            window.alert('Thêm thành công');
-                                                        }
-        </script>
     </body>
 </html>
