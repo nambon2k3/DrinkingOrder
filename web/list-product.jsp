@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Tất cả sản phẩm</title>
+        <title>Trang chủ</title>
         <link href="${pageContext.request.contextPath}/css2/bootstrap.min.css" rel="stylesheet">
         <script
             src="https://kit.fontawesome.com/8e2244e830.js"
@@ -28,108 +28,175 @@
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="${pageContext.request.contextPath}/images/ico/apple-touch-icon-114-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="${pageContext.request.contextPath}/images/ico/apple-touch-icon-72-precomposed.png">
         <link rel="apple-touch-icon-precomposed" href="${pageContext.request.contextPath}/images/ico/apple-touch-icon-57-precomposed.png">
+
+        <style>
+            /* Định dạng cho phần lựa chọn size và topping */
+            .product-options {
+                margin-top: 20px;
+            }
+
+            .size-option,
+            .topping-option {
+                margin-bottom: 15px;
+            }
+
+            .size-option label,
+            .topping-option label {
+                font-weight: bold;
+                margin-right: 10px;
+            }
+
+            #size-select {
+                padding: 5px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+
+            .topping-checkboxes {
+                display: block;
+            }
+
+            .topping-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px; /* Khoảng cách giữa các hàng topping */
+            }
+
+            .topping-item label {
+                font-weight: normal;
+                margin-right: 10px;
+                min-width: 100px; /* Đặt kích thước tối thiểu để căn chỉnh nhãn */
+            }
+
+            .topping-image {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 1px solid #ccc;
+                margin-top: 5px;
+            }
+
+            .topping-checkboxes input[type="checkbox"] {
+                margin-right: 5px;
+            }
+        </style>
+
     </head><!--/head-->
 
     <body>
 
         <jsp:include page="Header.jsp"></jsp:include>
 
-            <form action="list-product">
-                <section>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="left-sidebar">
 
-                                    <div class="search_box">
-                                        <h2>Tìm kiếm</h2>
-                                        <input style="background-image: none; width: 233px" type="text" placeholder="Tìm kiếm ... " value="${searchQuery}" name="searchQuery"/>
-                                    <button type="submit" style="height: 35px; color: #B2B2B2; border: none"><i class="fa-solid fa-magnifying-glass"></i></button>
-                                </div>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-1">
 
-                                <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-                                    <h2>Danh mục</h2>
-                                    <c:forEach items="${categories}" var="category">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" style="display: flex">
-                                                <input style="height: 18px; width: 18px; margin: 0"
-                                                       type="checkbox" value="${category.ID}" name="category"
-                                                       ${categoriesCheckBox.contains(category.ID.toString()) ? 'checked' : ''}
-                                                       />
-                                                <h4 class="panel-title" style="color: #696763; margin-left: 5px">${category.categoryName}</h4>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </div><!--/category-productsr-->
-
-                                <div class="price-range"><!--price-range-->
-                                    <h2>Giá tiền</h2>
-                                    <div class="search_box" style="display: flex">
-                                        <input name="minPrice" type="number" value="${minPrice}" style="background-image: none; margin-right: 10px; width: 125px" required/>
-                                        <input name="maxPrice" type="number" value="${maxPrice}" style="background-image: none; width: 125px" required/>
-                                    </div>
-                                </div><!--/price-range-->
-
-                                <div style="margin-top: 10px; display: flex; justify-content: center">
-                                    <button type="submit" class="add-to-cart" style="height: 30px; width: 100%">
-                                        Xác nhận
-                                    </button>
-                                </div>
-
-                            </div>
                         </div>
 
                         <div class="col-sm-9 padding-right">
-                            <div class="features_items"><!--features_items-->
-                                <h2 class="title text-center">Tất cả sản phẩm</h2>
-                                <div style="display: flex; justify-content: end; margin-bottom: 10px">
-                                    <div>
-                                        <p style="margin: 5px 5px 0 0">Sắp xếp:</p>
+                            <div class="product-details">
+                                <!--product-details-->
+                                <div class="col-sm-5">
+                                    <div class="view-product">
+                                        <img src="${product.productDetail.imageURL}" alt="" />
+                                    <h3>ZOOM</h3>
+                                </div>
+                                    <div class="category-tab" style="margin-top: 5px">
+                                    <!--category-tab-->
+                                    <div style="">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a href="#details" data-toggle="tab">Mô tả</a></li>
+                                        </ul>
                                     </div>
-                                    <select style="margin-right: 5px; width: 150px" name="arrangeName">
-                                        <option value="ASC" ${arrangeName == 'ASC' ? 'selected' : ''}>Từ A-Z</option>
-                                        <option value="DESC" ${arrangeName == 'DESC' ? 'selected' : ''}>Từ Z-A</option>
-                                    </select>
-                                    <select style="width: 150px" name="arrangePrice">
-                                        <option value="ASC" ${arrangePrice == 'ASC' ? 'selected' : ''}>Giá tăng dần</option>
-                                        <option value="DESC" ${arrangePrice == 'DESC' ? 'selected' : ''}>Giá giảm dần</option>
-                                    </select>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade active in" id="details">
+                                            <p>
+                                                ${product.description}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <c:forEach items="${products}" var="product">
-                                    <div class="col-sm-4">
-                                        <div class="product-image-wrapper">
-                                            <div class="single-products">
-                                                <div class="productinfo text-center">
-                                                    <img src="${product.productDetail.imageURL}" alt="" />
-                                                    <h2>${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND </h2>
-                                                    <p>${product.productName}</p>
-                                                    <a href="product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
-                                                </div>
-                                                <c:if test="${product.productDetail.discount != null && product.productDetail.discount != 0}">
-                                                    <img src="images/home/sale.png" class="new" alt="" />
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="product-information">
+                                    <!--/product-information-->
+                                    <img
+                                        src="images/product-details/new.jpg"
+                                        class="newarrival"
+                                        alt=""
+                                        />
+                                    <h2>${product.productName}</h2>
+                                    <img src="${pageContext.request.contextPath}/images/product-details/rating.png" alt="" />
+                                    <p><strong>91%</strong> người hài lòng với sản phẩm! <strong>(87 đánh giá)</strong></p>
+                                    <span>
+                                        <span>
+                                            <c:if test="${product.productDetail.discount != null && product.productDetail.discount != 0}">
+                                                <span style="color: grey; text-decoration: line-through; margin: 0 10px">
+                                                    ${product.productDetail.price}VNĐ</span> 
                                                 </c:if>
+                                                ${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND 
+
+                                        </span><br>
+                                        <label>Số lượng</label>
+                                        <input type="number" oninput="valid(this)" id="quantity" value="1" />
+                                    </span>
+                                    <button type="button" class="btn btn-fefault cart" onclick="addToCart(${product.productDetail.productDetailId})" style="margin-left: 0">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        Thêm vào giỏ hàng
+                                    </button>
+
+                                    <div class="product-options">
+                                        <div class="size-option">
+                                            <label for="size-select">Kích cỡ:</label>
+                                            <select id="size-select" onchange="changeSize(this, ${product.productId})">
+                                                <c:forEach items="${listDetails}" var="pd">
+                                                    <option value="${pd.productDetailId}" ${pd.size == product.productDetail.size ? 'selected' : ''}>${pd.size}</option>
+
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+
+                                        <div class="topping-option">
+                                            <label for="topping-select">Đồ ăn kèm:</label>
+                                            <div class="topping-checkboxes">
+                                                <c:forEach var="topping" items="${toppings}">
+                                                    <div class="topping-item">
+                                                        <label
+                                                            ><input type="checkbox" class="select-topping" value="${topping.id}" />
+                                                            ${topping.toppingName} (${topping.price} VNĐ)</label
+                                                        >
+                                                        <img
+                                                            src="${topping.img}"
+                                                            alt="${topping.toppingName}"
+                                                            class="topping-image"
+                                                            />
+                                                    </div>
+                                                </c:forEach>
                                             </div>
                                         </div>
                                     </div>
-                                </c:forEach>
 
 
-                            </div><!--features_items-->
-                            <ul class="pagination">
-                                <c:forEach begin="1" end="${endPage}" varStatus="status">
-                                    <li><button type="submit" 
-                                                class="btn btn-default add-to-cart" ${status.index == page ? 'style="background-color: #FE980F"' : ''} 
-                                                name="page" value="${status.index}">${status.index}
-                                        </button></li>
-                                    </c:forEach>
-                                <!--<li><a href="">&raquo;</a></li>-->
-                            </ul>
+                                </div>
+                                <!--/product-information-->
+                            </div>
                         </div>
+                        <!--/product-details-->
+
+                        
+                        <!--/category-tab-->
+
+
+                        <!--/recommended_items-->
                     </div>
                 </div>
-            </section>
-        </form>
+            </div>
+        </section>
+
 
         <jsp:include page="footer.jsp"></jsp:include>
 
@@ -140,7 +207,41 @@
         <script src="${pageContext.request.contextPath}/js2/price-range.js"></script>
         <script src="${pageContext.request.contextPath}/js2/jquery.prettyPhoto.js"></script>
         <script src="${pageContext.request.contextPath}/js2/main.js"></script>
+        <script>
+                                                function valid(input) {
+                                                    input.value = input.value.replace(/[^0-9]/g, '');
+                                                    if (input.value < 1) {
+                                                        input.value = 1;
+                                                    }
+
+                                                }
+
+                                                function addToCart(id) {
+                                                    let quantity = document.getElementById('quantity').value;
+                                                    var listTopping = document.getElementsByClassName('select-topping');
+                                                    let toppings = '';
+                                                    for (let i = 0; i < listTopping.length; i++) {
+                                                        if (listTopping[i].checked) {
+                                                            if (i !== 0) {
+                                                                toppings += ',';
+                                                            }
+                                                            toppings += listTopping[i].value;
+
+                                                        }
+                                                    }
 
 
+
+                                                    console.log(toppings);
+
+                                                    fetch('add-cart?id=' + id + '&quantity=' + quantity + '&toppings=' + toppings);
+                                                    window.alert('Thêm thành công');
+                                                }
+
+                                                function changeSize(select, productID) {
+                                                    let value = select.value;
+                                                    window.location.href = 'product-detail?pdid=' + value + '&id=' + productID;
+                                                }
+        </script>
     </body>
 </html>
