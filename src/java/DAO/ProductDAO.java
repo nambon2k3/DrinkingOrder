@@ -1073,7 +1073,7 @@ public class ProductDAO extends DBContext {
                 + "                   FROM ProductDetail\n"
                 + "                   WHERE ProductID = pd1.ProductID AND Price = pd2.MinPrice)\n"
                 + ") pd ON p.ID = pd.ProductID\n"
-                + "JOIN Category c ON p.CategoryID = c.ID\n"
+                + "JOIN Category c ON p.CategoryID = c.ID And c.IsDeleted = 0  \n"
                 + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n"
                 + "  AND p.name like '%" + name + "%' and p.isDeleted = 0 ";
 
@@ -1129,7 +1129,7 @@ public class ProductDAO extends DBContext {
                 + "    WHERE ProductID = pd1.ProductID AND Price = pd2.MinPrice\n"
                 + ")"
                 + ") pd ON p.ID = pd.ProductID\n"
-                + "JOIN Category c ON p.CategoryID = c.ID\n"
+                + "JOIN Category c ON p.CategoryID = c.ID And c.IsDeleted = 0  \n"
                 + "WHERE pd.Price BETWEEN " + minPrice + " AND " + maxPrice + "\n  "
                 + "  AND p.name like '%" + name + "%'  ";
 
