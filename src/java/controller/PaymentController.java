@@ -168,9 +168,6 @@ public class PaymentController extends HttpServlet {
             orderDetail.setQuantity(cartItem.getQuantity());
             orderDetail.setToppingId(cartItem.getToppings());
             new OrderDAO().createOrderDetail(orderDetail);
-            if (method.equalsIgnoreCase("COD") || method.equalsIgnoreCase("tranfer")) {
-                new ProductDAO().updateProductDetailHold(cartItem.getProductDetailId(), -cartItem.getQuantity());
-            }
         }
         new CartDAO().clearCart(user.getId());
 
