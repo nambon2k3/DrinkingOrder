@@ -59,7 +59,7 @@ public class ProductDetail {
     
 
     public boolean getIsDeleted() {
-        return new ProductDAO().getProductById(productId).getIsDeleted();
+        return isDeleted;
     }
 
     public String getDescription() {

@@ -93,7 +93,7 @@
                             <td>${product.description}</td>
                             <td>${product.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal">Info</button>
+                                <a href="product-detail?productId=${product.productId}" class="btn btn-info btn-sm">Info</a>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProductModal_${product.productId}">Edit</button>
                             </td>
                         </tr>

@@ -9,9 +9,9 @@ public class DBContext {
     // Configuration for MySQL connection
     private final String serverName = "localhost";
     private final String dbName = "drinkingorder";
-    private final String portNumber = "3390"; // Default MySQL port
+    private final String portNumber = "3306"; // Default MySQL port
     private final String userID = "root"; // Replace with your MySQL username
-    private final String password = "123456"; // Replace with your MySQL password
+    private final String password = "root"; // Replace with your MySQL password
 
     // Method to establish a database connection
     public Connection getConnection() {

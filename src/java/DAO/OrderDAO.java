@@ -420,7 +420,6 @@ public class OrderDAO {
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 isCanceled = true;
-                new ProductDAO().updateQuantity(orderId, -1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -438,7 +437,6 @@ public class OrderDAO {
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 isCanceled = true;
-                new ProductDAO().updateHoldQuantity(orderId, 1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -457,11 +455,6 @@ public class OrderDAO {
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 isCanceled = true;
-            }
-
-            if (status.equalsIgnoreCase("Delivering")) {
-                new ProductDAO().updateQuantity(orderId, 1);
-                new ProductDAO().updateHoldQuantity(orderId, 1);
             }
         } catch (SQLException e) {
             System.out.println("shippingOrder: " + e.getMessage());
@@ -605,9 +598,6 @@ public class OrderDAO {
 
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, orderId);
-            if (status.equalsIgnoreCase("Submitted")) {
-                new ProductDAO().updateHoldQuantity(orderId, -1);
-            }
 
             int affectedRows = preparedStatement.executeUpdate();
 

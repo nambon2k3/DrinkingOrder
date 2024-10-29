@@ -210,8 +210,6 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + " "
-                + "pd.Stock, "
                 + "pd.price AS price, "
                 + "pd.discount AS discount, "
                 + "pd.CreatedAt AS ProductDetailCreatedAt, "
@@ -234,8 +232,6 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-
-                productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("ProductDetailCreatedAt"));
                 productDetail.setCreatedBy(resultSet.getInt("ProductDetailCreatedBy"));
                 productDetail.setPrice(resultSet.getDouble("price"));
@@ -296,11 +292,9 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + "pd.Stock, "
                 + "pd.price, "
                 + "pd.discount, "
                 + "pd.CreatedAt, "
-                + "pd.Hold, "
                 + "pd.ImportPrice, "
                 + "pd.CreatedBy "
                 + "FROM ProductDetail pd "
@@ -315,12 +309,10 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setPrice(resultSet.getDouble("price"));
                 productDetail.setDiscount(resultSet.getInt("discount"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("CreatedAt"));
                 productDetail.setCreatedBy(resultSet.getInt("CreatedBy"));
-                productDetail.setHold(resultSet.getInt("Hold"));
                 productDetail.setImportPrice(resultSet.getFloat("ImportPrice"));
                 return productDetail;
             }
@@ -379,7 +371,6 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + "pd.Stock, "
                 + "pd.price, "
                 + "pd.discount, "
                 + "pd.CreatedAt, "
@@ -396,7 +387,6 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-                productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setPrice(resultSet.getDouble("price"));
                 productDetail.setDiscount(resultSet.getInt("discount"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("CreatedAt"));
@@ -499,9 +489,7 @@ public class ProductDAO extends DBContext {
                 + "Size, "
                 + "price, "
                 + "discount, "
-                + "Stock, "
                 + "CreatedAt, "
-                + "Hold, "
                 + "CreatedBy, "
                 + "importPrice "
                 + "FROM ProductDetail "
@@ -517,12 +505,10 @@ public class ProductDAO extends DBContext {
                     productDetail.setProductId(resultSet.getInt("ProductID"));
                     productDetail.setImageURL(resultSet.getString("ImageURL"));
                     productDetail.setSize(resultSet.getString("Size"));
-                    productDetail.setStock(resultSet.getInt("Stock"));
                     productDetail.setPrice(resultSet.getDouble("price"));
                     productDetail.setDiscount(resultSet.getInt("discount"));
                     productDetail.setCreatedAt(resultSet.getTimestamp("CreatedAt"));
                     productDetail.setCreatedBy(resultSet.getInt("CreatedBy"));
-                    productDetail.setHold(resultSet.getInt("Hold"));
                     productDetail.setImportPrice(resultSet.getInt("importPrice"));
                 }
             }
@@ -577,7 +563,7 @@ public class ProductDAO extends DBContext {
 
     public List<ProductDetail> getListProductDetailsByProductId(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
-        String query = "SELECT ID, ProductID, ImageURL, Size, Color, Stock, IsDeleted, CreatedAt, CreatedBy, price, discount "
+        String query = "SELECT ID, ProductID, ImageURL, Size, IsDeleted, CreatedAt, CreatedBy, price, discount "
                 + "FROM ProductDetail WHERE ProductID = ? and IsDeleted != 1";
 
         try (
@@ -590,12 +576,39 @@ public class ProductDAO extends DBContext {
                     productDetail.setProductId(rs.getInt("ProductID"));
                     productDetail.setImageURL(rs.getString("ImageURL"));
                     productDetail.setSize(rs.getString("Size"));
-                    productDetail.setColor(rs.getString("Color"));
-                    productDetail.setStock(rs.getInt("Stock"));
                     productDetail.setCreatedAt(rs.getTimestamp("CreatedAt"));
                     productDetail.setCreatedBy(rs.getInt("CreatedBy"));
                     productDetail.setPrice(rs.getDouble("price"));
                     productDetail.setDiscount(rs.getInt("discount"));
+                    productDetails.add(productDetail);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productDetails;
+    }
+    
+    public List<ProductDetail> getListProductDetailsByProductIdAdmin(int productId) {
+        List<ProductDetail> productDetails = new ArrayList<>();
+        String query = "SELECT ID, ProductID, ImageURL, Size, IsDeleted, CreatedAt, CreatedBy, price, discount "
+                + "FROM ProductDetail WHERE ProductID = ?";
+
+        try (
+                PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ProductDetail productDetail = new ProductDetail();
+                    productDetail.setProductDetailId(rs.getInt("ID"));
+                    productDetail.setProductId(rs.getInt("ProductID"));
+                    productDetail.setImageURL(rs.getString("ImageURL"));
+                    productDetail.setSize(rs.getString("Size"));
+                    productDetail.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                    productDetail.setCreatedBy(rs.getInt("CreatedBy"));
+                    productDetail.setPrice(rs.getDouble("price"));
+                    productDetail.setDiscount(rs.getInt("discount"));
+                    productDetail.setIsDeleted(rs.getBoolean("IsDeleted"));
                     productDetails.add(productDetail);
                 }
             }
@@ -617,8 +630,6 @@ public class ProductDAO extends DBContext {
                 + "pd.ID AS ProductDetailID, "
                 + "pd.ImageURL, "
                 + "pd.Size, "
-                + " "
-                + "pd.Stock, "
                 + "pd.price AS price, "
                 + "pd.discount AS discount, "
                 + "pd.CreatedAt AS ProductDetailCreatedAt, "
@@ -641,8 +652,6 @@ public class ProductDAO extends DBContext {
                 productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
                 productDetail.setImageURL(resultSet.getString("ImageURL"));
                 productDetail.setSize(resultSet.getString("Size"));
-
-                productDetail.setStock(resultSet.getInt("Stock"));
                 productDetail.setCreatedAt(resultSet.getTimestamp("ProductDetailCreatedAt"));
                 productDetail.setCreatedBy(resultSet.getInt("ProductDetailCreatedBy"));
                 productDetail.setPrice(resultSet.getDouble("price"));
@@ -657,79 +666,6 @@ public class ProductDAO extends DBContext {
         }
 
         return products;
-    }
-
-    public void updateQuantity(int orderId, int mode) {
-        String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
-                = "SELECT ProductDetailID, quantity "
-                + "FROM OrderDetail "
-                + "WHERE OrderID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL)) {
-
-            preparedStatement.setInt(1, orderId);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    updateProductDetailQuantity(resultSet.getInt(1), resultSet.getInt(2) * mode);
-
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("getProductDetailIDsByOrderID: " + e.getMessage());
-        }
-
-    }
-
-    public void updateHoldQuantity(int orderId, int mode) {
-        String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
-                = "SELECT ProductDetailID, quantity "
-                + "FROM OrderDetail "
-                + "WHERE OrderID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL)) {
-
-            preparedStatement.setInt(1, orderId);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    updateProductDetailHold(resultSet.getInt(1), resultSet.getInt(2) * mode);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("getProductDetailIDsByOrderID: " + e.getMessage());
-        }
-
-    }
-
-    public void updateProductDetailQuantity(int productDetailId, int quantity) {
-        String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL
-                = "UPDATE ProductDetail "
-                + "SET Stock = Stock - ? "
-                + "WHERE ID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_DETAIL_QUANTITY_SQL)) {
-
-            preparedStatement.setInt(1, quantity);
-            preparedStatement.setInt(2, productDetailId);
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("updateProductDetailQuantity: " + e.getMessage());
-        }
-    }
-
-    public void updateProductDetailHold(int productDetailId, int hold) {
-        String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL
-                = "UPDATE ProductDetail "
-                + "SET Hold = Hold - ? "
-                + "WHERE ID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_DETAIL_QUANTITY_SQL)) {
-
-            preparedStatement.setInt(1, hold);
-            preparedStatement.setInt(2, productDetailId);
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("updateProductDetailQuantity: " + e.getMessage());
-        }
     }
     
     public boolean checkExistedProductName(String productName) {
@@ -926,15 +862,15 @@ public class ProductDAO extends DBContext {
 
     public boolean addProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Stock, price, discount) "
+        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, price, discount, importPrice) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, productDetail.getProductId());
             statement.setString(2, productDetail.getImageURL());
             statement.setString(3, productDetail.getSize());
-            statement.setInt(4, productDetail.getStock());
-            statement.setDouble(5, productDetail.getPrice());
+            statement.setDouble(4, productDetail.getPrice());
+            statement.setDouble(5, productDetail.getImportPrice());
             statement.setInt(6, productDetail.getDiscount());
 
             int rowsInserted = statement.executeUpdate();
@@ -950,15 +886,15 @@ public class ProductDAO extends DBContext {
 
     public boolean updateProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Stock = ?, price = ?, discount = ? "
+        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, price = ?, discount = ?, importPrice = ? "
                 + "WHERE ID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, productDetail.getImageURL());
             statement.setString(2, productDetail.getSize());
-            statement.setInt(3, productDetail.getStock());
-            statement.setDouble(4, productDetail.getPrice());
-            statement.setInt(5, productDetail.getDiscount());
+            statement.setDouble(3, productDetail.getPrice());
+            statement.setInt(4, productDetail.getDiscount());
+            statement.setDouble(5, productDetail.getImportPrice());
             statement.setInt(6, productDetail.getProductDetailId());
 
             int rowsUpdated = statement.executeUpdate();
@@ -967,28 +903,6 @@ public class ProductDAO extends DBContext {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }
-
-        return success;
-    }
-
-    public boolean updateProductDetailInventory(ProductDetail productDetail) {
-        boolean success = false;
-        String query = "UPDATE ProductDetail SET Stock = ?, hold = ?, importPrice = ? "
-                + "WHERE ID = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, productDetail.getStock());
-            statement.setInt(2, productDetail.getHold());
-            statement.setDouble(3, productDetail.getImportPrice());
-            statement.setInt(4, productDetail.getProductDetailId());
-
-            int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
-                success = true;
-            }
-        } catch (SQLException ex) {
-            System.out.println("updateProductDetailInventory: " + ex.getMessage());
         }
 
         return success;
