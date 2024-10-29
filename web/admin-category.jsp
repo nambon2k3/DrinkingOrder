@@ -59,7 +59,7 @@
                         <tr>
                             <td>${category.ID}</td>
                             <td>${category.categoryName}</td>
-                            <td>${category.isDeleted ? 'Inactive' : 'Active'}</td>
+                            <td>${category.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                             <td>${category.createdAt}</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCategoryModal_${category.ID}">Edit</button>
@@ -116,14 +116,14 @@
                                     <div class="form-group">
                                         <label for="isDeleted">Trạng thái</label>
                                         <select class="form-control" id="isDeleted" name="isDeleted">
-                                            <option value="false" ${!category.isDeleted ? 'selected' : ''}>Active</option>
-                                            <option value="true" ${category.isDeleted ? 'selected' : ''}>Inactive</option>
+                                            <option value="false" ${!category.isDeleted ? 'selected' : ''}>Hoạt động</option>
+                                            <option value="true" ${category.isDeleted ? 'selected' : ''}>Không hoạt động</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary">
-                                        Update</button>
+                                        Lưu</button>
                                 </div>
                             </form>
                         </div>
@@ -152,13 +152,13 @@
                             <div class="form-group">
                                 <label for="isDeleted">Trạng thái</label>
                                 <select class="form-control" id="isDeleted" name="isDeleted">
-                                    <option value="false" ${!category.isDeleted ? 'selected' : ''}>Active</option>
-                                    <option value="true" ${category.isDeleted ? 'selected' : ''}>Inactive</option>
+                                    <option value="false" ${!category.isDeleted ? 'selected' : ''}>Hoạt động</option>
+                                    <option value="true" ${category.isDeleted ? 'selected' : ''}>Không hoạt động</option>
                                 </select>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                         </div>
                     </form>
                 </div>

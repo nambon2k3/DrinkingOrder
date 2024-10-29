@@ -127,14 +127,14 @@ public class AdminCategoryController extends HttpServlet {
 
         String name = request.getParameter("name");
         boolean isDeleted = request.getParameter("isDeleted").equalsIgnoreCase("true");
-        int createdBy = staff.getId(); 
+        int createdBy = staff.getId();
 
         Category newCategory = new Category();
         newCategory.setCategoryName(name.trim());
         newCategory.setIsDeleted(isDeleted);
         newCategory.setCreatedBy(createdBy);
         boolean success = false;
-        if(!categoryDAO.checkExistedCategoryName(name.trim())) {
+        if (!categoryDAO.checkExistedCategoryName(name.trim())) {
             success = categoryDAO.addCategory(newCategory);
         }
 
@@ -157,14 +157,16 @@ public class AdminCategoryController extends HttpServlet {
         updatedCategory.setCategoryName(name);
         updatedCategory.setIsDeleted(isDeleted);
         boolean success = false;
-        
-        if(!categoryDAO.checkExistedCategoryName(name.trim())) {
+
+        if (!categoryDAO.checkExistedCategoryName(name.trim())) {
             success = categoryDAO.updateCategory(updatedCategory);
         }
-        if(success) {
+
+        // Chỉ cập nhật trạng thái sản phẩm nếu có sản phẩm trong danh mục
+        if (success && new ProductDAO().hasProductsInCategory(id)) {
             success = new ProductDAO().updateProductStatusByCategoryID(id, isDeleted);
         }
-        
+
         System.out.println(success);
         if (success) {
             // Redirect to staff list page after successful addition

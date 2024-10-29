@@ -363,7 +363,7 @@ public class ProductDAO extends DBContext {
         }
         return toppings;
     }
-    
+
     public List<ProductDetail> getProductDetailsByProductId(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
 
@@ -618,8 +618,6 @@ public class ProductDAO extends DBContext {
         return productDetails;
     }
 
-    
-
     public List<Product> getThreeLastestProducts() {
         List<Product> products = new ArrayList<>();
 
@@ -667,7 +665,59 @@ public class ProductDAO extends DBContext {
 
         return products;
     }
-    
+
+
+    public void updateHoldQuantity(int orderId, int mode) {
+        String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
+                = "SELECT ProductDetailID, quantity "
+                + "FROM OrderDetail "
+                + "WHERE OrderID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL)) {
+
+            preparedStatement.setInt(1, orderId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    updateProductDetailHold(resultSet.getInt(1), resultSet.getInt(2) * mode);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("getProductDetailIDsByOrderID: " + e.getMessage());
+        }
+
+    }
+
+    public void updateProductDetailQuantity(int productDetailId, int quantity) {
+        String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL
+                = "UPDATE ProductDetail "
+                + "SET Stock = Stock - ? "
+                + "WHERE ID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_DETAIL_QUANTITY_SQL)) {
+
+            preparedStatement.setInt(1, quantity);
+            preparedStatement.setInt(2, productDetailId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("updateProductDetailQuantity: " + e.getMessage());
+        }
+    }
+
+    public void updateProductDetailHold(int productDetailId, int hold) {
+        String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL
+                = "UPDATE ProductDetail "
+                + "SET Hold = Hold - ? "
+                + "WHERE ID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_DETAIL_QUANTITY_SQL)) {
+
+            preparedStatement.setInt(1, hold);
+            preparedStatement.setInt(2, productDetailId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("updateProductDetailQuantity: " + e.getMessage());
+        }
+    }
     public boolean checkExistedProductName(String productName) {
         String SELECT_SQL
                 = "SELET * FROM Product WHERE Name LIKE ?";
@@ -731,25 +781,36 @@ public class ProductDAO extends DBContext {
 
         return success;
     }
-    
-    
+
     public boolean updateProductStatusByCategoryID(int categoryId, boolean isDeleted) {
         boolean success = false;
-        String query = "UPDATE Product SET IsDeleted = ? WHERE categoryID = ?";
+        String query = "UPDATE Product SET IsDeleted = ? WHERE CategoryID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(2, categoryId);
             statement.setInt(1, isDeleted ? 1 : 0);
+            statement.setInt(2, categoryId);
 
             int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
-                success = true;
-            }
+            success = rowsUpdated > 0;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace();  // Thay bằng logging trong ứng dụng thực tế
         }
 
         return success;
+    }
+
+    public boolean hasProductsInCategory(int categoryId) {
+        String sql = "SELECT COUNT(*) FROM Product WHERE CategoryID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, categoryId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public List<Product> getFilteredProducts(String name, int categoryId, Boolean isDeleted, int pageNumber, int pageSize) {
@@ -1052,7 +1113,5 @@ public class ProductDAO extends DBContext {
 
         return products;
     }
-
-
 
 }
