@@ -856,4 +856,64 @@ public class OrderDAO {
         return orders;
     }
 
+    public List<Order> shipperViewAllOrder(){
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM drinkingorder.`Order` WHERE shipperId IS NULL;";
+        try {
+            stmt = connection.prepareStatement(query);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("ID"));
+                order.setUserId(rs.getInt("UserID"));
+                order.setCreatedAt(rs.getDate("CreatedAt"));
+                order.setStatus(rs.getString("Status"));
+                order.setFullname(rs.getString("Fullname"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+    public List<Order> shipperViewMyOrder(int id){
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM drinkingorder.`Order` where shipperId = ?";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("ID"));
+                order.setUserId(rs.getInt("UserID"));
+                order.setCreatedAt(rs.getDate("CreatedAt"));
+                order.setStatus(rs.getString("Status"));
+                order.setFullname(rs.getString("Fullname"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+    public void updateShipperOrder(int shipperId, String status, int orderId){
+        String sql = "Update `Order` Set shipperId = ?, Status = ? WHERE id = ?";
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, shipperId);
+            stmt.setString(2, status);
+            stmt.setInt(3, orderId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
