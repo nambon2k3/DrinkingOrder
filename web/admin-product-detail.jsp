@@ -36,12 +36,12 @@
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Success!
+                    Thành công!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Failed!
+                    Thất bại!
                 </div>
             </c:if>
 
@@ -77,12 +77,16 @@
                             <td>${productDetail.createdAt}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${productDetail.getIsDeleted()}">Hoạt động</c:when>
-                                    <c:otherwise>Không hoạt động</c:otherwise>
+                                    <c:when test="${productDetail.getIsDeleted() == false}">
+                                        Hoạt động
+                                    </c:when>
+                                    <c:otherwise>
+                                        Không hoạt động
+                                    </c:otherwise>
                                 </c:choose>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProductModal_${productDetail.productDetailId}">Edit</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProductModal_${productDetail.productDetailId}">Chỉnh sửa</button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -120,7 +124,6 @@
 
                                 <div class="form-group">
                                     <label for="Size">Kích cỡ</label>
-                                    <label>Size</label>
                                     <select class=" form-control" name="size" required>
                                         <option value="S" ${productDetail.size eq 'S' ? 'selected' : listSize.contains("S") ? 'style="display: none"' : ''}>S</option>
                                         <option value="M" ${productDetail.size eq 'M' ? 'selected' : listSize.contains("M") ? 'style="display: none"' : ''}>M</option>
@@ -152,7 +155,7 @@
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Update Product Detail</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
                             </form>
                         </div>
                     </div>
@@ -184,7 +187,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Size</label>
+                                <label>Kích cỡ</label>
                                 <select class=" form-control" name="size" required>
                                     <option value="S" ${listSize.contains("S") ? 'style="display: none"' : ''}>S</option>
                                     <option value="M" ${listSize.contains("M")  ? 'style="display: none"' : ''}>M</option>
@@ -194,24 +197,24 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="price">Price</label>
+                                <label for="price">Giá</label>
                                 <input type="number" class="form-control" id="price" name="price" step="0.01" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="discount">Discount (%)</label>
+                                <label for="discount">Giảm giá (%)</label>
                                 <input type="number" class="form-control" id="discount" name="discount" step="1" min="0" max="100">
                             </div>
 
                             <div class="form-group">
-                                <label for="ImportPrice">Import Price</label>
+                                <label for="ImportPrice">Giá nhập</label>
                                 <input type="number" class="form-control" id="ImportPrice" name="ImportPrice" step="0.01" required>
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add Product Detail</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Thêm</button>
                         </div>
                     </form>
                 </div>
