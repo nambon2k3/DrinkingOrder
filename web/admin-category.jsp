@@ -33,14 +33,14 @@
                 </div>
             </c:if>
 
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCategoryModal">Add</button>
+            <button type="button" class="btn btn-primary btn-sm mb-3" data-toggle="modal" data-target="#addCategoryModal">Thêm</button>
 
             <!--filter form-->
             <form action="category" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
-                    <input type="text" name="search" value="${searchQuery}" placeholder="Tìm kiếm tên">
+                    <input type="text" class="form-control" name="search" value="${searchQuery}" placeholder="Tìm kiếm tên">
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Tìm kiếm</button>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             </form>
 
 
@@ -62,7 +62,7 @@
                             <td>${category.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                             <td>${category.createdAt}</td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCategoryModal_${category.ID}">Edit</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCategoryModal_${category.ID}">Sửa</button>
                             </td>
                         </tr>
 
