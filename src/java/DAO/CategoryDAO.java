@@ -116,14 +116,13 @@ public class CategoryDAO extends DBContext {
         }
         return count;
     }
-    
-    
+
     public boolean checkExistedCategoryName(String categoryName) {
         int count = 0;
         String sql = "SELECT * FROM drinkingorder.`Category` WHERE Name LIKE ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1,  categoryName);
+            preparedStatement.setString(1, categoryName);
             ResultSet rs = preparedStatement.executeQuery();
             return rs.next();
         } catch (SQLException e) {
@@ -131,18 +130,31 @@ public class CategoryDAO extends DBContext {
         }
         return false;
     }
-    
-    
-    
+
+    public boolean checkExistedCategoryName(String categoryName, int id) {
+        String sql = "SELECT COUNT(*) FROM drinkingorder.`Category` WHERE Name = ? AND ID != ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, categoryName);
+            preparedStatement.setInt(2, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean addCategory(Category category) {
         String sql = "INSERT INTO drinkingorder.`Category` (Name, IsDeleted, CreatedAt, CreatedBy) VALUES (?, ?, NOW(), ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-             
+
             preparedStatement.setString(1, category.getCategoryName());
             preparedStatement.setBoolean(2, category.isIsDeleted());
             preparedStatement.setInt(3, category.getCreatedBy());
-            
-           return preparedStatement.executeUpdate() > 0;
+
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -152,11 +164,11 @@ public class CategoryDAO extends DBContext {
     public boolean updateCategory(Category category) {
         String sql = "UPDATE drinkingorder.`Category` SET Name = ?, IsDeleted = ? WHERE ID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-             
+
             preparedStatement.setString(1, category.getCategoryName());
             preparedStatement.setBoolean(2, category.isIsDeleted());
             preparedStatement.setInt(3, category.getID());
-            
+
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
