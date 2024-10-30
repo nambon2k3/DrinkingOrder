@@ -947,7 +947,7 @@ public class ProductDAO extends DBContext {
 
     public boolean updateProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, price = ?, discount = ?, importPrice = ? "
+        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, price = ?, discount = ?, importPrice = ?, isDeleted = ?  "
                 + "WHERE ID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -956,7 +956,8 @@ public class ProductDAO extends DBContext {
             statement.setDouble(3, productDetail.getPrice());
             statement.setInt(4, productDetail.getDiscount());
             statement.setDouble(5, productDetail.getImportPrice());
-            statement.setInt(6, productDetail.getProductDetailId());
+            statement.setInt(6, productDetail.getIsDeleted() ? 1 : 0);
+            statement.setInt(7, productDetail.getProductDetailId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
