@@ -158,7 +158,7 @@ public class AdminCategoryController extends HttpServlet {
         updatedCategory.setIsDeleted(isDeleted);
         boolean success = false;
 
-        if (!categoryDAO.checkExistedCategoryName(name.trim())) {
+        if (!categoryDAO.checkExistedCategoryName(name.trim(), id)) {
             success = categoryDAO.updateCategory(updatedCategory);
         }
 
