@@ -50,11 +50,9 @@
                 <div class="form-group mr-2">
                     <select class="form-control" name="role">
                         <option value="">Chức vụ</option>
-                        <option value="1">Admin</option>
-                        <option value="2">Marketing</option>
-                        <option value="3">Sale</option>
-                        <option value="4">Sale leader</option>
-                        <option value="6">Inventory</option>
+                        <option value="1">Quản lý</option>
+                        <option value="2">Nhân viên</option>
+                        <option value="3">Giao hàng</option>
                     </select>
                 </div>
                 <div class="form-group mr-2">
@@ -72,7 +70,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3">Tìm kiếm</button>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             </form>
 
 
@@ -84,7 +82,6 @@
                         <th>Email</th>
                         <th>Chức vụ</th>
                         <th>Giới tính</th>
-                        <th>Địa chỉ</th>
                         <th>Số điện thoại</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
@@ -96,14 +93,28 @@
                             <td>${user.id}</td>
                             <td>${user.fullname}</td>
                             <td>${user.email}</td>
-                            <td>${user.roleString}</td>
-                            <td>${user.gender}</td>
-                            <td>${user.address}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${user.role == 1}">
+                                        Quản lý
+                                    </c:when>
+                                    <c:when test="${user.role == 2}">
+                                        Nhân viên
+                                    </c:when>
+                                    <c:when test="${user.role == 3}">
+                                        Giao hàng
+                                    </c:when>
+                                    <c:otherwise>
+                                        Không xác định
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>${user.gender eq 'Male' ? 'Nam' : 'Nữ'}</td>
                             <td>${user.phone}</td>
                             <td>${user.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Info</button>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Edit</button>
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Chi tiết</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Sửa</button>
                             </td>
                         </tr>
 
@@ -160,19 +171,15 @@
                                 <div class="form-group">
                                     <label for="role">Chức vụ</label>
                                     <select class="form-control" id="role" name="role">
-                                        <option value="1" ${user.roleString eq "Admin" ? "selected" : ""}>Admin</option>
-                                        <option value="2" ${user.roleString eq "Marketing" ? "selected" : ""}>Marketing</option>
-                                        <option value="3" ${user.roleString eq "Sale" ? "selected" : ""}>Sale</option>
-                                        <option value="4" ${user.roleString eq "SaleLeader" ? "selected" : ""}>Sale leader</option>
-                                        <option value="6" ${user.roleString eq "Inventory" ? "selected" : ""}>Inventory</option>
+                                        <option value="1" ${user.role == 1 ? "selected" : ""}>Quản lý</option>
+                                        <option value="2" ${user.role == 2 ? "selected" : ""}>Nhân viên</option>
+                                        <option value="3" ${user.role == 3 ? "selected" : ""}>Giao hàng</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="gender">Giới tính</label>
-                                    <select class="form-control" id="gender" name="gender" readonly>
-                                        <option value="true" ${user.gender eq 'Male' ? "selected" : ""}>Nam</option>
-                                        <option value="false" ${user.gender eq 'Female' ? "selected" : ""}>Nữ</option>
-                                    </select>
+                                    <input type="text" class="form-control" value="${user.gender eq 'Male' ? 'Nam' : 'Nữ'}" readonly/>
+                                    <input type="hidden" class="form-control" name="gender" value="${user.gender}"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="address">Địa chỉ</label>
@@ -218,8 +225,21 @@
                             <p><strong>ID:</strong> ${user.id}</p>
                             <p><strong>Họ tên:</strong> ${user.fullname}</p>
                             <p><strong>Email:</strong> ${user.getEmail()}</p>
-                            <p><strong>Chức vụ:</strong> ${user.getRole()}</p>
-                            <p><strong>Giới tính:</strong> ${user.gender}</p>
+                            <p><strong>Chức vụ:</strong> <c:choose>
+                                    <c:when test="${user.role == 1}">
+                                        Quản lý
+                                    </c:when>
+                                    <c:when test="${user.role == 2}">
+                                        Nhân viên
+                                    </c:when>
+                                    <c:when test="${user.role == 3}">
+                                        Giao hàng
+                                    </c:when>
+                                    <c:otherwise>
+                                        Không xác định
+                                    </c:otherwise>
+                                </c:choose></p>
+                            <p><strong>Giới tính:</strong> ${user.gender eq 'Male' ? 'Nam' : 'Nữ'}</p>
                             <p><strong>Địa chỉ:</strong> ${user.getAddress()}</p>
                             <p><strong>Số điện thoai:</strong> ${user.getPhone()}</p>
                             <p><strong>Trạng thái</strong> ${user.isDeleted ? 'Inactive' : 'Active'}</p>
@@ -265,11 +285,9 @@
                             <div class="form-group">
                                 <label for="role">Chức vụ</label>
                                 <select class="form-control" id="role" name="role">
-                                    <option value="1">Admin</option>
-                                    <option value="3">Sale</option>
-                                    <option value="2">Marketing</option>
-                                    <option value="4">Sale leader</option>
-                                    <option value="6">Inventory</option>
+                                    <option value="1">Quản lý</option>
+                                    <option value="2">Nhân viên</option>
+                                    <option value="3">Giao hàng</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -332,10 +350,10 @@
                 // check file uploaded
                 if (fileInput.files && fileInput.files[0]) {
                     const file = fileInput.files[0];
-                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+                    const maxSize = 1024 * 1024; // 2 MB in bytes
 
                     if (file.size > maxSize) {
-                        alert("File tối đa 2 MB.");
+                        alert("File tối đa 1 MB.");
                         fileInput.value = ''; // Clear the file input
                         return;
                     }
