@@ -36,12 +36,12 @@
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Success!
+                    Thành công!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Failed!
+                    Thất bại!
                 </div>
             </c:if>
 
@@ -56,14 +56,14 @@
 
                 <div class="form-group mr-2  col-2">
                     <select class="form-control me-2 mb-4" name="categoryId">
-                        <option value="">All Categories</option>
+                        <option value="">Tất cả danh mục</option>
                         <c:forEach items="${categories}" var="category">
                             <option value="${category.ID}" <c:if test="${categoryId == category.ID}">selected</c:if>>${category.categoryName}</option>
                         </c:forEach>
                     </select>
                 </div>
                 <div class="form-group mr-2">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">
                         Thêm sản phẩm
                     </button>
@@ -75,12 +75,12 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th style="width: 20%">Image</th>
-                        <th>Product Name</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th style="width: 20%">Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Mô tả</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,10 +91,10 @@
                             <td>${product.productName}</td>
                             <td>${product.categoryName}</td>
                             <td>${product.description}</td>
-                            <td>${product.isDeleted ? 'Inactive' : 'Active'}</td>
+                            <td>${product.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                             <td>
-                                <a href="product-detail?productId=${product.productId}" class="btn btn-info btn-sm">Info</a>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProductModal_${product.productId}">Edit</button>
+                                <a href="product-detail?productId=${product.productId}" class="btn btn-info btn-sm">Chi tiết</a>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProductModal_${product.productId}">Sửa</button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -144,38 +144,38 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="productId" value="${product.productId}">
                                 <div class="form-group">
-                                    <label for="imageUrl">Image</label>
+                                    <label for="imageUrl">Ảnh</label>
                                     <img id="image${product.productId}" class="w-100" src="${product.baseImageURL}">
                                     <input type="file" class="form-control" id="imageFile${product.productId}" accept="image/*" onchange="updateImage(${product.productId})">
                                     <input type="hidden" class="form-control" id="imageUrl${product.productId}" name="imageUrl" value="${product.baseImageURL}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="productName">Product Name</label>
+                                    <label for="productName">Tên sản phẩm</label>
                                     <input type="text" class="form-control" id="productName" name="productName" value="${product.productName}" required>
                                 </div>
                                 <div class="form-group d-none">
-                                    <label for="categoryName">Category</label>
+                                    <label for="categoryName">Danh mục</label>
                                     <input type="text" class="form-control" id="categoryName" name="categoryName" value="${product.categoryName}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description">Description</label>
+                                    <label for="description">Mô tả</label>
                                     <textarea class="form-control" id="description" name="description" rows="3">${product.description}</textarea>
                                 </div>
                                 <div class="form-group d-none">
-                                    <label for="createdBy">Created By</label>
+                                    <label for="createdBy">Tạo bởi</label>
                                     <input type="text" class="form-control" id="createdBy" name="createdBy" value="${product.createdBy}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="isDeleted">Is Deleted</label>
+                                    <label for="isDeleted">Trang thái</label>
                                     <select class="form-control" id="isDeleted" name="isDeleted">
-                                        <option value="false" ${!product.isDeleted ? 'selected' : ''}>Active</option>
+                                        <option value="false" ${!product.isDeleted ? 'selected' : ''}>Hoạt động</option>
                                         <c:if  test="${product.productDetail.stock > 0}">
-                                            <option value="true" ${product.isDeleted ? 'selected' : ''}>Inactive</option>
+                                            <option value="true" ${product.isDeleted ? 'selected' : ''}>Không hoạt động</option>
                                         </c:if>
                                     </select>
                                 </div>
                                 <!-- Add other fields as needed -->
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
                             </form>
                         </div>
                     </div>
@@ -188,7 +188,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                        <h5 class="modal-title" id="addProductModalLabel">Thêm mới</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -197,17 +197,17 @@
                         <input type="hidden" name="action" value="add">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="imageUrl">Image</label>
+                                <label for="imageUrl">Ảnh</label>
                                 <img id="image0" class="w-100" src="">
                                 <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)" required>
                                 <input type="hidden" class="form-control" id="imageUrl0" name="imageUrl" value="">
                             </div>
                             <div class="form-group">
-                                <label for="productName">Product Name</label>
+                                <label for="productName">Tên sản phẩm</label>
                                 <input type="text" class="form-control" id="productName" name="productName" required>
                             </div>
                             <div class="form-group">
-                                <label for="categoryId">Category</label>
+                                <label for="categoryId">Danh mục</label>
                                 <select class="form-control" id="categoryId" name="categoryId" required>
                                     <c:forEach var="category" items="${categories}">
                                         <option value="${category.getID()}">${category.categoryName}</option>
@@ -215,13 +215,13 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="description">Description</label>
+                                <label for="description">Mô tả</label>
                                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add Product</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                         </div>
                     </form>
                 </div>
