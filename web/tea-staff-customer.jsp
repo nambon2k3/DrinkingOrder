@@ -47,30 +47,30 @@
             <!--filter form-->
             <form id="searchForm" action="customer" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="${fullName}">
+                    <input type="text" class="form-control" name="fullName" placeholder="Họ và tên" value="${fullName}">
                 </div>
                 <div class="form-group mr-2">
                     <input type="text" class="form-control" name="email" placeholder="Email" value="${email}">
                 </div>
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="phone" placeholder="Phone" value="${phone}">
+                    <input type="text" class="form-control" name="phone" placeholder="Số điện thoại" value="${phone}">
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="gender">
-                        <option value="">Select Gender</option>
+                        <option value="">Giới tính</option>
                         <option value="Male" ${gender eq 'Male' ? 'selected' : ''}>Male</option>
                         <option value="Female" ${gender eq 'Female' ? 'selected' : ''}>Female</option>
                     </select>
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
-                        <option value="">Select Status</option>
-                        <option value="true" ${statusString eq 'true' ? 'selected' : ''}>Inactive</option>
-                        <option value="false" ${statusString eq 'false' ? 'selected' : ''}>Active</option>
+                        <option value="">Trạng thái</option>
+                        <option value="true" ${statusString eq 'true' ? 'selected' : ''}>Không hoạt động</option>
+                        <option value="false" ${statusString eq 'false' ? 'selected' : ''}>Hoạt động</option>
                     </select>
                 </div>
                 <input type="hidden" name="page" id="pageInput" value="1">
-                <button type="submit" class="btn btn-primary mt-3">Search</button>
+                <button type="submit" class="btn btn-primary mt-3">Tìm kiếm</button>
             </form>
 
 
@@ -78,13 +78,13 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Full Name</th>
+                        <th>Họ và tên</th>
                         <th>Email</th>
-                        <th>Gender</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Giới tính</th>
+                        <th>Địa chỉ</th>
+                        <th>Số điện thoại</th>
+                        <th>Trạng Thái</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,8 +98,8 @@
                             <td>${user.phone}</td>
                             <td>${user.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Info</button>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Edit</button>
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Thông tin</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Chỉnh sửa</button>
                             </td>
                         </tr>
 

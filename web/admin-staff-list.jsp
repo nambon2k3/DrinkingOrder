@@ -36,7 +36,7 @@
             <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Thêm người dùng</button>
 
             <!--filter form-->
-            <form action="user" method="get" class="form-inline mb-3">
+            <form action="staff" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
                     <input type="text" class="form-control" name="fullName" placeholder="Họ và tên">
                 </div>
@@ -157,7 +157,7 @@
                         </div>
                         <div class="modal-body">
                             <!-- Edit User Form -->
-                            <form action="user" method="post">
+                            <form action="staff" method="post">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="userId" value="${user.id}">
                                 <div class="form-group">
@@ -266,7 +266,7 @@
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <!-- Add User Form -->
-                        <form action="user" method="post">
+                        <form action="staff" method="post">
                             <!-- Hidden Field -->
                             <input type="hidden" name="action" value="add">
                             <!-- Form Inputs -->

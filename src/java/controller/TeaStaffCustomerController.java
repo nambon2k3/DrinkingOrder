@@ -73,9 +73,6 @@ public class TeaStaffCustomerController extends HttpServlet {
         String action = request.getParameter("action");
         if (action != null) {
             switch (action) {
-                case "add":
-                    addUser(request, response);
-                    break;
                 case "update":
                     updateUser(request, response);
                     break;
@@ -86,41 +83,7 @@ public class TeaStaffCustomerController extends HttpServlet {
         }
     }
 
-    private void addUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Retrieve user data from request parameters
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-        String address = request.getParameter("address");
-        String phone = request.getParameter("phone");
-
-        boolean success = false;
-
-        User user = userDAO.getUserByEmail(email);
-
-        if (user == null) {
-            // Register the user
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setPassword(password);
-            newUser.setFullname(fullName);
-            newUser.setGender(gender ? "Male" : "Female");
-            newUser.setAddress(address);
-            newUser.setPhone(phone);
-
-            success = userDAO.registerUser(newUser);
-
-            EmailService.sendEmail(email, "Account created", "Your password: " + password);
-        }
-
-        if (success) {
-            // Redirect to user list page after successful addition
-            response.sendRedirect("customer?success");
-        } else {
-            response.sendRedirect("customer?fail");
-        }
-    }
+    
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve user data from request parameters
