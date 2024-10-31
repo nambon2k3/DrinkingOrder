@@ -101,7 +101,8 @@ public class RegisterControl extends HttpServlet {
 
             // Registration successful
             request.setAttribute("errorMessage", "Đã gửi thư xác minh tới email của bạn!");
-            request.getRequestDispatcher("Register.jsp").forward(request, response);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
 
     }

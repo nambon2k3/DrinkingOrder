@@ -74,6 +74,7 @@ public class VerifyControl extends HttpServlet {
             if (registrationSuccessful) {
                 // Registration successful
                 request.setAttribute("errorMessage", "Register success");
+                request.setAttribute("email", email);
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
 
             } else {
