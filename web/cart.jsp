@@ -272,7 +272,7 @@
                                         <div class="cart_quantity_button">
                                             <form action="update-cart" method="post" style="display:inline;">
                                                 <input type="hidden" name="cartId" value="${item.id}">
-                                                <input type="number"  name="quantity" value="${item.quantity}" min="1" max="${item.productDetail.stock}"
+                                                <input type="number"  name="quantity" value="${item.quantity}" min="1"
                                                        class="form-control" style="width: 80px; display:inline;">
                                                 <button type="submit" class="btn btn-sm btn-primary" style="margin-top: 0">Cập nhật</button>
                                             </form>
