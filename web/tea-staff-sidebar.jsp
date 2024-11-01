@@ -1,4 +1,4 @@
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- Custom CSS -->
 <style>
     /* Sidebar style */
@@ -60,9 +60,9 @@
 <!-- Sidebar -->
 <nav class="sidebar">
     <ul>
-        <li><a href="dashboard"><i class="fas fa-chart-line mr-2"></i>Dashboard</a></li>
-        <li><a href="teastaff-order"><i class="fas fa-shopping-cart mr-2"></i>Orders</a></li>
-        <li><a href="customer"><i class="fas fa-users mr-2"></i>Customer</a></li>
+        <li><a href="teastaff-order"><i class="fas fa-shopping-cart mr-2"></i>Đơn hàng</a></li>
+        <li><a href="customer"><i class="fas fa-users mr-2"></i>Khách hàng</a></li>
+        <li><a href="list-post"><i class="fas fa-chart-line mr-2"></i>Bài viết</a></li>
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>

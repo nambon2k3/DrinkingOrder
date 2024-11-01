@@ -78,7 +78,7 @@
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
                             <li><a href="${pageContext.request.contextPath}/public/list-product">Sản phẩm</a></li> 
-                            <li class="dropdown"><a href="#">Bài viết</a></li> 
+                            <li class="dropdown"><a href="${pageContext.request.contextPath}/public/list-blog">Bài viết</a></li> 
                         </ul>
                     </div>
                 </div>

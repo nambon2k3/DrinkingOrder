@@ -26,7 +26,7 @@
     </head>
 
     <body>
-        <%@ include file="marketing-sidebar.jsp" %>
+        <%@ include file="tea-staff-sidebar.jsp" %>
 
         <div class="mt-5 main-content">
             <c:if test="${isSuccess ne null && isSuccess}">
@@ -45,8 +45,9 @@
                 Post detail
             </div>
 
-            <form method="post" action="update-post">
+            <form method="post" action="list-post">
                 <div class="modal-header">
+                    <input type="hidden" name="action" value="update">
                     <h5 class="modal-title" id="addPostModalLabel">Xem bài viết</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -90,7 +91,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <a class="btn btn-secondary" href="list-post">Đóng</a>
                     <button type="submit" class="btn btn-primary">Lưu lại</button>
                 </div>
             </form>
