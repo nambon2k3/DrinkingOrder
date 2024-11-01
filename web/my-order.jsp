@@ -262,9 +262,10 @@
                                     <label for="orderStatus" class="sr-only">Trạng thái:</label>
                                     <select id="orderStatus" name="orderStatus" class="form-control">
                                         <option value="">Tất cả</option>
-                                        <option value="Close" ${orderStatus eq"Close" ? "selected" : ""}>Đã đóng</option>
                                         <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Đã gửi</option>
-                                        <option value="Success" ${orderStatus eq"Success" ? "selected" : ""}>Thành công</option>
+                                        <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Thành công</option>
+                                        <option value="Wait for pay" ${orderStatus eq"Wait for pay" ? "selected" : ""}>Chưa thanh toán</option>
+                                        <option value="Delivering" ${orderStatus eq"Delivering" ? "selected" : ""}>Đang giao</option>
                                         <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Yêu cầu hủy</option>
                                         <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Đã hủy</option>
                                     </select>
