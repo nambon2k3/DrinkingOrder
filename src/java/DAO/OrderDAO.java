@@ -858,7 +858,7 @@ public class OrderDAO {
 
     public List<Order> shipperViewAllOrder(){
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM drinkingorder.`Order` WHERE shipperId IS NULL;";
+        String query = "SELECT * FROM drinkingorder.`Order` WHERE shipperId IS NULL And Status = 'Submitted';";
         try {
             stmt = connection.prepareStatement(query);
             rs = stmt.executeQuery();
