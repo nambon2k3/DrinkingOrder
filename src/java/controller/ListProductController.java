@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
-@WebServlet(name = "ListProductController", urlPatterns = {"/public/list-product"})
+@WebServlet(name = "ListProductController", urlPatterns = {"/home"})
 public class ListProductController extends HttpServlet {
 
     @Override

@@ -71,7 +71,7 @@
                                             <td>${post.title}</td>
                                             <td>${fn:substring(post.content, 0, 50)}...</td>
                                             <td>
-                                                <a class="btn btn-primary" href="post-detail?id=${post.id}">See more</a>
+                                                <a class="btn btn-primary" href="post-detail?id=${post.id}">Chi tiết</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -80,7 +80,7 @@
 
                             <ul class="pagination">
                                 <c:if test="${currentPage > 1}">
-                                    <li class="page-item"><a class="page-link" href="list-blog?page=${currentPage - 1}&category=${param.category}&search=${param.search}">Previous</a></li>
+                                    <li class="page-item"><a class="page-link" href="list-blog?page=${currentPage - 1}&category=${param.category}&search=${param.search}">Lùi</a></li>
                                     </c:if>
                                     <c:forEach var="i" begin="1" end="${totalPages}">
                                     <li class="page-item ${currentPage == i ? 'active' : ''}">
@@ -88,7 +88,7 @@
                                     </li>
                                 </c:forEach>
                                 <c:if test="${currentPage < totalPages}">
-                                    <li class="page-item"><a class="page-link" href="list-blog?page=${currentPage + 1}&category=${param.category}&search=${param.search}">Next</a></li>
+                                    <li class="page-item"><a class="page-link" href="list-blog?page=${currentPage + 1}&category=${param.category}&search=${param.search}">Tiến</a></li>
                                     </c:if>
                             </ul>
 

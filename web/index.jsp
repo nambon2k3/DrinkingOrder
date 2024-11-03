@@ -1,3 +1,3 @@
 <% 
-    response.sendRedirect("public/list-product"); 
+    response.sendRedirect("home"); 
 %>

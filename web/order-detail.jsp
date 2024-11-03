@@ -171,14 +171,38 @@
                             <h2>Đơn hàng</h2>
                             <p>Mã đơn hàng: ${order.id}</p>
                             <p>Ngày đặt: ${order.createdAt}</p>
-                            <p>Trạng thái: ${order.status}</p>
+                            <p>Trạng thái: 
+                                <c:choose>
+                                    <c:when test="${order.status.trim() eq 'Submitted'}">
+                                        Đã thanh toán
+                                    </c:when>
+                                    <c:when test="${order.status.trim() eq 'Shipped'}">
+                                        Đã giao
+                                    </c:when>
+                                    <c:when test="${order.status.trim() eq 'Wait for pay'}">
+                                        Chưa thanh toán
+                                    </c:when>
+                                    <c:when test="${order.status.trim() eq 'Delivering'}">
+                                        Đang giao
+                                    </c:when>
+                                    <c:when test="${order.status.trim() eq 'Request cancel'}">
+                                        Yêu cầu hủy
+                                    </c:when>
+                                    <c:when test="${order.status.trim() eq 'Canceled'}">
+                                        Đã hủy
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${order.status}
+                                    </c:otherwise>
+                                </c:choose>
+                            </p>
                             <p>Phương thức thanh toán: ${order.paymentMethod}</p>
 
                             <!-- Receiver Information -->
                             <h3>Người nhận</h3>
                             <p>Họ tên: ${order.fullname}</p>
-                            <p>Địa chỉ ${order.address}</p>
-                            <p>SĐT ${order.phone}</p>
+                            <p>Địa chỉ: ${order.address}</p>
+                            <p>SĐT: ${order.phone}</p>
                         </div>
                     </div>
                 </div>
@@ -279,7 +303,7 @@
                                         <th>Ăn kèm</th>
                                         <td>
                                             <c:forEach items="${product.listTopping}" var="t">
-                                                <p>${t.toppingName}: ${t.price}$</p>
+                                                <p>${t.toppingName}: ${t.price}VND</p>
                                             </c:forEach>
                                         </td>
                                     </tr>
@@ -305,7 +329,7 @@
                 <div class="heading">
                     <strong>Tổng đơn hàng:</strong>${String.format("%.2f", Double.parseDouble(order.totalCost + totalToppingProducts))}
                 </div>
-                <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Failed' && order.status ne 'Success' && order.status ne 'Rejected' && order.status ne 'Delivering'}">
+                <c:if test="${order.status.trim() eq 'Submitted'}">
                     <div class="mt-4">
                         <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Hủy đơn hàng</a>
                     </div>
@@ -325,14 +349,7 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2><c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
-                                                        <span class="text-muted text-decoration-line-through">$${p.productDetail.price}</span>
-                                                        $${p.productDetail.price * (100.0- p.productDetail.discount)/100}
-                                                    </c:if>
-
-                                                    <c:if test="${p.productDetail.discount == null || p.productDetail.discount == 0}">
-                                                        $${p.productDetail.price}
-                                                    </c:if></h2>
+                                                <h2>${p.productDetail.price}VND</h2>
                                                 <p>${p.productName}</p>
                                                 <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>

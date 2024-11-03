@@ -33,7 +33,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="logo pull-left">
-                        <a href="${pageContext.request.contextPath}/public/list-product"><img src="${pageContext.request.contextPath}/Image/logo.png" alt="" /></a>
+                        <a href="${pageContext.request.contextPath}/home"><img src="${pageContext.request.contextPath}/Image/logo.png" alt="" /></a>
                     </div>
                 </div>
                 <div class="col-sm-8">
@@ -77,7 +77,7 @@
                     </div>
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
-                            <li><a href="${pageContext.request.contextPath}/public/list-product">Sản phẩm</a></li> 
+                            <li><a href="${pageContext.request.contextPath}/home">Sản phẩm</a></li> 
                             <li class="dropdown"><a href="${pageContext.request.contextPath}/public/list-blog">Bài viết</a></li> 
                         </ul>
                     </div>

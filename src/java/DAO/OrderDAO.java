@@ -16,6 +16,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.sql.Statement;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,12 +153,13 @@ public class OrderDAO {
                 String status = rs.getString("Status");
                 boolean isDeleted = rs.getBoolean("IsDeleted");
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
+                ZonedDateTime zonedDateTime = createdAt.toInstant().atZone(ZoneId.of("Asia/Ho_Chi_Minh"));
                 int createdBy = rs.getInt("CreatedBy");
 
                 String paymentMethod = rs.getString("paymentMethod");
 
                 // Create an Order object with extracted data
-                Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
+                Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, Date.from(zonedDateTime.toInstant()), createdBy);
                 order.setPaymentMethod(paymentMethod);
                 order.setNotes(rs.getString("notes"));
 
@@ -165,6 +169,12 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return orders;
+    }
+    
+    public static void main(String[] args) {
+        for(Order o : new OrderDAO().getOrdersByPage(1, 10, 1, null, null, null)){
+            System.out.println(o);
+        }
     }
 
     public boolean autoCanceled() {
@@ -856,7 +866,7 @@ public class OrderDAO {
         return orders;
     }
 
-    public List<Order> shipperViewAllOrder(){
+    public List<Order> shipperViewAllOrder() {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM drinkingorder.`Order` WHERE shipperId IS NULL And Status = 'Submitted';";
         try {
@@ -879,7 +889,8 @@ public class OrderDAO {
         }
         return orders;
     }
-    public List<Order> shipperViewMyOrder(int id){
+
+    public List<Order> shipperViewMyOrder(int id) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM drinkingorder.`Order` where shipperId = ?";
         try {
@@ -903,7 +914,8 @@ public class OrderDAO {
         }
         return orders;
     }
-    public void updateShipperOrder(int shipperId, String status, int orderId){
+
+    public void updateShipperOrder(int shipperId, String status, int orderId) {
         String sql = "Update `Order` Set shipperId = ?, Status = ? WHERE id = ?";
         try {
             stmt = connection.prepareStatement(sql);

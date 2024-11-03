@@ -34,7 +34,7 @@
 
         <jsp:include page="Header.jsp"></jsp:include>
 
-            <form action="list-product">
+            <form action="home">
                 <section>
                     <div class="container">
                         <div class="row">
@@ -43,8 +43,7 @@
 
                                     <div class="search_box">
                                         <h2>Tìm kiếm</h2>
-                                        <input style="background-image: none; width: 233px" type="text" placeholder="Tìm kiếm ... " value="${searchQuery}" name="searchQuery"/>
-                                    <button type="submit" style="height: 35px; color: #B2B2B2; border: none"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                        <input style="background-image: none; width: 263px" type="text" placeholder="Tìm kiếm ... " value="${searchQuery}" name="searchQuery"/>
                                 </div>
 
                                 <div class="panel-group category-products" id="accordian"><!--category-productsr-->
@@ -102,9 +101,9 @@
                                             <div class="single-products">
                                                 <div class="productinfo text-center">
                                                     <img src="${product.productDetail.imageURL}" alt="" />
-                                                    <h2>${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND </h2>
+                                                    <h2>${String.format("%.0f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND </h2>
                                                     <p>${product.productName}</p>
-                                                    <a href="product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
+                                                    <a href="public/product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
                                                 </div>
                                                 <c:if test="${product.productDetail.discount != null && product.productDetail.discount != 0}">
                                                     <img src="images/home/sale.png" class="new" alt="" />

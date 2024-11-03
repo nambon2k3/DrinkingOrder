@@ -433,21 +433,24 @@
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="fullname">Họ và tên:</label>
-                                        <input type="text" id="fullname" class="form-control" name="fullname" value="${sessionScope.user.fullname}">
+                                        <input type="text" id="fullname" class="form-control" name="fullname" value="${sessionScope.user.fullname}" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="gender">Giới tính:</label>
-                                        <input type="text" id="gender" class="form-control" name="gender" value="${sessionScope.user.gender}">
+                                        <select name="gender" id="gender" required>
+                                            <option value="Male" ${sessionScope.user.gender eq 'Male' ? 'selected' : ''}>Nam</option>
+                                            <option value="Female" ${sessionScope.user.gender eq 'Female' ? 'selected' : ''}>Nữ</option>
+                                        </select>                     
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="email">Email:</label>
-                                        <input type="email" id="email" class="form-control" name="email" value="${sessionScope.user.email}">
+                                        <input type="email" id="email" class="form-control" name="email" value="${sessionScope.user.email}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required title="Vui lòng nhập một địa chỉ email hợp lệ">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="phone">Số điện thoại:</label>
-                                        <input type="tel" id="phone" class="form-control" name="phone" value="${sessionScope.user.phone}">
+                                        <input type="tel" id="phone" class="form-control" name="phone" value="${sessionScope.user.phone}" pattern="\d{10}" required title="Vui lòng nhập số điện thoại gồm 10 chữ số">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -461,7 +464,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="address">Địa chỉ:</label>
-                                        <input type="text" id="address" class="form-control" name="address" value="${sessionScope.user.address}" required>
+                                        <input type="text" id="address" class="form-control" name="address" value="${sessionScope.user.address}" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                                     </div>
                                 </div>
                                 <div class="form-group">

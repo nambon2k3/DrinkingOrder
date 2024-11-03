@@ -1,6 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -262,11 +264,11 @@
                                     <label for="orderStatus" class="sr-only">Trạng thái:</label>
                                     <select id="orderStatus" name="orderStatus" class="form-control">
                                         <option value="">Tất cả</option>
-                                        <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Đã gửi</option>
-                                        <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Thành công</option>
+                                        <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Đã thanh toán</option>
+                                        <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Đã giao</option>
                                         <option value="Wait for pay" ${orderStatus eq"Wait for pay" ? "selected" : ""}>Chưa thanh toán</option>
                                         <option value="Delivering" ${orderStatus eq"Delivering" ? "selected" : ""}>Đang giao</option>
-                                        <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Yêu cầu hủy</option>
+                                        <option value="Request cancel" ${orderStatus eq "Request cancel" ? "selected" : ""}>Yêu cầu hủy</option>
                                         <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Đã hủy</option>
                                     </select>
                                 </div>
@@ -296,7 +298,7 @@
                                         <a href="order-detail?orderId=${item.id}">${item.id}</a>
                                     </td>
                                     <td class="cart_price">
-                                        ${item.createdAt}
+                                        <fmt:formatDate value="${item.createdAt}" pattern="dd/MM/yyyy HH:mm:ss"/>
                                     </td>
                                     <td class="cart_price">
                                         ${item.address}
@@ -305,10 +307,32 @@
                                         ${item.phone}
                                     </td>
                                     <td class="cart_quantity">
-                                        ${item.totalCost}
+                                        ${String.format("%.0f", item.totalCost)}VND
                                     </td>
                                     <td class="cart_quantity">
-                                        ${item.status}
+                                        <c:choose>
+                                            <c:when test="${item.status.trim() eq 'Submitted'}">
+                                                Đã thanh toán
+                                            </c:when>
+                                            <c:when test="${item.status.trim() eq 'Shipped'}">
+                                                Đã giao
+                                            </c:when>
+                                            <c:when test="${item.status.trim() eq 'Wait for pay'}">
+                                                Chưa thanh toán
+                                            </c:when>
+                                            <c:when test="${item.status.trim() eq 'Delivering'}">
+                                                Đang giao
+                                            </c:when>
+                                            <c:when test="${item.status.trim() eq 'Request cancel'}">
+                                                Yêu cầu hủy
+                                            </c:when>
+                                            <c:when test="${item.status.trim() eq 'Canceled'}">
+                                                Đã hủy
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${item.status}
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                     <td class="cart_total">
                                         ${item.paymentMethod}
@@ -384,16 +408,9 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2><c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
-                                                        <span class="text-muted text-decoration-line-through">$${p.productDetail.price}</span>
-                                                        $${p.productDetail.price * (100.0- p.productDetail.discount)/100}
-                                                    </c:if>
-
-                                                    <c:if test="${p.productDetail.discount == null || p.productDetail.discount == 0}">
-                                                        $${p.productDetail.price}
-                                                    </c:if></h2>
+                                                <h2>${p.productDetail.price}VND</h2>
                                                 <p>${p.productName}</p>
-                                                <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
+                                                <a href="${pageContext.request.contextPath}/public/product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>
 
                                         </div>

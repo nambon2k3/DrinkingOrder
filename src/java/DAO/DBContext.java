@@ -16,7 +16,7 @@ public class DBContext {
     // Method to establish a database connection
     public Connection getConnection() {
         Connection conn = null;
-        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName + "?allowPublicKeyRetrieval=true&useSSL=true&serverTimezone=UTC";
+        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName + "?allowPublicKeyRetrieval=true&useSSL=true&serverTimezone=Asia/Ho_Chi_Minh";
 
         try {
             // Load MySQL JDBC driver
