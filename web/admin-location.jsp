@@ -123,7 +123,7 @@
                             <input type="hidden" name="action" value="add">
                             <div class="form-group">
                                 <label for="value">Quận/Huyện</label>
-                                <input type="text" class="form-control" id="value" name="locationName" pattern=".*\S.*" required>
+                                <input type="text" class="form-control" id="value" name="locationName" pattern=".*\S.*" required title="Địa chỉ không được trống hay chỉ khoảng trắng">
                             </div>
                             <button type="submit" class="btn btn-primary">Thêm</button>
                         </form>
