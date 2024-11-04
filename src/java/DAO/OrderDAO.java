@@ -182,7 +182,7 @@ public class OrderDAO {
             String UPDATE_ORDER_STATUS_SQL
                     = "UPDATE drinkingorder.`Order` "
                     + "SET Status = 'Canceled' "
-                    + "WHERE Status Like 'Not yet' "
+                    + "WHERE Status Like 'Wait for pay' "
                     + "AND CreatedAt < DATE_SUB(NOW(), INTERVAL 1 DAY)";
             // Execute the update statement
             PreparedStatement pstmt = connection.prepareStatement(UPDATE_ORDER_STATUS_SQL);

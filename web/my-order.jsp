@@ -323,9 +323,6 @@
                                             <c:when test="${item.status.trim() eq 'Delivering'}">
                                                 Đang giao
                                             </c:when>
-                                            <c:when test="${item.status.trim() eq 'Request cancel'}">
-                                                Yêu cầu hủy
-                                            </c:when>
                                             <c:when test="${item.status.trim() eq 'Canceled'}">
                                                 Đã hủy
                                             </c:when>
