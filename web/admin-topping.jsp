@@ -47,7 +47,7 @@
             <!-- Name Search -->
             <div class="mb-3 mt-2">
                 <label for="nameSearch">Tìm kiếm theo tên:</label>
-                <input type="text" id="nameSearch" class="form-control" style="width: auto; display: inline-block;" placeholder="Enter name">
+                <input type="text" id="nameSearch" class="form-control" style="width: auto; display: inline-block;" placeholder="Tìm kiếm">
             </div>
 
             <table id="settingTable" class="table table-striped">
