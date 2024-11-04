@@ -50,7 +50,7 @@
                 </div>
             </c:if>
             <div class="card-header">
-                Danh sách post
+                Danh sách bài viết
             </div>
             <form method="get" action="list-post" class="form-inline mb-3">
                 <table>
@@ -95,7 +95,7 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                <label for="sortBy">Sắp xếp:</label>
+                                <label for="sortBy">Sắp xếp theo:</label>
                                 <select id="sortBy" name="sortBy" class="form-control">
                                     <option value="title" ${param.sortBy == 'title' ? 'selected' : ''}>Tiêu đề</option>
                                     <option value="CategoryId" ${param.sortBy == 'CategoryId' ? 'selected' : ''}>Thể loại</option>
@@ -106,7 +106,7 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                <label for="sortOrder">Order:</label>
+                                <label for="sortOrder">Sắp xếp</label>
                                 <select id="sortOrder" name="sortOrder" class="form-control">
                                     <option value="ASC" ${param.sortOrder == 'ASC' ? 'selected' : ''}>Tăng dần</option>
                                     <option value="DESC" ${param.sortOrder == 'DESC' ? 'selected' : ''}>Giảm dần</option>
@@ -128,7 +128,7 @@
                 <thead class="text-bold">
                     <tr>
                         <td>#</td>
-                        <td>Thumbnail</td>
+                        <td>Hình ảnh</td>
                         <td>Tiêu đề</td>
                         <!--<td>Brief</td>-->
                         <td>Thể loại</td>
@@ -203,7 +203,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="postImgURL">Thumbnail:</label>
+                                <label for="postImgURL">Hình ảnh</label>
                                 <!--<input type="text" class="form-control" id="postImgURL" name="imgURL" required>-->
                                 <img id="image0" class="w-100" src="">
                                 <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)">
@@ -269,7 +269,7 @@
                                 <input type="text" class="form-control" id="createdBy" name="createdBy" readonly style="background-color: #e6e6e6">
                             </div>
                             <div class="form-group">
-                                <label for="postImgURLUpdate">Thumbnail:</label>
+                                <label for="postImgURLUpdate">Hình ảnh</label>
                                 <!--<input type="text" class="form-control" id="postImgURLUpdate" name="imgURL" required>-->
                                 <img id="image1" class="w-100" src="">
                                 <input type="file" class="form-control" id="imageFile1" accept="image/*" onchange="updateImage(1)">
