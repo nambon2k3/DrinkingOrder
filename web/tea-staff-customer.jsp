@@ -30,17 +30,17 @@
         <%@ include file="tea-staff-sidebar.jsp" %>
 
         <div class="mt-5 main-content">
-            <h2>User List</h2>
+            <h2>Danh sách người dùng</h2>
 
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Success!
+                    Thành công!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Failed!
+                    Thất bại!
                 </div>
             </c:if>
 
@@ -58,8 +58,8 @@
                 <div class="form-group mr-2">
                     <select class="form-control" name="gender">
                         <option value="">Giới tính</option>
-                        <option value="Male" ${gender eq 'Male' ? 'selected' : ''}>Male</option>
-                        <option value="Female" ${gender eq 'Female' ? 'selected' : ''}>Female</option>
+                        <option value="Male" ${gender eq 'Male' ? 'selected' : ''}>Nam</option>
+                        <option value="Female" ${gender eq 'Female' ? 'selected' : ''}>Nữ</option>
                     </select>
                 </div>
                 <div class="form-group mr-2">
@@ -70,7 +70,7 @@
                     </select>
                 </div>
                 <input type="hidden" name="page" id="pageInput" value="1">
-                <button type="submit" class="btn btn-primary mt-3">Tìm kiếm</button>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             </form>
 
 
@@ -96,7 +96,7 @@
                             <td>${user.gender}</td>
                             <td>${user.address}</td>
                             <td>${user.phone}</td>
-                            <td>${user.isDeleted ? 'Inactive' : 'Active'}</td>
+                            <td>${user.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Thông tin</button>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Chỉnh sửa</button>
@@ -146,7 +146,7 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="userId" value="${user.id}">
                                 <div class="form-group">
-                                    <label for="fullName">Full Name</label>
+                                    <label for="fullName">Họ và tên</label>
                                     <input type="text" class="form-control" id="fullName" name="fullName" value="${user.fullname}">
                                 </div>
                                 <div class="form-group">
@@ -154,29 +154,29 @@
                                     <input type="email" class="form-control" id="email" name="email" value="${user.getEmail()}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="gender">Gender</label>
+                                    <label for="gender">Giới tính</label>
                                     <select class="form-control" id="gender" name="gender">
-                                        <option value="true" ${user.gender eq 'Male' ? "selected" : ""}>Male</option>
-                                        <option value="false" ${user.gender eq 'Female' ? "selected" : ""}>Female</option>
+                                        <option value="true" ${user.gender eq 'Male' ? "selected" : ""}>Nam</option>
+                                        <option value="false" ${user.gender eq 'Female' ? "selected" : ""}>Nữ</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="address">Address</label>
+                                    <label for="address">Địa chỉ</label>
                                     <input type="text" class="form-control" id="address" name="address" value="${user.getAddress()}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="phone">Phone</label>
+                                    <label for="phone">SĐT</label>
                                     <input type="text" class="form-control" id="phone" name="phone" value="${user.getPhone()}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="status">Status</label>
+                                    <label for="status">Trạng thái</label>
                                     <select class="form-control" id="status" name="status">
-                                        <option value="false" ${!user.isDeleted ? "selected" : ""}>Active</option>
-                                        <option value="true" ${user.isDeleted ? "selected" : ""}>Inactive</option>
+                                        <option value="false" ${!user.isDeleted ? "selected" : ""}>Hoạt động</option>
+                                        <option value="true" ${user.isDeleted ? "selected" : ""}>Không hoạt động</option>
                                     </select>
                                 </div>
                                 <!-- Add other fields as needed -->
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                             </form>
                         </div>
                     </div>
@@ -188,7 +188,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="userInfoModalLabel_${user.id}">User Details</h5>
+                            <h5 class="modal-title" id="userInfoModalLabel_${user.id}">Người dùng</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -204,7 +204,7 @@
                                         <td>${user.id}</td>
                                     </tr>
                                     <tr>
-                                        <th>Full Name</th>
+                                        <th>Họ và tên</th>
                                         <td>${user.fullname}</td>
                                     </tr>
                                     <tr>
@@ -212,35 +212,35 @@
                                         <td>${user.getEmail()}</td>
                                     </tr>
                                     <tr>
-                                        <th>Gender</th>
+                                        <th>Giới tính</th>
                                         <td>${user.gender}</td>
                                     </tr>
                                     <tr>
-                                        <th>Address</th>
+                                        <th>Địa chỉ</th>
                                         <td>${user.getAddress()}</td>
                                     </tr>
                                     <tr>
-                                        <th>Phone</th>
+                                        <th>SĐT</th>
                                         <td>${user.getPhone()}</td>
                                     </tr>
                                     <tr>
-                                        <th>Status</th>
-                                        <td>${user.isDeleted ? 'Inactive' : 'Active'}</td>
+                                        <th>Trạng thái</th>
+                                        <td>${user.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div>
-                                <strong>History Change</strong>
+                                <strong>Lịch sử thay đổi</strong>
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Update at</th>
+                                            <th>Ngày cập nhật</th>
                                             <th>Email</th>
-                                            <th>Full Name</th>
-                                            <th>Gender</th>
-                                            <th>Address</th>
-                                            <th>Phone</th>
-                                            <th>Update by</th>
+                                            <th>Họ và tên</th>
+                                            <th>Giới tính</th>
+                                            <th>Địa chỉ</th>
+                                            <th>SĐT</th>
+                                            <th>Người cập nhật</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -264,7 +264,7 @@
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                        <h5 class="modal-title" id="addUserModalLabel">Thêm người dùng</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -277,7 +277,7 @@
                             <input type="hidden" name="action" value="add">
                             <!-- Form Inputs -->
                             <div class="form-group">
-                                <label for="fullName">Full Name</label>
+                                <label for="fullName">Họ và tên</label>
                                 <input type="text" class="form-control" id="fullName" name="fullName" required>
                             </div>
                             <div class="form-group">
@@ -285,25 +285,25 @@
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password</label>
+                                <label for="password">Mật khẩu</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
                             <div class="form-group">
-                                <label for="gender">Gender</label>
+                                <label for="gender">Giới tính</label>
                                 <select class="form-control" id="gender" name="gender">
-                                    <option value="true">Male</option>
-                                    <option value="false">Female</option>
+                                    <option value="true">Nam</option>
+                                    <option value="false">Nữ</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="address">Address</label>
+                                <label for="address">Địa chỉ</label>
                                 <input type="text" class="form-control" id="address" name="address">
                             </div>
                             <div class="form-group">
-                                <label for="phone">Phone</label>
+                                <label for="phone">SĐT</label>
                                 <input type="text" class="form-control" id="phone" name="phone">
                             </div>
-                            <button type="submit" class="btn btn-primary">Add User</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                         </form>
                     </div>
                 </div>
