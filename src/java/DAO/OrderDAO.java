@@ -126,7 +126,7 @@ public class OrderDAO {
                 sql += " AND status = ?";
             }
 
-            sql += " AND UserID = ? ORDER BY createdAt LIMIT ?, ?";
+            sql += " AND UserID = ? ORDER BY createdAt DESC LIMIT ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             int index = 1;
@@ -406,7 +406,7 @@ public class OrderDAO {
     public boolean cancelOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE drinkingorder.`Order`  SET status = 'Request cancel' WHERE ID = ?";
+            String sql = "UPDATE drinkingorder.`Order`  SET status = 'Canceled' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
