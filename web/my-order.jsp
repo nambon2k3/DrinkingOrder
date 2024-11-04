@@ -268,7 +268,7 @@
                                         <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Đã giao</option>
                                         <option value="Wait for pay" ${orderStatus eq"Wait for pay" ? "selected" : ""}>Chưa thanh toán</option>
                                         <option value="Delivering" ${orderStatus eq"Delivering" ? "selected" : ""}>Đang giao</option>
-                                        <option value="Request cancel" ${orderStatus eq "Request cancel" ? "selected" : ""}>Yêu cầu hủy</option>
+                                        
                                         <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Đã hủy</option>
                                     </select>
                                 </div>
@@ -358,25 +358,11 @@
 
                 <c:if test="${totalPages > 1}">
                     <ul class="pagination" style="padding-left: 0;">
-                        <c:if test="${currentPage > 1}">
-                            <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage - 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
                         <c:forEach var="i" begin="1" end="${totalPages}">
                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                 <a class="page-link" href="?page=${i}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}">${i}</a>
                             </li>
                         </c:forEach>
-                        <c:if test="${currentPage < totalPages}">
-                            <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage + 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
                     </ul> 
                 </c:if>
             </div>
