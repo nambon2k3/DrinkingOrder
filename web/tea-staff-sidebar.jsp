@@ -66,6 +66,6 @@
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
-        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
+        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất</a></li>
     </ul>
 </nav>
