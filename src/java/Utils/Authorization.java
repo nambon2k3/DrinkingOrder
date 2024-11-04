@@ -40,7 +40,7 @@ public class Authorization implements Filter {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
             return;
         }
-        if ((url.contains("public/cart") || url.contains("customer") || url.contains("common/profile")) && user == null) {
+        if ((url.contains("public/cart") || url.contains("customer/my-order") || url.contains("common/profile")) && user == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
             return;
         }
