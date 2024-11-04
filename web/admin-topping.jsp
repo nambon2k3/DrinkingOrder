@@ -225,7 +225,7 @@
 
                     reader.readAsDataURL(file);
                 } else {
-                    alert("The image size must be less than 1MB.");
+                    alert("Ảnh phải bé hơn 1MB.");
                 }
             }
 
@@ -236,7 +236,7 @@
 
                 // Kiểm tra trường Tên
                 if (!nameField.value.trim()) {
-                    alert("The name cannot be empty.");
+                    alert("Tên không được trống.");
                     nameField.focus();
                     return; // Dừng thực thi nếu có lỗi
                 }
@@ -244,7 +244,7 @@
                 // Kiểm tra trường Giá
                 const priceValue = parseFloat(priceField.value);
                 if (isNaN(priceValue) || priceValue <= 0) {
-                    alert("The price must be greater than 0.");
+                    alert("Giá tiền phải lớn hơn 0 0.");
                     priceField.focus();
                     return; // Dừng thực thi nếu có lỗi
                 }
