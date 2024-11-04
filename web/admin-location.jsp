@@ -132,33 +132,24 @@
             </div>
         </div>
 
-        <c:if test="${requestScope.notification != null}">
-            <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="notificationModalLabel">Thông báo</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            ${requestScope.notification}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                        </div>
+        <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notificationModalLabel">Thông báo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ${requestScope.notification}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     </div>
                 </div>
             </div>
-
-            <!-- JavaScript để tự động mở modal -->
-            <script>
-                $(document).ready(function () {
-                    $('#notificationModal').modal('show');
-                });
-            </script>
-        </c:if>
+        </div>
 
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -168,34 +159,47 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
-        <script>
+        <c:if test="${requestScope.notification != null}">
+            <script>
                 $(document).ready(function () {
-                    let table = $('#settingTable').DataTable({
-                        "paging": true,
-                        "pageLength": 5,
-                        "lengthChange": false,
-                        "searching": true,
-                        "ordering": true,
-                        "order": [[0, 'desc']],
-                        "info": false,
-                        "autoWidth": false
-                    });
-
-                    $('#nameSearch').on('keyup', function () {
-                        table.columns(1).search(this.value).draw();
-                    });
-
-                    $('#statusFilter').on('change', function () {
-                        var selectedStatus = $(this).val();
-                        if (selectedStatus) {
-                            table.columns(2).search('^' + selectedStatus + '$', true, false).draw();
-                        } else {
-                            table.columns(2).search('').draw();
-                        }
-                    });
-
-                    $('#settingTable_wrapper .dataTables_filter').addClass('d-none');
+                    // Kiểm tra xem phần tử modal có tồn tại không
+                    if ($("#notificationModal").length) {
+                        // Hiển thị modal
+                        $("#notificationModal").modal('show');
+                    }
                 });
+            </script>
+        </c:if>
+        <script>
+            $(document).ready(function () {
+                let table = $('#settingTable').DataTable({
+                    "paging": true,
+                    "pageLength": 5,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": true,
+                    "order": [[0, 'desc']],
+                    "info": false,
+                    "autoWidth": false
+                });
+
+                $('#nameSearch').on('keyup', function () {
+                    table.columns(1).search(this.value).draw();
+                });
+
+                $('#statusFilter').on('change', function () {
+                    var selectedStatus = $(this).val();
+                    if (selectedStatus) {
+                        table.columns(2).search('^' + selectedStatus + '$', true, false).draw();
+                    } else {
+                        table.columns(2).search('').draw();
+                    }
+                });
+
+                $('#settingTable_wrapper .dataTables_filter').addClass('d-none');
+            });
+
+
         </script>
 
 
