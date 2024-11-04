@@ -60,6 +60,10 @@ public class AdminToppingController extends HttpServlet {
         topping.setPrice(toppingPrice);
         topping.setDeleted(false);
         
+        if(new ToppingDAO().isDuplicate(toppingName, 0)){
+            response.sendRedirect("topping?fail");
+            return;
+        }
         new ToppingDAO().addTopping(topping);
         
         response.sendRedirect("topping?success");
@@ -78,6 +82,10 @@ public class AdminToppingController extends HttpServlet {
         topping.setToppingName(toppingName);
         topping.setPrice(toppingPrice);
         topping.setDeleted(toppingStatus);
+        if(new ToppingDAO().isDuplicate(toppingName, toppingId)){
+            response.sendRedirect("topping?fail");
+            return;
+        }
         
         new ToppingDAO().updateTopping(topping);
         
