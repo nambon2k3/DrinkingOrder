@@ -5,6 +5,7 @@
 package Utils;
 
 import Model.Staff;
+import Model.User;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -16,6 +17,12 @@ public class SessionUserInfo {
     public static Staff getStaffSession(HttpServletRequest request) {
         
         return (Staff) request.getSession().getAttribute("staff");
+        
+    }
+    
+        public static User getUserSession(HttpServletRequest request) {
+        
+        return (User) request.getSession().getAttribute("user");
         
     }
     
