@@ -69,7 +69,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" name="fullname" class="form-control" value="${sessionScope.user.fullname}" required/>
+                                                <input type="text" name="fullname" class="form-control" value="${sessionScope.user.fullname}" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng"/>
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" name="phone" class="form-control" value="${sessionScope.user.phone}" required/>
+                                                <input type="text" name="phone" class="form-control" value="${sessionScope.user.phone}" pattern="\d{10}" required title="Vui lòng nhập số điện thoại gồm 10 chữ số"/>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" name="address" class="form-control" value="${sessionScope.user.address}" required/>
+                                                <input type="text" name="address" class="form-control" value="${sessionScope.user.address}" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng"/>
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +178,7 @@
                                                     const maxSize = 1 * 1024 * 1024; // 2 MB in bytes
 
                                                     if (file.size > maxSize) {
-                                                        alert("The selected file is too large. Please select a file smaller than 1 MB.");
+                                                        alert("Ảnh chỉ có thể dùng bé hơn 1 MB.");
                                                         fileInput.value = ''; // Clear the file input
                                                         return;
                                                     }
