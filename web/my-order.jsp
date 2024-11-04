@@ -391,7 +391,7 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2>${p.productDetail.price}VND</h2>
+                                                <h2>${String.format("%.0f", p.productDetail.price)}VND</h2>
                                                 <p>${p.productName}</p>
                                                 <a href="${pageContext.request.contextPath}/public/product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>
