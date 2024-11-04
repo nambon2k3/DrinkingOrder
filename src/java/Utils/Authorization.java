@@ -1,6 +1,7 @@
 package Utils;
 
 import Model.Staff;
+import Model.User;
 import java.io.IOException;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -24,6 +25,7 @@ public class Authorization implements Filter {
 
         // lay thong tin staff
         Staff staff = SessionUserInfo.getStaffSession(httpRequest);
+        User user = SessionUserInfo.getUserSession(httpRequest);
 
         // Get the requested URL
         String url = httpRequest.getRequestURI();
@@ -35,6 +37,10 @@ public class Authorization implements Filter {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
             return;
         } else if (url.contains("/teastaff/") && role != 2) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
+            return;
+        }
+        if ((url.contains("public/cart") || url.contains("customer") || url.contains("common/profile")) && user == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
             return;
         }
