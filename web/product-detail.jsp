@@ -136,9 +136,9 @@
                                         <span>
                                             <c:if test="${product.productDetail.discount != null && product.productDetail.discount != 0}">
                                                 <span style="color: grey; text-decoration: line-through; margin: 0 10px">
-                                                    ${product.productDetail.price}VNĐ</span> 
+                                                ${String.format("%.0f", product.productDetail.price)}VND </span> 
                                                 </c:if>
-                                                ${String.format("%.2f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND 
+                                                ${String.format("%.0f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND 
 
                                         </span><br>
                                         <label>Số lượng</label>
@@ -167,7 +167,7 @@
                                                     <div class="topping-item">
                                                         <label
                                                             ><input type="checkbox" class="select-topping" value="${topping.id}" />
-                                                            ${topping.toppingName} (${topping.price} VNĐ)</label
+                                                            ${topping.toppingName} (${String.format("%.0f", topping.price)} VNĐ)</label
                                                         >
                                                         <img
                                                             src="${topping.img}"
