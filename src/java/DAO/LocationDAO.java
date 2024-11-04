@@ -102,6 +102,32 @@ public class LocationDAO {
         }
         return isSuccess;
     }
+    
+    public boolean isDuplicate(String locationName, int locationId) {
+        String sql = "SELECT * FROM location WHERE LocationName = ?";
+        if (locationId > 0) {
+            sql += " AND ID <> ?";
+        }
+        boolean isDuplicate = false;
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, locationName);
+            if (locationId > 0) {
+                ps.setInt(2, locationId);
+            }
+
+            rs = ps.executeQuery();
+            // Check if the result set has any records, which means a duplicate exists
+            if (rs.next()) {
+                isDuplicate = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isDuplicate;
+    }
 
     public static void main(String[] args) {
         for (Location l : new LocationDAO().getAllLocation()) {
