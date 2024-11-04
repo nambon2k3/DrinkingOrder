@@ -22,17 +22,17 @@
             <h2>Tất cả hóa đơn</h2>
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save success!</strong> You should check in on some of those fields below.
+                    <strong>Thành công!</strong> 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('mess').style.display = 'none'"></button>
                 </div>
             </c:if>
             <c:if test="${isSuccess ne null && !isSuccess}">
                 <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save failed!</strong> You should check your network.
+                    <strong>Thất bại!</strong> 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
-            <form method="get" action="sale-order" class="mb-3 " style="width: 100%">
+            <form method="get" action="teastaff-order" class="mb-3 " style="width: 100%">
                 <div class="row d-flex ${sessionScope.staff.role eq 4 ? 'justify-content-center' : 'justify-content-between' }" >
                     <div class="col-md-2">
                         <label for="startDate" class="form-label">Từ ngày: </label>
@@ -44,7 +44,7 @@
                     </div>
                     <c:if test="${sessionScope.staff.role eq 4}">
                         <div class="col-md-2 mr-2">
-                            <label for="salesperson" class="form-label">Salesperson</label>
+                            <label for="salesperson" class="form-label">Người bán</label>
                             <input  type="text" id="salesperson" name="salesperson" class="form-control" value="${param.salesperson}">
                         </div>
                     </c:if>
@@ -53,24 +53,22 @@
                         <input type="text" id="salesperson" name="id"   class="form-control" value="${param.id}">
                     </div>
                     <div class="col-md-2">
-                        <label for="salesperson" class="form-label">Customer name: </label>
+                        <label for="salesperson" class="form-label">Tên khách hàng: </label>
                         <input type="text" id="salesperson" name="customerName" class="form-control" width="100%" value="${param.customerName}">
                     </div>
                     <div class="col-md-2">
-                        <label for="orderStatus" class="form-label">Order Status</label>
+                        <label for="orderStatus" class="form-label">Trạng thái</label>
                         <select id="orderStatus" name="orderStatus" class="form-control">
-                            <option value="" ${param.orderStatus == null ? 'selected' : ''}>All</option>
-                            <option value="Close" ${param.orderStatus == 'Close' ? 'selected' : ''}>Close</option>
-                            <option value="Failed" ${param.orderStatus == 'Failed' ? 'selected' : ''}>Failed</option>
-                            <option value="Submitted" ${param.orderStatus == 'Submitted' ? 'selected' : ''}>Submitted</option>
-                            <option value="Success" ${param.orderStatus == 'Success' ? 'selected' : ''}>Success</option>
-                            <option value="Request Cancel" ${param.orderStatus == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
-                            <option value="Canceled" ${param.orderStatus == 'Canceled' ? 'selected' : ''}>Canceled</option>
+                            <option value="" ${param.orderStatus == null ? 'selected' : ''}>Tất cả</option>
+                            <option value="Submitted" ${param.orderStatus eq"Submitted" ? "selected" : ""}>Đã thanh toán</option>
+                            <option value="Shipped" ${param.orderStatus eq"Shipped" ? "selected" : ""}>Đã giao</option>
+                            <option value="Wait for pay" ${param.orderStatus eq"Wait for pay" ? "selected" : ""}>Chưa thanh toán</option>
+                            <option value="Delivering" ${param.orderStatus eq"Delivering" ? "selected" : ""}>Đang giao</option>
                         </select>
                     </div>
-                        <div class="d-flex flex-column">
+                    <div class="d-flex flex-column">
                         <label for="orderStatus" style="visibility: hidden" class="form-label">O</label>
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="submit" class="btn btn-primary">Lọc</button>
                     </div>
                 </div>
             </form>
@@ -78,14 +76,14 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Order Date</th>
-                        <th>Customer Name</th>
-                        <th>Sale Name</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Total</th>
-                        <th>Payment Method</th>
-                        <th>Status</th>
+                        <th>Ngày đặt</th>
+                        <th>Người mua</th>
+                        <th>Người bán</th>
+                        <th>Địa chỉ</th>
+                        <th>SĐT</th>
+                        <th>Tổng giá</th>
+                        <th>Thanh toán</th>
+                        <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -97,9 +95,30 @@
                             <td>${item.staff.fullname}</td>
                             <td>${item.address}</td>
                             <td>${item.phone}</td>
-                            <td>$${item.totalCost}</td>
+                            <td>${String.format("%.0f", item.totalCost)}VND</td>
                             <td>${item.paymentMethod}</td>
-                            <td>${item.status}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${item.status.trim() eq 'Submitted'}">
+                                        Đã thanh toán
+                                    </c:when>
+                                    <c:when test="${item.status.trim() eq 'Shipped'}">
+                                        Đã giao
+                                    </c:when>
+                                    <c:when test="${item.status.trim() eq 'Wait for pay'}">
+                                        Chưa thanh toán
+                                    </c:when>
+                                    <c:when test="${item.status.trim() eq 'Delivering'}">
+                                        Đang giao
+                                    </c:when>
+                                    <c:when test="${item.status.trim() eq 'Canceled'}">
+                                        Đã hủy
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${item.status}
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>
