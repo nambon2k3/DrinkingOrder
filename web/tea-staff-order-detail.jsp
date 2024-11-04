@@ -22,41 +22,41 @@
         <div class="main-content" style="margin-top: 10%; margin-bottom: 10%">
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Update Order success!</strong> 
+                    <strong>Cập nhật thành công!</strong> 
                 </div>
             </c:if>
             <c:if test="${isSuccess ne null && !isSuccess}">
                 <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Update Order failed!</strong> You should check your network.
+                    <strong>Cập nhật không thành công</strong>
                 </div>
             </c:if>
             <!-- Order Details -->
-            <h2>Order Details</h2>
-            <p>Order ID: ${order.id}</p>
-            <p>Order Date: ${order.createdAt}</p>
-            <p>Total Cost: $${order.totalCost}</p>
-            <p>Status: ${order.status}</p>
-            <p>Payment Method: ${order.paymentMethod}</p>
+            <h2>Chi tiết đơn hàng:</h2>
+            <p>Mã đơn hàng: ${order.id}</p>
+            <p>Ngày đặt: ${order.createdAt}</p>
+            <p>Tổng giá: ${String.format("%.0f", order.totalCost)}VND</p>
+            <p>Trạng thái ${order.status}</p>
+            <p>Phương thức thanh toán: ${order.paymentMethod}</p>
 
             <!-- Receiver Information -->
-            <h3>Receiver Information</h3>
-            <p>Full Name: ${order.fullname}</p>
-            <p>Address: ${order.address}</p>
-            <p>Phone: ${order.phone}</p>
-            <p>Gender: ${order.user.gender}</p>
-            <p>Sale name: ${order.sale.fullname}</p>
+            <h3>Thông tin khách hàng:</h3>
+            <p>Họ và tên: ${order.fullname}</p>
+            <p>Địa chỉ: ${order.address}</p>
+            <p>Số điện thoại: ${order.phone}</p>
+            <p>Giới tính: ${order.user.gender}</p>
+            <p>Người bán: ${order.sale.fullname}</p>
 
             <!-- Ordered Products -->
-            <h3>Ordered Products</h3>
+            <h3>Danh sách sản phẩm</h3>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Thumbnail</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Unit Price</th>
-                        <th>Quantity</th>
-                        <th>Total Cost</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên</th>
+                        <th>Thể loại</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng giá</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,26 +65,17 @@
                             <td><img src="${product.imageURL}" alt="..." width="100" height="100"></td>
                             <td>${product.getProductName()}</td>
                             <td>${product.getCateogryName()}</td>
-                            <td>${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price} VND</td>
+                            <td>${String.format("%.0f", product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price)} VND</td>
                             <td>${product.buyQuantity}</td>
-                            <td>${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity} VND</td>
+                            <td>${String.format("%.0f", product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity)} VND</td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
             <div>
-                <strong>Total Order Price:</strong> ${order.totalCost} VND
+                <strong>Tổng giá:</strong> ${String.format("%.0f", order.totalCost)}VND
             </div>
-            <div class="mt-4">
-                <c:if test="${(order.status eq 'Submitted' || order.status eq 'COD') && sessionScope.staff.role ne 4}">
-                    <a class="btn btn-success" href="approve-order?orderId=${order.id}&status=Approved">
-                        Approved
-                    </a>
-                    <a class="btn btn-danger" href="approve-order?orderId=${order.id}&status=Rejected"">
-                        Rejected
-                    </a>
-                </c:if>
-            </div>
+
         </div>
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
