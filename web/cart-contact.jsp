@@ -295,7 +295,7 @@
                                             <c:forEach items="${item.listTopping}" var="t">
                                                 <c:set value="${totalTopping + t.price}" var="totalTopping"/>
                                             </c:forEach>
-                                            ${String.format('%.2f',Double.parseDouble( totalTopping))}
+                                            ${String.format('%.0f',Double.parseDouble( totalTopping))}
                                         </p>
                                     </td>
                                     <td class="cart_price">
@@ -303,11 +303,11 @@
                                     </td>
                                     <td class="cart_price">
                                         <p style="margin: 0"><c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price * (100.0- item.productDetail.discount)/100))}
+                                                ${String.format('%.0f',Double.parseDouble(item.productDetail.price * (100.0- item.productDetail.discount)/100))}
                                                 <c:set value="${total + item.productDetail.price * (100.0- item.productDetail.discount)/100}" var="total"/>
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                ${String.format('%.2f',Double.parseDouble(item.productDetail.price))}
+                                                ${String.format('%.0f',Double.parseDouble(item.productDetail.price))}
                                                 <c:set value="${total + item.productDetail.price}" var="total"/>
                                             </c:if>
                                         </p>
@@ -324,10 +324,10 @@
                                     <td class="cart_total">
                                         <p class="cart_total_price" style="margin: 0">
                                             <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                ${String.format('%.2f', item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping)}
+                                                ${String.format('%.0f', item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping)}
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                ${String.format('%.2f', item.quantity * (item.productDetail.price) + totalTopping)}
+                                                ${String.format('%.0f', item.quantity * (item.productDetail.price) + totalTopping)}
                                             </c:if>
                                         </p>
                                     </td>
@@ -420,7 +420,7 @@
                             </c:if>
 
                         </c:forEach>
-                        ${String.format('%.2f', totalPrice + totalTopping)}</h3>
+                        ${String.format('%.0f', totalPrice + totalTopping)}</h3>
                 </div>
                 <div style="width: 100%">
                     <div style="width: 100%">
