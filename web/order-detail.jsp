@@ -329,7 +329,7 @@
                 <div class="heading">
                     <strong>Tổng đơn hàng:</strong>${String.format("%.2f", Double.parseDouble(order.totalCost + totalToppingProducts))}
                 </div>
-                <c:if test="${order.status.trim() eq 'Submitted'}">
+                <c:if test="${order.status.trim() eq 'Wait for pay'}">
                     <div class="mt-4">
                         <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Hủy đơn hàng</a>
                     </div>
