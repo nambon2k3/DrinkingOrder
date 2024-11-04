@@ -248,11 +248,11 @@
                                             <c:set value="${totalTopping + t.price}" var="totalTopping"/>
                                             <c:set value="${totalToppingProducts + t.price}" var="totalToppingProducts"/>
                                         </c:forEach>
-                                        ${String.format("%.2f", Double.parseDouble(totalTopping))}
+                                        ${String.format("%.0f", Double.parseDouble(totalTopping))}
                                     </td>
                                     <td class="cart_total">
                                         <c:set value="${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) + totalTopping: product.price*product.buyQuantity + totalTopping}" var="ttprice"/>
-                                        ${String.format("%.2f", Double.parseDouble(ttprice))}
+                                        ${String.format("%.0f", Double.parseDouble(ttprice))}
                                     </td>
                                     <td class="cart_delete">
                                         <a  style="margin-top: 0" href="${pageContext.request.contextPath}/public/product-detail?id=${product.productId}&pdid=${product.productDetailId}" class="btn btn-primary">Mua lại</a>
@@ -327,7 +327,7 @@
         <section id="do_action">
             <div class="container">
                 <div class="heading">
-                    <strong>Tổng đơn hàng:</strong>${String.format("%.2f", Double.parseDouble(order.totalCost + totalToppingProducts))}
+                    <strong>Tổng đơn hàng:</strong>${String.format("%.0f", Double.parseDouble(order.totalCost + totalToppingProducts))}
                 </div>
                 <c:if test="${order.status.trim() eq 'Wait for pay'}">
                     <div class="mt-4">
@@ -349,7 +349,7 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2>${p.productDetail.price}VND</h2>
+                                                <h2>${String.format("%.0f", p.productDetail.price)}VND</h2>
                                                 <p>${p.productName}</p>
                                                 <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>
