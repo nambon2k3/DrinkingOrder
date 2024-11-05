@@ -153,7 +153,7 @@ public class ProductDAO extends DBContext {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT p.*, c.Name as CategoryName FROM Product p "
                 + "JOIN Category c ON p.CategoryID = c.ID "
-                + "WHERE p.isDeleted = 0 AND 1=1 ";
+                + "WHERE 1=1 ";
 
         List<Object> params = new ArrayList<>();
 
@@ -588,10 +588,10 @@ public class ProductDAO extends DBContext {
         }
         return productDetails;
     }
-    
+
     public List<ProductDetail> getListProductDetailsByProductIdAdmin(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
-        String query = "SELECT ID, ProductID, ImageURL, Size, IsDeleted, CreatedAt, CreatedBy, price, discount "
+        String query = "SELECT ID, ProductID, ImageURL, Size, IsDeleted, CreatedAt, CreatedBy, price, discount, ImportPrice "
                 + "FROM ProductDetail WHERE ProductID = ?";
 
         try (
@@ -609,6 +609,7 @@ public class ProductDAO extends DBContext {
                     productDetail.setPrice(rs.getDouble("price"));
                     productDetail.setDiscount(rs.getInt("discount"));
                     productDetail.setIsDeleted(rs.getBoolean("IsDeleted"));
+                    productDetail.setImportPrice(rs.getFloat("ImportPrice"));
                     productDetails.add(productDetail);
                 }
             }
@@ -666,7 +667,6 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-
     public void updateHoldQuantity(int orderId, int mode) {
         String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
                 = "SELECT ProductDetailID, quantity "
@@ -718,17 +718,26 @@ public class ProductDAO extends DBContext {
             System.out.println("updateProductDetailQuantity: " + e.getMessage());
         }
     }
-    public boolean checkExistedProductName(String productName) {
-        String SELECT_SQL
-                = "SELET * FROM Product WHERE Name LIKE ?";
+
+    public boolean checkExistedProductName(String productName, int productId) {
+        String SELECT_SQL = "SELECT * FROM Product WHERE Name = ?";
+        if (productId != 0) {
+            SELECT_SQL += " AND ID <> ?";
+        }
+        boolean isDuplicate = false;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
             preparedStatement.setString(1, productName);
+            if (productId != 0) {
+                preparedStatement.setInt(2, productId);
+            }
             ResultSet rs = preparedStatement.executeQuery();
-            return rs.next();
+            if (rs.next()) {
+                isDuplicate = true;
+            }
         } catch (SQLException e) {
             System.out.println("checkExistedProductName: " + e.getMessage());
         }
-        return false;
+        return isDuplicate;
     }
 
     public int addProduct(Product product) {
@@ -741,17 +750,11 @@ public class ProductDAO extends DBContext {
             statement.setInt(2, product.getCategoryId());
             statement.setInt(3, product.getCreatedBy());
             statement.setString(4, product.getDescription());
-            statement.setString(5, product.getBaseImageURL());
-            statement.setBoolean(6, product.getIsDeleted());
+            statement.setBoolean(5, product.getIsDeleted());
+            statement.setString(6, product.getBaseImageURL());
 
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
-                // Retrieve the generated keys
-                ResultSet rs = statement.getGeneratedKeys();
-                if (rs.next()) {
-                    generatedId = rs.getInt(1); // Assuming the generated key is an integer
-                }
-            }
+            generatedId = statement.executeUpdate();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -923,7 +926,7 @@ public class ProductDAO extends DBContext {
 
     public boolean addProductDetail(ProductDetail productDetail) {
         boolean success = false;
-        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, price, discount, importPrice) "
+        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, price, discount, ImportPrice) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -931,8 +934,8 @@ public class ProductDAO extends DBContext {
             statement.setString(2, productDetail.getImageURL());
             statement.setString(3, productDetail.getSize());
             statement.setDouble(4, productDetail.getPrice());
-            statement.setDouble(5, productDetail.getImportPrice());
-            statement.setInt(6, productDetail.getDiscount());
+            statement.setInt(5, productDetail.getDiscount());
+            statement.setDouble(6, productDetail.getImportPrice());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -1029,11 +1032,11 @@ public class ProductDAO extends DBContext {
                 + "    SELECT pd1.*\n"
                 + "    FROM ProductDetail pd1\n"
                 + "    JOIN (\n"
-                + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
-                + "        FROM ProductDetail\n"
+                + "        SELECT ProductID, IsDeleted, MIN(Price) AS MinPrice\n"
+                + "        FROM ProductDetail WHERE IsDeleted = 0\n"
                 + "        GROUP BY ProductID\n"
                 + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice\n"
-                + "    WHERE pd1.ID = (SELECT MIN(ID)\n"
+                + "    WHERE pd1.IsDeleted = 0 AND pd1.ID = (SELECT MIN(ID)\n"
                 + "                   FROM ProductDetail\n"
                 + "                   WHERE ProductID = pd1.ProductID AND Price = pd2.MinPrice)\n"
                 + ") pd ON p.ID = pd.ProductID\n"
@@ -1084,10 +1087,10 @@ public class ProductDAO extends DBContext {
                 + "    JOIN (\n"
                 + "        -- Lấy giá nhỏ nhất của từng ProductID\n"
                 + "        SELECT ProductID, MIN(Price) AS MinPrice\n"
-                + "        FROM ProductDetail\n"
+                + "        FROM ProductDetail WHERE IsDeleted = 0\n"
                 + "        GROUP BY ProductID\n"
                 + "    ) pd2 ON pd1.ProductID = pd2.ProductID AND pd1.Price = pd2.MinPrice \n "
-                + "WHERE pd1.ID = (\n"
+                + "WHERE pd1.IsDeleted = 0 AND pd1.ID = (\n"
                 + "    SELECT MIN(ID)\n"
                 + "    FROM ProductDetail\n"
                 + "    WHERE ProductID = pd1.ProductID AND Price = pd2.MinPrice\n"
