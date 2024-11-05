@@ -46,10 +46,12 @@
             </c:if>
 
 
-
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">
+            <button type="button" class="btn btn-primary" data-toggle="modal" 
+                    data-target="#addProductModal" 
+                    ${listProductDetail.size() == 4 ? 'disabled' : ''}>
                 Thêm sản phẩm
             </button>
+
             <!-- Product Table -->
             <table id="productTable" class="table table-striped">
                 <thead>
@@ -188,11 +190,11 @@
 
                             <div class="form-group">
                                 <label>Kích cỡ</label>
-                                <select class=" form-control" name="size" required>
-                                    <option value="S" ${listSize.contains("S") ? 'style="display: none"' : ''}>S</option>
-                                    <option value="M" ${listSize.contains("M")  ? 'style="display: none"' : ''}>M</option>
-                                    <option value="L" ${listSize.replace("XL", "").contains("L")  ? 'style="display: none"' : ''}>L</option>
-                                    <option value="XL" ${listSize.contains("XL")  ? 'style="display: none"' : ''}>XL</option>
+                                <select class="form-control" name="size" required>
+                                    <option value="S" ${listSize.contains("S") ? 'style="display: none"' : ''} ${!listSize.contains("S") ? 'selected' : ''}>S</option>
+                                    <option value="M" ${listSize.contains("M") ? 'style="display: none"' : ''} ${!listSize.contains("M") && listSize.contains("S") ? 'selected' : ''}>M</option>
+                                    <option value="L" ${listSize.replace("XL", "").contains("L") ? 'style="display: none"' : ''} ${!listSize.contains("L") && (listSize.contains("S") || listSize.contains("M")) ? 'selected' : ''}>L</option>
+                                    <option value="XL" ${listSize.contains("XL") ? 'style="display: none"' : ''} ${!listSize.contains("XL") && (listSize.contains("S") || listSize.contains("M") || listSize.contains("L")) ? 'selected' : ''}>XL</option>
                                 </select>
                             </div>
 
@@ -203,7 +205,7 @@
 
                             <div class="form-group">
                                 <label for="discount">Giảm giá (%)</label>
-                                <input type="number" class="form-control" id="discount" name="discount" step="1" min="0" max="100">
+                                <input type="number" class="form-control" id="discount" name="discount" step="1" min="0" max="100" value="0">
                             </div>
 
                             <div class="form-group">
