@@ -75,7 +75,6 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th style="width: 20%">Ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Danh mục</th>
                         <th>Mô tả</th>
@@ -86,8 +85,7 @@
                 <tbody>
                     <c:forEach var="product" items="${productList}">
                         <tr>
-                            <td>${product.productId}</td>
-                            <td style="width: 20%" class="text-center"><img class="w-50 rounded" src="${product.baseImageURL}"></td>
+                            <td>${product.productId}</td>                         
                             <td>${product.productName}</td>
                             <td>${product.categoryName}</td>
                             <td>${product.description}</td>
@@ -143,7 +141,7 @@
                                 <!-- Hidden Field -->
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="productId" value="${product.productId}">
-                                <div class="form-group">
+                                <div class="form-group" style="display: none">
                                     <label for="imageUrl">Ảnh</label>
                                     <img id="image${product.productId}" class="w-100" src="${product.baseImageURL}">
                                     <input type="file" class="form-control" id="imageFile${product.productId}" accept="image/*" onchange="updateImage(${product.productId})">
@@ -169,9 +167,7 @@
                                     <label for="isDeleted">Trang thái</label>
                                     <select class="form-control" id="isDeleted" name="isDeleted">
                                         <option value="false" ${!product.isDeleted ? 'selected' : ''}>Hoạt động</option>
-                                        <c:if  test="${product.productDetail.stock > 0}">
-                                            <option value="true" ${product.isDeleted ? 'selected' : ''}>Không hoạt động</option>
-                                        </c:if>
+                                        <option value="true" ${product.isDeleted ? 'selected' : ''}>Không hoạt động</option>
                                     </select>
                                 </div>
                                 <!-- Add other fields as needed -->
@@ -196,10 +192,10 @@
                     <form id="addProductForm" action="product" method="post">
                         <input type="hidden" name="action" value="add">
                         <div class="modal-body">
-                            <div class="form-group">
+                            <div class="form-group" style="display: none">
                                 <label for="imageUrl">Ảnh</label>
                                 <img id="image0" class="w-100" src="">
-                                <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)" required>
+                                <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)">
                                 <input type="hidden" class="form-control" id="imageUrl0" name="imageUrl" value="">
                             </div>
                             <div class="form-group">
@@ -245,6 +241,7 @@
                                             "lengthChange": false,
                                             "searching": false,
                                             "ordering": true,
+                                            "order":[[0,'desc']],
                                             "info": false,
                                             "autoWidth": false
                                         });
