@@ -436,14 +436,7 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2><c:if test="${p.productDetail.discount != null && p.productDetail.discount != 0}">
-                                                        <span class="text-muted text-decoration-line-through">$${p.productDetail.price}</span>
-                                                        ${p.productDetail.price * (100.0- p.productDetail.discount)/100}
-                                                    </c:if>
-
-                                                    <c:if test="${p.productDetail.discount == null || p.productDetail.discount == 0}">
-                                                        ${p.productDetail.price}
-                                                    </c:if></h2>
+                                                <h2>${String.format("%.0f", p.productDetail.price)}VND</h2>
                                                 <p>${p.productName}</p>
                                                 <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>
