@@ -92,7 +92,7 @@ public class AdminProductController extends HttpServlet {
         newProduct.setIsDeleted(Boolean.FALSE);
 
         int productId = -1;
-        if(!productDAO.checkExistedProductName(productName.trim())) {
+        if(!productDAO.checkExistedProductName(productName.trim(), 0)) {
             /// Add the product to the database
             productId = productDAO.addProduct(newProduct);
         }
@@ -124,7 +124,7 @@ public class AdminProductController extends HttpServlet {
         product.setBaseImageURL(imageUrl);
          boolean success = false;
          
-        if(!productDAO.checkExistedProductName(productName.trim())) {
+        if(!productDAO.checkExistedProductName(productName.trim(), productId)) {
             // Update the product in the database
             success= productDAO.updateProduct(product);
         }
