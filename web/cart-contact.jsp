@@ -410,17 +410,21 @@
         <section id="do_action">
             <div class="container">
                 <div class="heading">
-                    <h3>Tổng giá tiền: <c:set var="totalPrice" value="0" />
+                    <h3>Tổng giá tiền: <c:set var="totalPrice" value="0"/>
                         <c:forEach var="item" items="${cartItemsFull}">
+                            <c:set value="0" var="totalTopping"/>
+                            <c:forEach items="${item.listTopping}" var="t">
+                                <c:set value="${totalTopping + t.price}" var="totalTopping"/>
+                            </c:forEach>
                             <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100)}" />
+                                <c:set var="totalPrice" value="${totalPrice + totalTopping + item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100)}" />
                             </c:if>
                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price)}" />
+                                <c:set var="totalPrice" value="${totalPrice + totalTopping + item.quantity * (item.productDetail.price)}" />
                             </c:if>
 
                         </c:forEach>
-                        ${String.format('%.0f', totalPrice + totalTopping)}</h3>
+                        ${String.format("%.0f", Double.parseDouble(totalPrice))}</h3>
                 </div>
                 <div style="width: 100%">
                     <div style="width: 100%">
