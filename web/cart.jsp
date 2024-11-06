@@ -413,7 +413,7 @@
                                         ${String.format("%.0f", Double.parseDouble(totalPrice))}
                                     </span></li>
                             </ul>
-                            <a class="btn btn-default update" href="list-product">Tiếp tục mua sắm</a>
+                            <a class="btn btn-default update" href="../home">Tiếp tục mua sắm</a>
 
                             <c:if test="${cartItemsFull.size() ne 0}">
                                 <a href="cart-contact" class="btn btn-default check_out">Thanh toán</a>
