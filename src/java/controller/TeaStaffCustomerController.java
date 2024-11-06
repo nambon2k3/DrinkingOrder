@@ -8,7 +8,7 @@ import DAO.UserDAO;
 import Model.Staff;
 import Model.User;
 import Utils.EmailService;
-import Utils.SessionUserInfo;
+//import Utils.SessionUserInfo;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -95,7 +95,7 @@ public class TeaStaffCustomerController extends HttpServlet {
         String phone = request.getParameter("phone");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         
-        Staff staff = SessionUserInfo.getStaffSession(request);
+        //Staff staff = SessionUserInfo.getStaffSession(request);
 
         // Create a User object with the updated data
         User user = new UserDAO().getUserById(userId);
@@ -106,7 +106,7 @@ public class TeaStaffCustomerController extends HttpServlet {
         user.setAddress(address);
         user.setPhone(phone);
         user.setIsDeleted(status);
-        user.setChangeHistory((user.getChangeHistory() == null ? "" : user.getChangeHistory()) + user.toString(staff));
+       // user.setChangeHistory((user.getChangeHistory() == null ? "" : user.getChangeHistory()) + user.toString(staff));
 
         // Update the user
         boolean success = userDAO.updateUser(user);

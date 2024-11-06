@@ -179,7 +179,7 @@ public class PostDAO extends DBContext {
     }
 
     public boolean createPost(String title, String content, String category, int createdBy, String imgURL) {
-        String query = "INSERT INTO Post (Title, Content, categoryid, IsDeleted, CreatedAt, CreatedBy, imgURL) VALUES (?, ?, ?, 0, GETDATE(), ?, ?)";
+        String query = "INSERT INTO Post (Title, Content, categoryid, IsDeleted, CreatedAt, CreatedBy, imgURL) VALUES (?, ?, ?, 0, NOW(), ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query);) {
             stmt.setString(1, title);
             stmt.setString(2, content);

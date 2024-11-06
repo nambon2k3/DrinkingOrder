@@ -195,7 +195,7 @@
         <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form method="post" action="add-post">
+                    <form method="post" action="list-post">
                         <input type="hidden" name="action" value="add">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addPostModalLabel">Thêm mới</h5>
