@@ -227,10 +227,7 @@
             <section id="cart_items">
                 <div class="container">
                     <div class="breadcrumbs">
-                        <ol class="breadcrumb">
-                            <li><a href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
-                        <li class="active">Giỏ hàng</li>
-                    </ol>
+                        
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
@@ -268,7 +265,7 @@
                                         <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Đã giao</option>
                                         <option value="Wait for pay" ${orderStatus eq"Wait for pay" ? "selected" : ""}>Chưa thanh toán</option>
                                         <option value="Delivering" ${orderStatus eq"Delivering" ? "selected" : ""}>Đang giao</option>
-                                        
+                                        <option value="Pay before" ${orderStatus eq "Pay before" ? "selected" : ""}>Trả sau</option>
                                         <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Đã hủy</option>
                                     </select>
                                 </div>
@@ -307,7 +304,7 @@
                                         ${item.phone}
                                     </td>
                                     <td class="cart_quantity">
-                                        ${String.format("%.0f", item.totalCost)}VND
+                                        <fmt:formatNumber value="${item.totalCost}" type="number" groupingUsed="true" maxFractionDigits="0" />VND
                                     </td>
                                     <td class="cart_quantity">
                                         <c:choose>
@@ -320,14 +317,14 @@
                                             <c:when test="${item.status.trim() eq 'Wait for pay'}">
                                                 Chưa thanh toán
                                             </c:when>
-                                            <c:when test="${item.status.trim() eq 'Delivering'}">
+                                            <c:when test="${item.status.trim() eq 'Delivering' || item.status.trim() eq 'Delivering - Pay before'}">
                                                 Đang giao
                                             </c:when>
                                             <c:when test="${item.status.trim() eq 'Canceled'}">
                                                 Đã hủy
                                             </c:when>
                                             <c:otherwise>
-                                                ${item.status}
+                                                Trả sau
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
@@ -391,7 +388,7 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2>${String.format("%.0f", p.productDetail.price)}VND</h2>
+                                                <h2><fmt:formatNumber value="${p.productDetail.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</h2>
                                                 <p>${p.productName}</p>
                                                 <a href="${pageContext.request.contextPath}/public/product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>

@@ -1,6 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -180,14 +182,11 @@
             <section id="cart_items">
                 <div class="container">
                     <div class="breadcrumbs">
-                        <ol class="breadcrumb">
-                            <li><a href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
-                        <li class="active">Giỏ hàng</li>
-                    </ol>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h3>Giỏ hàng</h3>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3>Giỏ hàng</h3>
                         <c:if test="${isSuccess ne null && isSuccess}">
                             <div class="success-message" id="mess">
                                 <strong>Thành công!</strong>
@@ -251,7 +250,7 @@
                                             <c:forEach items="${item.listTopping}" var="t">
                                                 <c:set value="${totalTopping + t.price}" var="totalTopping"/>
                                             </c:forEach>
-                                            ${String.format('%.0f',Double.parseDouble(totalTopping) )}
+                                            <fmt:formatNumber value="${totalTopping}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                         </p>
                                     </td>
                                     <td class="cart_price">
@@ -259,11 +258,11 @@
                                     </td>
                                     <td class="cart_price">
                                         <p style="margin: 0"><c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                ${String.format('%.0f',Double.parseDouble(item.productDetail.price * (100.0- item.productDetail.discount)/100) )}
+                                                <fmt:formatNumber value="${item.productDetail.price * (100.0- item.productDetail.discount)/100}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                                 <c:set value="${total + item.productDetail.price * (100.0- item.productDetail.discount)/100}" var="total"/>
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                ${String.format('%.0f',Double.parseDouble(item.productDetail.price) )}
+                                                <fmt:formatNumber value="${item.productDetail.price}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                                 <c:set value="${total + item.productDetail.price}" var="total"/>
                                             </c:if>
                                         </p>
@@ -281,10 +280,10 @@
                                     <td class="cart_total">
                                         <p class="cart_total_price" style="margin: 0">
                                             <c:if test="${item.productDetail.discount != null && item.productDetail.discount != 0}">
-                                                ${String.format('%.0f',Double.parseDouble(item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping))}
+                                                <fmt:formatNumber value="${item.quantity * (item.productDetail.price * (100.0- item.productDetail.discount)/100) + totalTopping}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                             </c:if>
                                             <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                                ${String.format('%.0f', Double.parseDouble(item.quantity * (item.productDetail.price) + totalTopping))}
+                                                <fmt:formatNumber value="${item.quantity * (item.productDetail.price) + totalTopping}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                             </c:if>
                                         </p>
                                     </td>
@@ -331,7 +330,7 @@
                                     </tr>
                                     <tr>
                                         <th>Giá</th>
-                                        <td>${item.productDetail.price}</td>
+                                        <td><fmt:formatNumber value="${item.productDetail.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</td>
                                     </tr>
                                     <tr>
                                         <th>Số lượng</th>
@@ -341,7 +340,7 @@
                                         <th>Ăn kèm</th>
                                         <td>
                                             <c:forEach var="t" items="${item.listTopping}">
-                                                <p>${t.toppingName}: ${t.price}VNĐ</p>
+                                                <p>${t.toppingName}: <fmt:formatNumber value="${t.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</p>
                                             </c:forEach>
                                         </td>
                                     </tr>
@@ -392,7 +391,7 @@
                                             </c:if>
 
                                         </c:forEach>
-                                        ${String.format("%.0f", Double.parseDouble(totalPrice))}
+                                        <fmt:formatNumber value="${totalPrice}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                     </span></li>
                                 <li>Shipping <span>Miễn phí</span></li>
                                 <li>Tổng <span>
@@ -410,7 +409,7 @@
                                             </c:if>
 
                                         </c:forEach>
-                                        ${String.format("%.0f", Double.parseDouble(totalPrice))}
+                                        <fmt:formatNumber value="${totalPrice}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                     </span></li>
                             </ul>
                             <a class="btn btn-default update" href="../home">Tiếp tục mua sắm</a>
@@ -436,7 +435,7 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2>${String.format("%.0f", p.productDetail.price)}VND</h2>
+                                                <h2><fmt:formatNumber value="${p.productDetail.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</h2>
                                                 <p>${p.productName}</p>
                                                 <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>

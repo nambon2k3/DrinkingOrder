@@ -15,96 +15,103 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
         <style>
             body {
-                background-color: #f8f9fa;
+                display: flex;
+                min-height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif;
             }
-            .navbar {
-                margin-bottom: 20px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            .sidebar {
+                width: 200px; /* Độ rộng cố định của sidebar */
+                background-color: #343a40;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 50px 0 10px;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             }
-            .table-container {
-                background-color: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            .sidebar ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar li {
+                padding: 10px 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .sidebar a {
+                color: #f8f9fa;
+                text-decoration: none;
+                display: block;
+                width: 100%;
+            }
+
+            .sidebar a:hover {
+                background-color: #495057;
+            }
+
+            .main-content {
+                flex-grow: 1; /* Chiếm toàn bộ không gian còn lại */
                 padding: 20px;
+                background-color: #f8f9fa;
+                overflow-x: auto; /* Thêm thanh cuộn ngang nếu cần */
             }
-            h2 {
-                text-align: center;
-                color: #333;
-                margin-bottom: 20px;
-            }
-            .table th, .table td {
-                text-align: center;
-                vertical-align: middle;
-            }
-            .table tbody tr:hover {
-                background-color: #f1f1f1;
-            }
-            .status-icon {
-                font-size: 1.2em;
-                color: #28a745;
-            }
-            .status-icon.pending {
-                color: #ffc107;
-            }
-            .small-nav .nav-link {
-                font-size: 0.9rem; /* Giảm kích thước font */
-                padding: 5px 10px; /* Giảm padding */
-            }
+
         </style>
     </head>
     <body>
 
-        <!-- Header với logo và nút Đăng xuất -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img src="${pageContext.request.contextPath}/Image/logo.png" alt="Logo" style="height: 40px; width: 40px; object-fit: cover; margin-right: 10px;">
-            </a>
-            <div class="ml-auto">
-                <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger my-2 my-sm-0" ><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
-            </div>
-        </nav>
-
-        <!-- Thanh điều hướng (thêm vào đây) -->
-        <nav class="nav nav-pills nav-fill small-nav py-1">
-            <a class="nav-item nav-link" href="${pageContext.request.contextPath}/shipper?page=view-all-order">Tất cả đơn hàng</a>
-            <a class="nav-item nav-link active" href="${pageContext.request.contextPath}/shipper?page=view-my-order">Đơn hàng của tôi</a>
-            <a class="nav-item nav-link">Chi tiết đơn hàng</a>
+        <nav class="sidebar">
+            <ul>
+                <li><a href="${pageContext.request.contextPath}/shipper?page=view-all-order">Tất cả đơn hàng</a></li>
+                <li><a href="${pageContext.request.contextPath}/shipper?page=view-my-order">Đơn hàng của tôi</a></li>
+            </ul>
+            <ul class="logout">
+                <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
+                <li><a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất</a></li>
+            </ul>
         </nav>
 
 
-        <div class="container table-container">
+        <div class="main-content">
             <h2>Danh Sách Đơn Hàng</h2>
-            <div class="table-responsive">
-                <table id="userTable" class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên Khách Hàng</th>
-                            <th>Số Điện Thoại</th>
-                            <th>Địa Chỉ</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>               
-                        <c:forEach var="order" items="${orders}">
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table id="userTable" class="table table-striped table-bordered">
+                        <thead class="thead-dark">
                             <tr>
-                                <td>${order.id}</td>
-                                <td>${order.fullname}</td>
-                                <td>${order.phone}</td>
-                                <td>${order.address}</td>
-                                <td>
-                                    <button class="btn btn-info btn-sm" onclick="showOrderDetails(${order.id})">Chi Tiết</button>
-                                    <c:if test="${order.status.trim() ne 'Shipped'}">
-                                        <form action="shipper" method="post" style="display: inline">
-                                            <input type="hidden" name="orderId" value="${order.id}"/>
-                                            <button class="btn btn-success btn-sm" name="action" value="completeOrder">Đã Giao</button>
-                                        </form>
-                                    </c:if>
-                                </td>
+                                <th>STT</th>
+                                <th>Tên Khách Hàng</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Địa Chỉ</th>
+                                <th>Hành động</th>
                             </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>               
+                            <c:forEach var="order" items="${orders}">
+                                <tr>
+                                    <td>${order.id}</td>
+                                    <td>${order.fullname}</td>
+                                    <td>${order.phone}</td>
+                                    <td>${order.address}</td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm" onclick="showOrderDetails(${order.id})">Chi Tiết</button>
+                                        <c:if test="${order.status.trim() ne 'Shipped'}">
+                                            <form action="shipper" method="post" style="display: inline">
+                                                <input type="hidden" name="orderId" value="${order.id}"/>
+                                                <button class="btn btn-success btn-sm" name="action" value="completeOrder">Đã Giao</button>
+                                            </form>
+                                        </c:if>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -120,6 +127,7 @@
                                                 "lengthChange": true,
                                                 "searching": true,
                                                 "ordering": true,
+                                                "order":[[0,'desc']],
                                                 "info": true,
                                                 "autoWidth": false,
                                                 "language": {

@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -101,7 +102,9 @@
                                             <div class="single-products">
                                                 <div class="productinfo text-center">
                                                     <img src="${product.productDetail.imageURL}" alt="" />
-                                                    <h2>${String.format("%.0f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND </h2>
+                                                    <h2>
+                                                        <fmt:formatNumber value="${product.productDetail.price * (1 - product.productDetail.discount / 100)}" type="number" groupingUsed="true" maxFractionDigits="0" /> VND
+                                                    </h2>
                                                     <p>${product.productName}</p>
                                                     <a href="public/product-detail?id=${product.productId}" class="btn btn-default add-to-cart"><i class="fa-solid fa-eye"></i>Chi tiết</a>
                                                 </div>

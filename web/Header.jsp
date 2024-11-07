@@ -39,7 +39,7 @@
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                                <c:if test="${sessionScope.user != null}">
+                            <c:if test="${sessionScope.user != null}">
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-user"></i> ${sessionScope.user.fullname} <b class="caret"></b>
@@ -76,10 +76,17 @@
                         </button>
                     </div>
                     <div class="mainmenu pull-left">
+                        <%
+                            String currentUrl = request.getRequestURL().toString();
+                            if (!currentUrl.contains("cart") && !currentUrl.contains("my-order")) { 
+                        %>
                         <ul class="nav navbar-nav collapse navbar-collapse">
                             <li><a href="${pageContext.request.contextPath}/home">Sản phẩm</a></li> 
                             <li class="dropdown"><a href="${pageContext.request.contextPath}/public/list-blog">Bài viết</a></li> 
                         </ul>
+                        <%
+                            }
+                        %>
                     </div>
                 </div>
                 <div class="col-sm-3">

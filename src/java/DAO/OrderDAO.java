@@ -170,9 +170,9 @@ public class OrderDAO {
         }
         return orders;
     }
-    
+
     public static void main(String[] args) {
-        for(Order o : new OrderDAO().getOrdersByPage(1, 10, 1, null, null, null)){
+        for (Order o : new OrderDAO().getOrdersByPage(1, 10, 1, null, null, null)) {
             System.out.println(o);
         }
     }
@@ -868,7 +868,10 @@ public class OrderDAO {
 
     public List<Order> shipperViewAllOrder() {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM drinkingorder.`Order` WHERE shipperId IS NULL And Status = 'Submitted';";
+        String query = "SELECT * \n"
+                + "FROM drinkingorder.`Order`\n"
+                + "WHERE shipperId IS NULL \n"
+                + "      AND (Status = 'Submitted' OR Status = 'Pay before');";
         try {
             stmt = connection.prepareStatement(query);
             rs = stmt.executeQuery();
@@ -926,6 +929,29 @@ public class OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Order getOrderByOrderID(int id) {
+        Order order = new Order();
+        String query = "SELECT * FROM drinkingorder.`Order` where ID = ?";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                order.setId(rs.getInt("ID"));
+                order.setUserId(rs.getInt("UserID"));
+                order.setCreatedAt(rs.getDate("CreatedAt"));
+                order.setStatus(rs.getString("Status"));
+                order.setFullname(rs.getString("Fullname"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+                order.setStatus(rs.getString("Status"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return order;
     }
 
 }

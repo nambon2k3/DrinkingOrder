@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -160,10 +161,7 @@
             <section id="cart_items">
                 <div class="container">
                     <div class="breadcrumbs">
-                        <ol class="breadcrumb">
-                            <li><a href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
-                        <li class="active">Giỏ hàng</li>
-                    </ol>
+                        
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
@@ -182,7 +180,7 @@
                                     <c:when test="${order.status.trim() eq 'Wait for pay'}">
                                         Chưa thanh toán
                                     </c:when>
-                                    <c:when test="${order.status.trim() eq 'Delivering'}">
+                                    <c:when test="${order.status.trim() eq 'Delivering' || order.status.trim() eq 'Delivering - Pay before'}">
                                         Đang giao
                                     </c:when>
                                     <c:when test="${order.status.trim() eq 'Request cancel'}">
@@ -192,7 +190,7 @@
                                         Đã hủy
                                     </c:when>
                                     <c:otherwise>
-                                        ${order.status}
+                                        Trả sau
                                     </c:otherwise>
                                 </c:choose>
                             </p>
@@ -237,7 +235,7 @@
                                         <p>${product.getCateogryName()}</p>
                                     </td>
                                     <td class="cart_price">
-                                        ${String.format("%.2f", Double.parseDouble(product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price))}
+                                        <fmt:formatNumber value="${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                     </td>
                                     <td class="cart_quantity">
                                         ${product.buyQuantity}
@@ -248,11 +246,11 @@
                                             <c:set value="${totalTopping + t.price}" var="totalTopping"/>
                                             <c:set value="${totalToppingProducts + t.price}" var="totalToppingProducts"/>
                                         </c:forEach>
-                                        ${String.format("%.0f", Double.parseDouble(totalTopping))}
+                                        <fmt:formatNumber value="${totalTopping}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                     </td>
                                     <td class="cart_total">
                                         <c:set value="${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) + totalTopping: product.price*product.buyQuantity + totalTopping}" var="ttprice"/>
-                                        ${String.format("%.0f", Double.parseDouble(ttprice))}
+                                        <fmt:formatNumber value="${ttprice}" type="number" groupingUsed="true" maxFractionDigits="0" />
                                     </td>
                                     <td class="cart_delete">
                                         <a  style="margin-top: 0" href="${pageContext.request.contextPath}/public/product-detail?id=${product.productId}&pdid=${product.productDetailId}" class="btn btn-primary">Mua lại</a>
@@ -293,7 +291,7 @@
                                     </tr>
                                     <tr>
                                         <th>Giá</th>
-                                        <td>${product.price}</td>
+                                        <td><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" maxFractionDigits="0" /></td>
                                     </tr>
                                     <tr>
                                         <th>Số lượng</th>
@@ -303,7 +301,7 @@
                                         <th>Ăn kèm</th>
                                         <td>
                                             <c:forEach items="${product.listTopping}" var="t">
-                                                <p>${t.toppingName}: ${t.price}VND</p>
+                                                <p>${t.toppingName}: <fmt:formatNumber value="${t.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</p>
                                             </c:forEach>
                                         </td>
                                     </tr>
@@ -327,7 +325,7 @@
         <section id="do_action">
             <div class="container">
                 <div class="heading">
-                    <strong>Tổng đơn hàng:</strong>${String.format("%.0f", Double.parseDouble(order.totalCost + totalToppingProducts))}
+                    <strong>Tổng đơn hàng:</strong><fmt:formatNumber value="${order.totalCost + totalToppingProducts}" type="number" groupingUsed="true" maxFractionDigits="0" />
                 </div>
                 <c:if test="${order.status.trim() eq 'Wait for pay'}">
                     <div class="mt-4">
@@ -349,7 +347,7 @@
                                         <div class="single-products">
                                             <div class="productinfo text-center">
                                                 <img src="${p.productDetail.imageURL}" alt="" />
-                                                <h2>${String.format("%.0f", p.productDetail.price)}VND</h2>
+                                                <h2><fmt:formatNumber value="${p.productDetail.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</h2>
                                                 <p>${p.productName}</p>
                                                 <a href="product-detail?id=${p.productId}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
                                             </div>

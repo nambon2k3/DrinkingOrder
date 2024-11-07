@@ -1,6 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -136,10 +138,10 @@
                                         <span>
                                             <c:if test="${product.productDetail.discount != null && product.productDetail.discount != 0}">
                                                 <span style="color: grey; text-decoration: line-through; margin: 0 10px">
-                                                ${String.format("%.0f", product.productDetail.price)}VND </span> 
-                                                </c:if>
-                                                ${String.format("%.0f", product.productDetail.price * (1 - product.productDetail.discount/100))}VND 
-
+                                                    <fmt:formatNumber value="${product.productDetail.price}" type="number" groupingUsed="true" maxFractionDigits="0" />
+                                                </span> 
+                                            </c:if>
+                                            <fmt:formatNumber value="${product.productDetail.price * (1 - product.productDetail.discount/100)}" type="number" groupingUsed="true" maxFractionDigits="0" /> VND
                                         </span><br>
                                         <label>Số lượng</label>
                                         <input type="number" oninput="valid(this)" id="quantity" value="1" />
@@ -167,7 +169,8 @@
                                                     <div class="topping-item">
                                                         <label
                                                             ><input type="checkbox" class="select-topping" value="${topping.id}" />
-                                                            ${topping.toppingName} (${String.format("%.0f", topping.price)} VNĐ)</label
+                                                            ${topping.toppingName} 
+                                                            (<fmt:formatNumber value="${topping.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND)</label
                                                         >
                                                         <img
                                                             src="${topping.img}"
