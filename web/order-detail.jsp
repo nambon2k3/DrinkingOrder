@@ -172,7 +172,7 @@
                         <div style="width: 100%">
                             <h2>Đơn hàng</h2>
                             <p>Mã đơn hàng: ${order.id}</p>
-                            <p>Ngày đặt: ${order.createdAt}</p>
+                            <p>Ngày đặt: <fmt:formatDate value="${order.createdAt}" pattern="HH:mm" /> - <fmt:formatDate value="${order.createdAt}" pattern=" dd/MM/yyyy" /></p>
                             <p>Trạng thái: 
                                 <c:choose>
                                     <c:when test="${order.status.trim() eq 'Submitted'}">
