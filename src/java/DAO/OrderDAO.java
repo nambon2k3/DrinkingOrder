@@ -365,7 +365,7 @@ public class OrderDAO {
                 order.setAddress(rs.getString("address"));
                 order.setPhone(rs.getString("phone"));
                 order.setStatus(rs.getString("Status"));
-                order.setCreatedAt(rs.getDate("createdAt"));
+                order.setCreatedAt(rs.getTimestamp("createdAt"));
                 order.setCreatedBy(rs.getInt("createdBy"));
                 order.setNotes(rs.getString("notes"));
                 order.setTotalCost(getTotal(orderId));
