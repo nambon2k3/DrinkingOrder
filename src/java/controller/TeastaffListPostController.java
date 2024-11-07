@@ -102,7 +102,11 @@ public class TeastaffListPostController extends HttpServlet {
         // Assuming you have a way to get the current user ID
         //int createdBy = ((User) request.getSession().getAttribute("user")).getId();
         int createdBy = 1; //need delete
-        boolean isSuccess = new PostDAO().createPost(title, content, category, createdBy, imgURL);
+        boolean isSuccess = false;
+        if (!new PostDAO().isExistedPostByTitle(title)) {
+            isSuccess = new PostDAO().createPost(title, content, category, createdBy, imgURL);
+
+        }
         response.sendRedirect("list-post?isSuccess=" + isSuccess);
     }
 

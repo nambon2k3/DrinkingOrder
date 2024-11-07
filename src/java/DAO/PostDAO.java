@@ -233,6 +233,26 @@ public class PostDAO extends DBContext {
         return post;
     }
 
+    
+    public boolean isExistedPostByTitle(String title) {
+        Post post = new Post();
+        // SQL query to retrieve post by ID
+        String query = "SELECT po.ID as PostID, CategoryId, Title, Content, po.IsDeleted, po.CreatedAt, po.CreatedBy, po.imgURL, u.Fullname as AuthorName "
+                + "FROM Post po "
+                + "JOIN User u ON po.CreatedBy = u.ID "
+                + "WHERE po.Title = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query);) {
+            stmt.setString(1, title);
+            // Execute the query
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
     public boolean updatePost(int postId, String title, String content, int categoryId, String imgURL) {
         // SQL query to update the post
         String query = "UPDATE Post SET Title = ?, Content = ?, CategoryId = ?, imgURL = ? WHERE ID = ?";
