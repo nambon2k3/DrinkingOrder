@@ -104,8 +104,11 @@
                                     <c:when test="${order.status.trim() eq 'Canceled'}">
                                         Đã hủy
                                     </c:when>
-                                    <c:otherwise>
+                                    <c:when test="${order.status.trim() eq 'Delivering - Pay before'}">
                                         Đang giao - Trả sau
+                                    </c:when>
+                                    <c:otherwise>
+                                        Trả sau
                                     </c:otherwise>
                                 </c:choose>
                             </p>
