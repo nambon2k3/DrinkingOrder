@@ -369,6 +369,7 @@ public class OrderDAO {
                 order.setCreatedBy(rs.getInt("createdBy"));
                 order.setNotes(rs.getString("notes"));
                 order.setTotalCost(getTotal(orderId));
+                order.setDeliverDate(rs.getTimestamp("deliverDate"));
                 String paymentMethod = rs.getString("paymentMethod");
                 order.setPaymentMethod(paymentMethod);
             }
@@ -919,7 +920,7 @@ public class OrderDAO {
     }
 
     public void updateShipperOrder(int shipperId, String status, int orderId) {
-        String sql = "Update `Order` Set shipperId = ?, Status = ? WHERE id = ?";
+        String sql = "Update `Order` Set shipperId = ?, Status = ?, deliverDate = DATE_ADD(NOW(), INTERVAL 20 MINUTE) WHERE id = ?";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, shipperId);
