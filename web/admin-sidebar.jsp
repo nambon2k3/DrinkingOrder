@@ -55,7 +55,6 @@
 <!-- Sidebar -->
 <nav class="sidebar">
     <ul>
-        <li><a href="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a></li>
         <li><a href="staff"><i class="fas fa-users mr-2"></i>Nhân viên</a></li>
         <li><a href="product"><i class="fas fa-users mr-2"></i>Sản Phẩm</a></li>
         <li><a href="category"><i class="fas fa-users mr-2"></i>Loại Sản Phẩm</a></li>
