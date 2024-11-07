@@ -234,15 +234,21 @@ public class PostDAO extends DBContext {
     }
 
     
-    public boolean isExistedPostByTitle(String title) {
+    public boolean isExistedPostByTitle(String title, int ID) {
         Post post = new Post();
         // SQL query to retrieve post by ID
         String query = "SELECT po.ID as PostID, CategoryId, Title, Content, po.IsDeleted, po.CreatedAt, po.CreatedBy, po.imgURL, u.Fullname as AuthorName "
                 + "FROM Post po "
                 + "JOIN User u ON po.CreatedBy = u.ID "
-                + "WHERE po.Title = ?";
+                + "WHERE po.Title = ? ";
+        if(ID != 0){
+            query += " AND po.ID <> ? ";
+        }
         try (PreparedStatement stmt = connection.prepareStatement(query);) {
             stmt.setString(1, title);
+            if(ID != 0){
+                stmt.setInt(2, ID);
+            }
             // Execute the query
             ResultSet rs = stmt.executeQuery();
             return rs.next();
