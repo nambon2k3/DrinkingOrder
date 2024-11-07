@@ -138,13 +138,8 @@ public class PaymentController extends HttpServlet {
         order.setPhone(phone);
         order.setNotes(notes);
         order.setLocation(location);
-//        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay") || method.equalsIgnoreCase("COD")) {
-//            order.setFullname(user.getFullname());
-//            order.setAddress(location+ " - "+address);
-//            order.setPhone(phone);
-//            order.setNotes(notes);
-//        }
-        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Wait for pay" : "Submitted");
+
+        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Wait for pay" : "Pay before");
         order.setPaymentMethod(method);
         order.setUserId(user.getId());
         int orderId = 0;
