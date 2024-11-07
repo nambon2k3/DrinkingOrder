@@ -103,7 +103,7 @@ public class TeastaffListPostController extends HttpServlet {
         //int createdBy = ((User) request.getSession().getAttribute("user")).getId();
         int createdBy = 1; //need delete
         boolean isSuccess = false;
-        if (!new PostDAO().isExistedPostByTitle(title)) {
+        if (!new PostDAO().isExistedPostByTitle(title, 0)) {
             isSuccess = new PostDAO().createPost(title, content, category, createdBy, imgURL);
 
         }
@@ -116,7 +116,11 @@ public class TeastaffListPostController extends HttpServlet {
         String content = request.getParameter("content");
         int categoryId = Integer.parseInt(request.getParameter("category"));
         String imgURL = request.getParameter("imgURL");
-        boolean isSuccess = new PostDAO().updatePost(postId, title, content, categoryId, imgURL);
+        boolean isSuccess = false;
+        if (!new PostDAO().isExistedPostByTitle(title, postId)) {
+            isSuccess = new PostDAO().updatePost(postId, title, content, categoryId, imgURL);
+
+        }        
         response.sendRedirect("list-post?isSuccess=" + isSuccess);
     }
 
