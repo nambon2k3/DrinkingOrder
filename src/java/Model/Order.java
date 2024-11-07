@@ -21,7 +21,16 @@ public class Order {
     private double totalCost;
     private String notes;
     private String paymentMethod;
-     private String location;
+    private String location;
+    private Date deliverDate;
+
+    public Date getDeliverDate() {
+        return deliverDate;
+    }
+
+    public void setDeliverDate(Date deliverDate) {
+        this.deliverDate = deliverDate;
+    }
 
     private User user;
 
