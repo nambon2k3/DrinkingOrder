@@ -2,6 +2,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.time.ZoneId" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -181,7 +185,7 @@
                                         Chưa thanh toán
                                     </c:when>
                                     <c:when test="${order.status.trim() eq 'Delivering' || order.status.trim() eq 'Delivering - Pay before'}">
-                                        Đang giao
+                                        Đang giao - Đơn hàng sẽ tới lúc: <fmt:formatDate value="${order.deliverDate}" pattern="HH:mm dd/MM/yyyy" />
                                     </c:when>
                                     <c:when test="${order.status.trim() eq 'Request cancel'}">
                                         Yêu cầu hủy
