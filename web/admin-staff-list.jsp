@@ -272,11 +272,11 @@
                             <!-- Form Inputs -->
                             <div class="form-group">
                                 <label for="fullName">Họ tên</label>
-                                <input type="text" class="form-control" id="fullName" name="fullName" required>
+                                <input type="text" class="form-control" id="fullName" name="fullName" pattern=".*\S.*" title="Input cannot be only spaces" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="email" class="form-control" id="email" name="email" pattern="^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$" title="ex: a@gmail.com" required>
                             </div>
                             <div class="form-group">
                                 <label for="password">Mật khẩu</label>
@@ -303,7 +303,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="phone">Số điện thoại</label>
-                                <input type="text" class="form-control" id="phone" name="phone">
+                                <input type="text" class="form-control" id="phone" name="phone" pattern="^\d{10}$" title="10 number" required>
                             </div>
                             <div class="form-group">
                                 <label for="imageUrl">Ảnh</label>
