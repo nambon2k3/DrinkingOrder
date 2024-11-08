@@ -1,4 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+
+<head>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
 <!-- Custom CSS -->
 <style>
     /* Sidebar style */
@@ -52,14 +57,16 @@
     }
 </style>
 
+
+
 <!-- Sidebar -->
 <nav class="sidebar">
     <ul>
         <li><a href="staff"><i class="fas fa-users mr-2"></i>Nhân viên</a></li>
-        <li><a href="product"><i class="fas fa-users mr-2"></i>Sản Phẩm</a></li>
-        <li><a href="category"><i class="fas fa-users mr-2"></i>Loại Sản Phẩm</a></li>
-        <li><a href="topping"><i class="fas fa-cog mr-2"></i>Đồ ăn kèm</a></li>
-        <li><a href="location"><i class="fas fa-cog mr-2"></i>Địa chỉ giao</a></li>
+        <li><a href="product"><i class='bx bxs-drink mr-2'></i>Sản Phẩm</a></li>
+        <li><a href="category"><i class='bx bxs-category mr-2' ></i>Loại Sản Phẩm</a></li>
+        <li><a href="topping"><i class='bx bxs-component mr-2'></i>Đồ ăn kèm</a></li>
+        <li><a href="location"><i class='bx bxs-location-plus mr-2' ></i>Địa chỉ giao</a></li>
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
