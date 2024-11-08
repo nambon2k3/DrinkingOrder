@@ -285,7 +285,6 @@
                             <div class="form-group">
                                 <label for="role">Chức vụ</label>
                                 <select class="form-control" id="role" name="role">
-                                    <option value="1">Quản lý</option>
                                     <option value="2">Nhân viên</option>
                                     <option value="3">Giao hàng</option>
                                 </select>
