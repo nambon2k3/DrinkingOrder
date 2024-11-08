@@ -59,7 +59,6 @@
         <li><a href="product"><i class="fas fa-users mr-2"></i>Sản Phẩm</a></li>
         <li><a href="category"><i class="fas fa-users mr-2"></i>Loại Sản Phẩm</a></li>
         <li><a href="topping"><i class="fas fa-cog mr-2"></i>Đồ ăn kèm</a></li>
-        <li><a href="setting"><i class="fas fa-cog mr-2"></i>Cài đặt</a></li>
         <li><a href="location"><i class="fas fa-cog mr-2"></i>Địa chỉ giao</a></li>
     </ul>
     <ul class="logout">
