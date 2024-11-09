@@ -35,7 +35,7 @@ public class PostDAO extends DBContext {
         int offset = (page - 1) * pageSize;
         StringBuilder query = new StringBuilder("SELECT po.ID, po.CategoryId, po.Title, po.Content, po.IsDeleted, po.CreatedAt, po.imgURL, u.Fullname as AuthorName "
                 + "FROM Post po "
-                + "JOIN User u ON po.CreatedBy = u.ID "
+                + "JOIN Staff u ON po.CreatedBy = u.ID "
                 + "JOIN Category c ON po.CategoryId = c.ID "
                 + "WHERE 1=1");
 
@@ -103,7 +103,7 @@ public class PostDAO extends DBContext {
         int totalPosts = 0;
         StringBuilder query = new StringBuilder("SELECT COUNT(*) as Total "
                 + "FROM Post po "
-                + "JOIN staff u ON po.CreatedBy = u.ID "
+                + "JOIN Staff u ON po.CreatedBy = u.ID "
                 + "JOIN Category c ON po.CategoryId = c.ID "
                 + "WHERE 1=1");
 
@@ -166,7 +166,7 @@ public class PostDAO extends DBContext {
 
     public List<String> getUniqueAuthors() {
         List<String> authors = new ArrayList<>();
-        String query = "SELECT DISTINCT u.Fullname FROM Post po JOIN User u ON po.CreatedBy = u.ID";
+        String query = "SELECT DISTINCT u.Fullname FROM Post po JOIN Staff u ON po.CreatedBy = u.ID";
 
         try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
@@ -203,7 +203,7 @@ public class PostDAO extends DBContext {
         // SQL query to retrieve post by ID
         String query = "SELECT po.ID as PostID, CategoryId, Title, Content, po.IsDeleted, po.CreatedAt, po.CreatedBy, po.imgURL, u.Fullname as AuthorName "
                 + "FROM Post po "
-                + "JOIN User u ON po.CreatedBy = u.ID "
+                + "JOIN Staff u ON po.CreatedBy = u.ID "
                 + "WHERE po.ID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query);) {
             stmt.setInt(1, postId);
@@ -239,7 +239,7 @@ public class PostDAO extends DBContext {
         // SQL query to retrieve post by ID
         String query = "SELECT po.ID as PostID, CategoryId, Title, Content, po.IsDeleted, po.CreatedAt, po.CreatedBy, po.imgURL, u.Fullname as AuthorName "
                 + "FROM Post po "
-                + "JOIN User u ON po.CreatedBy = u.ID "
+                + "JOIN Staff u ON po.CreatedBy = u.ID "
                 + "WHERE po.Title = ? ";
         if(ID != 0){
             query += " AND po.ID <> ? ";
@@ -306,7 +306,7 @@ public class PostDAO extends DBContext {
         try {
             String query = "SELECT po.ID, po.CategoryId, po.Title, po.Content, po.IsDeleted, po.CreatedAt, po.imgURL, u.Fullname as AuthorName LIMIT 5"
                     + "FROM Post po "
-                    + "JOIN User u ON po.CreatedBy = u.ID "
+                    + "JOIN Staff u ON po.CreatedBy = u.ID "
                     + "JOIN Category c ON po.CategoryId = c.ID ORDER BY po.CreatedAt DESC";
             PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
