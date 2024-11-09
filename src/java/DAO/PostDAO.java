@@ -103,7 +103,7 @@ public class PostDAO extends DBContext {
         int totalPosts = 0;
         StringBuilder query = new StringBuilder("SELECT COUNT(*) as Total "
                 + "FROM Post po "
-                + "JOIN User u ON po.CreatedBy = u.ID "
+                + "JOIN staff u ON po.CreatedBy = u.ID "
                 + "JOIN Category c ON po.CategoryId = c.ID "
                 + "WHERE 1=1");
 
