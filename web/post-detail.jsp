@@ -58,7 +58,7 @@
                     </div>
                     <div class="form-group">
                         <label for="postTitleEdit">Tiêu đề</label>
-                        <input type="text" class="form-control" id="postTitleEdit" name="title" required>
+                        <input type="text" class="form-control" id="postTitleEdit" name="title" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                     </div>
                     <div class="form-group">
                         <label for="postContentEdit">Nội dung</label>
