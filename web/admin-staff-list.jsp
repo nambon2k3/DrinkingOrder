@@ -302,11 +302,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="address">Địa chỉ</label>
-                                <input type="text" class="form-control" id="address" name="address">
+                                <input type="text" class="form-control" id="address" name="address" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                             </div>
                             <div class="form-group">
                                 <label for="phone">Số điện thoại</label>
-                                <input type="text" class="form-control" id="phone" name="phone" pattern="^\d{10}$" title="10 number" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
+                                <input type="text" class="form-control" id="phone" name="phone" pattern="^\d{10}$" title="10 number" required>
                             </div>
                             <div class="form-group">
                                 <label for="imageUrl">Ảnh</label>
