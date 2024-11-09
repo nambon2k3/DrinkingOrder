@@ -283,7 +283,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="password">Mật khẩu</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password" pattern="^\S{8,}$"  title="Mật khẩu phải có ít nhất 8 ký tự"  required>
                             </div>
                             <div class="form-group">
                                 <label for="role">Chức vụ</label>
