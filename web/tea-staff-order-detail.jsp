@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -34,8 +35,29 @@
             <h2>Chi tiết đơn hàng:</h2>
             <p>Mã đơn hàng: ${order.id}</p>
             <p>Ngày đặt: ${order.createdAt}</p>
-            <p>Tổng giá: ${String.format("%.0f", order.totalCost)}VND</p>
-            <p>Trạng thái ${order.status}</p>
+            <p>Tổng giá: <fmt:formatNumber value="${order.totalCost}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</p>
+            <p>Trạng thái:
+                <c:choose>
+                    <c:when test="${order.status.trim() eq 'Submitted'}">
+                        Đã thanh toán
+                    </c:when>
+                    <c:when test="${order.status.trim() eq 'Shipped'}">
+                        Đã giao
+                    </c:when>
+                    <c:when test="${order.status.trim() eq 'Wait for pay'}">
+                        Chưa thanh toán
+                    </c:when>
+                    <c:when test="${order.status.trim() eq 'Delivering' || order.status.trim() eq 'Delivering - Pay before'}">
+                        Đang giao
+                    </c:when>
+                    <c:when test="${order.status.trim() eq 'Canceled'}">
+                        Đã hủy
+                    </c:when>
+                    <c:otherwise>
+                        Trả sau
+                    </c:otherwise>
+                </c:choose>
+            </p>
             <p>Phương thức thanh toán: ${order.paymentMethod}</p>
 
             <!-- Receiver Information -->
@@ -65,15 +87,15 @@
                             <td><img src="${product.imageURL}" alt="..." width="100" height="100"></td>
                             <td>${product.getProductName()}</td>
                             <td>${product.getCateogryName()}</td>
-                            <td>${String.format("%.0f", product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price)} VND</td>
+                            <td><fmt:formatNumber value="${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</td>
                             <td>${product.buyQuantity}</td>
-                            <td>${String.format("%.0f", product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity)} VND</td>
+                            <td><fmt:formatNumber value="${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity}" type="number" groupingUsed="true" maxFractionDigits="0" />VND</td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
             <div>
-                <strong>Tổng giá:</strong> ${String.format("%.0f", order.totalCost)}VND
+                <strong>Tổng giá:</strong> <fmt:formatNumber value="${order.totalCost}" type="number" groupingUsed="true" maxFractionDigits="0" />VND
             </div>
 
         </div>
