@@ -101,10 +101,9 @@ public class TeastaffListPostController extends HttpServlet {
         String category = request.getParameter("category");
         String imgURL = request.getParameter("imgURL");
         Staff staff = (Staff) request.getSession(true).getAttribute("staff");
-        int createdBy = 1; 
         boolean isSuccess = false;
         if (!new PostDAO().isExistedPostByTitle(title, 0)) {
-            isSuccess = new PostDAO().createPost(title, content, category, staff.getRole(), imgURL);
+            isSuccess = new PostDAO().createPost(title, content, category, staff.getId(), imgURL);
 
         }
         response.sendRedirect("list-post?isSuccess=" + isSuccess);
