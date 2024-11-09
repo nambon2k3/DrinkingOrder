@@ -186,7 +186,7 @@ public class StaffDAO {
             String gender, Boolean isDeleted, int pageNumber, int pageSize) {
         List<Staff> filteredUserList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder(
-                "SELECT * FROM Staff WHERE role != 1 and 1=1");
+                "SELECT * FROM Staff WHERE 1=1");
 
         if (fullName != null && !fullName.isEmpty()) {
             queryBuilder.append(" AND Fullname LIKE ?");
@@ -269,7 +269,7 @@ public class StaffDAO {
 
     public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender, Boolean isDeleted) {
         List<Staff> filteredUserList = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Staff WHERE role != 1 and 1=1");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Staff WHERE 1=1");
         // Dynamically build query conditions
         if (fullName != null && !fullName.isEmpty()) {
             queryBuilder.append(" AND Fullname LIKE ?");

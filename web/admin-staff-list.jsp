@@ -113,8 +113,11 @@
                             <td>${user.phone}</td>
                             <td>${user.isDeleted ? 'Không hoạt động' : 'Hoạt động'}</td>
                             <td>
+                                <c:if test="${user.role != 1}">
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Sửa</button>
+                                    
+                                </c:if >
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Chi tiết</button>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Sửa</button>
                             </td>
                         </tr>
 
@@ -285,6 +288,7 @@
                             <div class="form-group">
                                 <label for="role">Chức vụ</label>
                                 <select class="form-control" id="role" name="role">
+                                    <option value="1">Quản lý</option>
                                     <option value="2">Nhân viên</option>
                                     <option value="3">Giao hàng</option>
                                 </select>
