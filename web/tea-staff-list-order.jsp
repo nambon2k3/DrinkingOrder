@@ -59,11 +59,13 @@
                     <div class="col-md-2">
                         <label for="orderStatus" class="form-label">Trạng thái</label>
                         <select id="orderStatus" name="orderStatus" class="form-control">
-                            <option value="" ${param.orderStatus == null ? 'selected' : ''}>Tất cả</option>
-                            <option value="Submitted" ${param.orderStatus eq"Submitted" ? "selected" : ""}>Đã thanh toán</option>
-                            <option value="Shipped" ${param.orderStatus eq"Shipped" ? "selected" : ""}>Đã giao</option>
-                            <option value="Wait for pay" ${param.orderStatus eq"Wait for pay" ? "selected" : ""}>Chưa thanh toán</option>
-                            <option value="Delivering" ${param.orderStatus eq"Delivering" ? "selected" : ""}>Đang giao</option>
+                            <option value="">Tất cả</option>
+                            <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Đã thanh toán</option>
+                            <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Đã giao</option>
+                            <option value="Wait for pay" ${orderStatus eq"Wait for pay" ? "selected" : ""}>Chưa thanh toán</option>
+                            <option value="Delivering" ${orderStatus eq"Delivering" ? "selected" : ""}>Đang giao</option>
+                            <option value="Pay before" ${orderStatus eq "Pay before" ? "selected" : ""}>Trả sau</option>
+                            <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Đã hủy</option>
                         </select>
                     </div>
                     <div class="d-flex flex-column">
@@ -78,6 +80,7 @@
                         <th>ID</th>
                         <th>Ngày đặt</th>
                         <th>Người mua</th>
+                        <th>Người bán</th>
                         <th>Địa chỉ</th>
                         <th>SĐT</th>
                         <th>Tổng giá</th>
@@ -91,6 +94,7 @@
                             <td><a href="order-detail?orderId=${item.id}">${item.id}</a></td>
                             <td>${item.createdAt}</td>
                             <td>${item.fullname}</td>
+                            <td>${item.staff.fullname}</td>
                             <td>${item.address}</td>
                             <td>${item.phone}</td>
                             <td>${String.format("%.0f", item.totalCost)}VND</td>
@@ -106,14 +110,14 @@
                                     <c:when test="${item.status.trim() eq 'Wait for pay'}">
                                         Chưa thanh toán
                                     </c:when>
-                                    <c:when test="${item.status.trim() eq 'Delivering'}">
+                                    <c:when test="${item.status.trim() eq 'Delivering' || item.status.trim() eq 'Delivering - Pay before'}">
                                         Đang giao
                                     </c:when>
                                     <c:when test="${item.status.trim() eq 'Canceled'}">
                                         Đã hủy
                                     </c:when>
                                     <c:otherwise>
-                                        ${item.status}
+                                        Trả sau
                                     </c:otherwise>
                                 </c:choose>
                             </td>
