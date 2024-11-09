@@ -65,7 +65,7 @@
             <p>Họ và tên: ${order.fullname}</p>
             <p>Địa chỉ: ${order.address}</p>
             <p>Số điện thoại: ${order.phone}</p>
-            <p>Giới tính: ${order.user.gender}
+            <p>Giới tính:
                 <c:choose>
                     <c:when test="${order.user.gender.trim() eq 'Male'}">
                         Name
