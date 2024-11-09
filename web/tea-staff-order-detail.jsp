@@ -65,8 +65,16 @@
             <p>Họ và tên: ${order.fullname}</p>
             <p>Địa chỉ: ${order.address}</p>
             <p>Số điện thoại: ${order.phone}</p>
-            <p>Giới tính: ${order.user.gender}</p>
-            <p>Người bán: ${order.sale.fullname}</p>
+            <p>Giới tính: ${order.user.gender}
+                <c:choose>
+                    <c:when test="${order.user.gender.trim() eq 'Male'}">
+                        Name
+                    </c:when>
+                    <c:otherwise>
+                        Nữ
+                    </c:otherwise>
+                </c:choose>
+            </p>
 
             <!-- Ordered Products -->
             <h3>Danh sách sản phẩm</h3>
