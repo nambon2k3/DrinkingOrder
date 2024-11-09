@@ -211,7 +211,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="postTitle">Tiêu đề</label>
-                                <input type="text" class="form-control" id="postTitle" name="title" required>
+                                <input type="text" class="form-control" id="postTitle" name="title" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                             </div>
                             <div class="form-group">
                                 <label for="postContent">Nội dung</label>
@@ -254,7 +254,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="postTitleEdit">Tiêu đề</label>
-                                <input type="text" class="form-control" id="postTitleEdit" name="title" required>
+                                <input type="text" class="form-control" id="postTitleEdit" name="title" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                             </div>
                             <div class="form-group">
                                 <label for="postContentEdit">Nội dung</label>
@@ -338,10 +338,10 @@
                 // check file uploaded
                 if (fileInput.files && fileInput.files[0]) {
                     const file = fileInput.files[0];
-                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+                    const maxSize = 1024 * 1024; // 2 MB in bytes
 
                     if (file.size > maxSize) {
-                        alert("Ảnh chỉ có thể bé hơn 2MB.");
+                        alert("Ảnh chỉ có thể bé hơn 1 MB.");
                         fileInput.value = ''; // Clear the file input
                         return;
                     }
