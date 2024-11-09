@@ -174,10 +174,10 @@
                 // check file uploaded
                 if (fileInput.files && fileInput.files[0]) {
                     const file = fileInput.files[0];
-                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+                    const maxSize = 1024 * 1024; // 2 MB in bytes
 
                     if (file.size > maxSize) {
-                        alert("File chỉ tối đa 2 MB");
+                        alert("File chỉ tối đa 1 MB");
                         fileInput.value = ''; // Clear the file input
                         return;
                     }
