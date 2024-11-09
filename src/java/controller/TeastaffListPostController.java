@@ -7,6 +7,7 @@ package controller;
 import DAO.PostDAO;
 import Model.Category;
 import Model.Post;
+import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -99,12 +100,11 @@ public class TeastaffListPostController extends HttpServlet {
         String content = request.getParameter("content");
         String category = request.getParameter("category");
         String imgURL = request.getParameter("imgURL");
-        // Assuming you have a way to get the current user ID
-        //int createdBy = ((User) request.getSession().getAttribute("user")).getId();
-        int createdBy = 1; //need delete
+        Staff staff = (Staff) request.getSession(true).getAttribute("staff");
+        int createdBy = 1; 
         boolean isSuccess = false;
         if (!new PostDAO().isExistedPostByTitle(title, 0)) {
-            isSuccess = new PostDAO().createPost(title, content, category, createdBy, imgURL);
+            isSuccess = new PostDAO().createPost(title, content, category, staff.getRole(), imgURL);
 
         }
         response.sendRedirect("list-post?isSuccess=" + isSuccess);
