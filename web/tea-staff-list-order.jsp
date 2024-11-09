@@ -80,7 +80,6 @@
                         <th>ID</th>
                         <th>Ngày đặt</th>
                         <th>Người mua</th>
-                        <th>Người bán</th>
                         <th>Địa chỉ</th>
                         <th>SĐT</th>
                         <th>Tổng giá</th>
@@ -94,7 +93,6 @@
                             <td><a href="order-detail?orderId=${item.id}">${item.id}</a></td>
                             <td>${item.createdAt}</td>
                             <td>${item.fullname}</td>
-                            <td>${item.staff.fullname}</td>
                             <td>${item.address}</td>
                             <td>${item.phone}</td>
                             <td>${String.format("%.0f", item.totalCost)}VND</td>
