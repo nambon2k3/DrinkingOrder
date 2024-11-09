@@ -149,7 +149,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="productName">Tên sản phẩm</label>
-                                    <input type="text" class="form-control" id="productName" name="productName" value="${product.productName}" required>
+                                    <input type="text" class="form-control" id="productName" name="productName" value="${product.productName}" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                                 </div>
                                 <div class="form-group d-none">
                                     <label for="categoryName">Danh mục</label>
@@ -200,7 +200,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="productName">Tên sản phẩm</label>
-                                <input type="text" class="form-control" id="productName" name="productName" required>
+                                <input type="text" class="form-control" id="productName" name="productName" pattern=".*\S.*" required title="Vui lòng không để trống hoặc nhập toàn khoảng trắng">
                             </div>
                             <div class="form-group">
                                 <label for="categoryId">Danh mục</label>
